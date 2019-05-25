@@ -44,7 +44,6 @@ public class GerenciadorComandas extends javax.swing.JFrame {
                     String mantissa = builder.substring(i+1, valor.length());
                     StringBuilder mantissaBuilder = new StringBuilder(mantissa).reverse();
                     mantissa = mantissaBuilder.toString();
-                    System.out.println("Mantissa: "+mantissaBuilder);
                     StringBuilder finalBuilder = new StringBuilder(mantissa);
                     finalBuilder.append(ponto);
                     finalBuilder.append(decimal);
