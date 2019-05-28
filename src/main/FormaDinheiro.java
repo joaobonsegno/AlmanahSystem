@@ -10,6 +10,7 @@ public class FormaDinheiro extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
+        getRootPane().setDefaultButton(btnConfirmar);
     }
 
     @SuppressWarnings("unchecked")
@@ -145,7 +146,8 @@ public class FormaDinheiro extends javax.swing.JDialog {
             }else{
                 EncerrarComanda.flagValor = true;
                 dispose();
-                FormaPagamento.valorRecebido = Double.parseDouble(txtEntrada.getText());
+                String valor = GerenciadorComandas.tornarCompativel(txtEntrada.getText());
+                FormaPagamento.valorRecebido = Double.parseDouble(valor);
                 FormaPagamento forma = new FormaPagamento(new javax.swing.JFrame(), true);
                 forma.setVisible(true);
             }

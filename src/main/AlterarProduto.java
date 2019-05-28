@@ -47,6 +47,7 @@ public class AlterarProduto extends javax.swing.JFrame {
        for(Produto p:pDao.read()){
            listaProdutos.add(p);
        }
+       getRootPane().setDefaultButton(btnConfirmar);
     }
 
 

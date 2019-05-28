@@ -95,6 +95,7 @@ public class EncerrarComanda extends javax.swing.JFrame {
             listaProdutos.add(p);
         }
         criarTabela();
+        getRootPane().setDefaultButton(btnConfirmar);
         /*JFormattedTextField tf = ((JSpinner.DefaultEditor) SpinnerQtd.getEditor()).getTextField();
         tf.setEditable(false);
         SpinnerQtd.setModel(nm);*/

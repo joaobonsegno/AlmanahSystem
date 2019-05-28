@@ -342,6 +342,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         novaInstancia();
         lblErro.setVisible(false);
         this.setLocationRelativeTo(null);
+        getRootPane().setDefaultButton(btnNovaComanda);
     }
 
     @SuppressWarnings("unchecked")

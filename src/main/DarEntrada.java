@@ -21,6 +21,7 @@ public class DarEntrada extends javax.swing.JDialog {
         txtEntrada.setDocument(new SoNumeros());
         idSelecionado = id;
         encontraProd();
+        getRootPane().setDefaultButton(btnConfirmar);
     }
     
     private void encontraProd(){

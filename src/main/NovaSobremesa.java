@@ -82,7 +82,8 @@ public class NovaSobremesa extends javax.swing.JFrame {
     }
     
     public NovaSobremesa() {
-        initComponents();
+        initComponents();      
+        getRootPane().setDefaultButton(btnConfirmar);
         txtIdBebida.setDocument(new SoNumeros());
         
         lblErro.setVisible(false);

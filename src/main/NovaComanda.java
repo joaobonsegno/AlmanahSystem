@@ -11,6 +11,7 @@ public class NovaComanda extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
         String numNovaComanda = Integer.toString(GerenciadorComandas.numeroNovaComanda);
         lblNovoID.setText(numNovaComanda);
+        getRootPane().setDefaultButton(btnConfirmar);
     }
 
     /**

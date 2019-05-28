@@ -10,6 +10,7 @@ public class Suprimento extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
+        getRootPane().setDefaultButton(btnConfirmar);
     }
 
     @SuppressWarnings("unchecked")

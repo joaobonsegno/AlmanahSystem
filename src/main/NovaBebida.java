@@ -36,6 +36,7 @@ public class NovaBebida extends javax.swing.JFrame {
                 );
             }
         }
+        getRootPane().setDefaultButton(btnConfirmar);
     }
     
     public void criarTabelaNome(String nome){

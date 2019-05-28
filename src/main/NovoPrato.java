@@ -28,6 +28,7 @@ public class NovoPrato extends javax.swing.JDialog {
         cbPeso.setSelected(true);
         String comString = Integer.toString(GerenciadorComandas.idSelecionado);
         lblComanda.setText(comString);
+        getRootPane().setDefaultButton(btnConfirmar);
     }
     
     @SuppressWarnings("unchecked")

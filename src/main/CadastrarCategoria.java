@@ -11,6 +11,7 @@ public class CadastrarCategoria extends javax.swing.JFrame {
     public CadastrarCategoria() {
        initComponents();
        this.setLocationRelativeTo(null);
+       getRootPane().setDefaultButton(btnConfirmar);
     }
 
 

@@ -72,6 +72,7 @@ public class Login extends javax.swing.JFrame {
                 
             }
         }
+        getRootPane().setDefaultButton(btnLogin);
     }
 
     @SuppressWarnings("unchecked")

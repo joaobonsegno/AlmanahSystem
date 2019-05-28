@@ -65,6 +65,7 @@ public class FormaPagamento extends javax.swing.JDialog {
             String trocoString = GerenciadorComandas.valorMonetario(troco);
             lblTroco.setText("R$ "+trocoString);
         }
+        getRootPane().setDefaultButton(btnConfirmar);
     }
 
     @SuppressWarnings("unchecked")
