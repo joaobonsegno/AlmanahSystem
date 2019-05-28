@@ -5,7 +5,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Turno {
-    private String dataAbertura, dataFechamento;
+    private String dataAbertura, dataFechamento, periodo;
     private int idTurno, status;
     
     public String dataAtual(){
@@ -13,6 +13,14 @@ public class Turno {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy   HH:mm:ss");
         String dataFormatada = sdf.format(data.getTime());
         return dataFormatada;
+    }
+
+    public String getPeriodo() {
+        return periodo;
+    }
+
+    public void setPeriodo(String periodo) {
+        this.periodo = periodo;
     }
     
     public Turno(int status){
