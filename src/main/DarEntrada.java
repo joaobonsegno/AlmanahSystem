@@ -26,7 +26,7 @@ public class DarEntrada extends javax.swing.JDialog {
     
     private void encontraProd(){
         for(Produto p:pDao.read()){
-            if(p.getIdSistema().equals(idSelecionado)){
+            if(p.getIdProduto().equals(idSelecionado)){
                 prod = p;
             }
         }
@@ -34,8 +34,8 @@ public class DarEntrada extends javax.swing.JDialog {
     }
     
     public void arrumarLabels(){
-        lblId.setText(Integer.toString(prod.getIdSistema()));
-        lblNome.setText(prod.getNome());
+        lblId.setText(" "+Integer.toString(prod.getIdProduto()));
+        lblNome.setText(" "+prod.getNome());
     }
 
     @SuppressWarnings("unchecked")
@@ -59,20 +59,20 @@ public class DarEntrada extends javax.swing.JDialog {
         setResizable(false);
 
         lblStringNovoPrato.setBackground(new java.awt.Color(0, 102, 204));
-        lblStringNovoPrato.setFont(new java.awt.Font("Comic Sans MS", 0, 22)); // NOI18N
+        lblStringNovoPrato.setFont(new java.awt.Font("Century Gothic", 0, 22)); // NOI18N
         lblStringNovoPrato.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblStringNovoPrato.setText("Dar Entrada");
 
         linha.setBackground(new java.awt.Color(0, 0, 0));
         linha.setOpaque(true);
 
-        lblStringQuantidade.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
+        lblStringQuantidade.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         lblStringQuantidade.setText("Quantidade a ser adicionada:");
 
-        txtEntrada.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        txtEntrada.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
 
         btnCancelar.setBackground(new java.awt.Color(204, 0, 0));
-        btnCancelar.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
+        btnCancelar.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         btnCancelar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\cancel.png")); // NOI18N
         btnCancelar.setText(" Cancelar");
         btnCancelar.setBorder(new javax.swing.border.MatteBorder(null));
@@ -84,7 +84,7 @@ public class DarEntrada extends javax.swing.JDialog {
         });
 
         btnConfirmar.setBackground(new java.awt.Color(0, 153, 0));
-        btnConfirmar.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
+        btnConfirmar.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         btnConfirmar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\confirm.png")); // NOI18N
         btnConfirmar.setText(" Confirmar");
         btnConfirmar.setBorder(new javax.swing.border.MatteBorder(null));
@@ -95,17 +95,17 @@ public class DarEntrada extends javax.swing.JDialog {
             }
         });
 
-        lblStringId.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
+        lblStringId.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         lblStringId.setText("ID:");
 
-        lblStringNome.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
+        lblStringNome.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         lblStringNome.setText("Nome:");
 
-        lblId.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
+        lblId.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         lblId.setText("ID:");
         lblId.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        lblNome.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
+        lblNome.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         lblNome.setText("ID:");
         lblNome.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -137,7 +137,7 @@ public class DarEntrada extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(170, 170, 170)
                         .addComponent(lblStringNovoPrato, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(linha, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE))
         );
@@ -159,7 +159,7 @@ public class DarEntrada extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(41, 41, 41)
@@ -180,10 +180,14 @@ public class DarEntrada extends javax.swing.JDialog {
         Log l = new Log();
         l.setCategoria("Estoque");
         l.setData(l.dataAtual());
+        l.setSaldo(0.0);
+        l.setStatus(0);
+        l.setTipo("");
+        l.setValor(0.0);
         
         String qtdAtualS = prod.getQtdEstoque();
         String qtdAdicionadaS = txtEntrada.getText();
-        l.setDescricao("João entrou "+qtdAdicionadaS+" de \""+prod.getNome()+"\" no estoque");
+        l.setDescricao(Login.funcAtual.getNome()+" entrou "+qtdAdicionadaS+" de \""+prod.getNome()+"\" no estoque");
         Integer qtdAtual = Integer.parseInt(qtdAtualS);
         Integer qtdAdicionada = Integer.parseInt(qtdAdicionadaS);
         qtdAtual += qtdAdicionada;

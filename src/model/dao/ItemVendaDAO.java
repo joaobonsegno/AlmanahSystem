@@ -20,7 +20,7 @@ public class ItemVendaDAO {
             String sql = "INSERT INTO item_venda (idVenda, idProduto, quantidade, valor)VALUES(?,?,?,?)";
             stmt = con.prepareStatement(sql);
             stmt.setInt(1, v.getIdBanco());
-            stmt.setInt(2, p.getIdBanco());
+            stmt.setInt(2, p.getIdProduto());
             stmt.setInt(3, qtd);
             stmt.setDouble(4, p.getPreco()*qtd);  
             
@@ -65,7 +65,7 @@ public class ItemVendaDAO {
                     int idProd = rs.getInt("idProduto");
                     if(idProd >= 1){
                         for(Produto p:GerenciadorProdutos.listaProdutos){
-                            if(p.getIdBanco() == idProd){
+                            if(p.getIdProduto() == idProd){
                                 String qtdString = Integer.toString(rs.getInt("qnt"));
                                 c.setItensBanco(p, qtdString);
                             }

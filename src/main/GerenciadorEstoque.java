@@ -11,17 +11,6 @@ import model.bean.Produto;
 import model.dao.ProdutoDAO;
 
 public class GerenciadorEstoque extends javax.swing.JFrame {
-    //public static ArrayList<Produto> listaProdutos = new ArrayList<>();
-    
-    public static boolean verificaIndice(){
-        int escolhido = cbEscolherProduto.getSelectedIndex();
-        if (escolhido > 0){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
     
     public static void retirarEstoque(Produto prod, Integer qtd){
         ProdutoDAO pDao = new ProdutoDAO();
@@ -32,24 +21,6 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
         prod.setQtdEstoque(qtdAtualS);
         pDao.updateEstoque(prod);
         
-    }
-    
-    public void criarCb(ArrayList<Produto> listaProdutos){  
-        ArrayList<Integer> ordenador = new ArrayList<>();
-        
-        for (Produto numero : listaProdutos){
-            if(!numero.getQtdMinima().equals("X")){
-                ordenador.add(numero.getIdSistema());
-            }
-        }
-
-        cbEscolherProduto.removeAllItems();
-        cbEscolherProduto.addItem("");
-        ordenador = GerenciadorComandas.ordenarListas(ordenador);
-        for (Integer numero : ordenador){
-            String numNovoProduto = Integer.toString(numero);
-            cbEscolherProduto.addItem(numNovoProduto);
-        }
     }
         
     public void criarTabela(){
@@ -67,13 +38,12 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
             if(!p.getQtdMinima().equals("X")){
                 dtmProdutos.addRow(
                     new Object[]{
-                        p.getIdSistema(),
+                        p.getIdProduto(),
                         p.getQtdEstoque(),
                         p.getNome()}
                 );
             }
         }
-        criarCb(pDao.read());
     }
     
     public void criarTabelaNome(String nome){
@@ -90,7 +60,7 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
             if(!p.getQtdMinima().equals("X")){
                 dtmProdutos.addRow(
                     new Object[]{
-                        p.getIdSistema(),
+                        p.getIdProduto(),
                         p.getQtdEstoque(),
                         p.getNome()}
                 );
@@ -109,20 +79,20 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
     
     public GerenciadorEstoque() {
        initComponents();
-       lblErro.setVisible(false);
+       getRootPane().setDefaultButton(btnOk);
+       jtProdutos.setRowHeight(22);
        this.setLocationRelativeTo(null);
-       cbEscolherProduto.removeAllItems();
        jtProdutos.getColumnModel().getColumn(0).setPreferredWidth(80); 
        jtProdutos.getColumnModel().getColumn(1).setPreferredWidth(100);
-       jtProdutos.getColumnModel().getColumn(2).setPreferredWidth(335);
+       jtProdutos.getColumnModel().getColumn(2).setPreferredWidth(430);
         
        jtProdutos.getColumnModel().getColumn(0).setMinWidth(80);
        jtProdutos.getColumnModel().getColumn(1).setMinWidth(100);
-       jtProdutos.getColumnModel().getColumn(2).setMinWidth(335);
+       jtProdutos.getColumnModel().getColumn(2).setMinWidth(430);
         
        jtProdutos.getColumnModel().getColumn(0).setMaxWidth(80);
        jtProdutos.getColumnModel().getColumn(1).setMaxWidth(100);
-       jtProdutos.getColumnModel().getColumn(2).setMaxWidth(335);
+       jtProdutos.getColumnModel().getColumn(2).setMaxWidth(430);
        criarTabela();
     }
 
@@ -133,42 +103,29 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
 
         btnStringProdutos = new javax.swing.JLabel();
         linha1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
-        linha2 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
         btnLancador = new javax.swing.JButton();
-        lblStringUsuario = new javax.swing.JLabel();
-        lblUsuario = new javax.swing.JLabel();
-        lblStringFuncao = new javax.swing.JLabel();
-        lblFuncao = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtProdutos = new javax.swing.JTable();
-        cbEscolherProduto = new javax.swing.JComboBox<>();
-        lblStringSelecione = new javax.swing.JLabel();
-        btnMovimentacao = new javax.swing.JButton();
         btnDarEntrada = new javax.swing.JButton();
-        lblErro = new javax.swing.JLabel();
         lblStringNomeProduto = new javax.swing.JLabel();
         txtPesquisa = new javax.swing.JTextField();
         btnOk = new javax.swing.JButton();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(1, 1), new java.awt.Dimension(1, 1), new java.awt.Dimension(1, 1));
+        btnDarEntrada1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gerenciador de Estoque");
-        setMaximumSize(new java.awt.Dimension(980, 620));
-        setMinimumSize(new java.awt.Dimension(980, 620));
+        setMinimumSize(new java.awt.Dimension(681, 615));
         setResizable(false);
 
         btnStringProdutos.setBackground(new java.awt.Color(0, 102, 204));
-        btnStringProdutos.setFont(new java.awt.Font("Comic Sans MS", 0, 24)); // NOI18N
+        btnStringProdutos.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
         btnStringProdutos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btnStringProdutos.setText("Gerenciador de Estoque");
 
         linha1.setBackground(new java.awt.Color(0, 0, 0));
         linha1.setOpaque(true);
 
-        linha2.setBackground(new java.awt.Color(0, 0, 0));
-        linha2.setOpaque(true);
-
-        btnLancador.setFont(new java.awt.Font("Comic Sans MS", 0, 17)); // NOI18N
+        btnLancador.setFont(new java.awt.Font("Century Gothic", 0, 17)); // NOI18N
         btnLancador.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\voltar (1).png")); // NOI18N
         btnLancador.setText("Menu");
         btnLancador.addActionListener(new java.awt.event.ActionListener() {
@@ -177,20 +134,8 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
             }
         });
 
-        lblStringUsuario.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
-        lblStringUsuario.setText("Usuário:");
-
-        lblUsuario.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
-        lblUsuario.setText("Joao");
-
-        lblStringFuncao.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
-        lblStringFuncao.setText("Função:");
-
-        lblFuncao.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
-        lblFuncao.setText("Gerente");
-
         jtProdutos.setBorder(new javax.swing.border.MatteBorder(null));
-        jtProdutos.setFont(new java.awt.Font("Comic Sans MS", 0, 16)); // NOI18N
+        jtProdutos.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         jtProdutos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -214,31 +159,8 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
             jtProdutos.getColumnModel().getColumn(2).setResizable(false);
         }
 
-        cbEscolherProduto.setFont(new java.awt.Font("Comic Sans MS", 0, 22)); // NOI18N
-        cbEscolherProduto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cbEscolherProduto.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cbEscolherProdutoItemStateChanged(evt);
-            }
-        });
-
-        lblStringSelecione.setFont(new java.awt.Font("Comic Sans MS", 0, 24)); // NOI18N
-        lblStringSelecione.setText("Selecione o produto:");
-
-        btnMovimentacao.setBackground(new java.awt.Color(153, 153, 0));
-        btnMovimentacao.setFont(new java.awt.Font("Comic Sans MS", 0, 20)); // NOI18N
-        btnMovimentacao.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\movimentacao (1).png")); // NOI18N
-        btnMovimentacao.setText("Movimentação");
-        btnMovimentacao.setBorder(new javax.swing.border.MatteBorder(null));
-        btnMovimentacao.setBorderPainted(false);
-        btnMovimentacao.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMovimentacaoActionPerformed(evt);
-            }
-        });
-
         btnDarEntrada.setBackground(new java.awt.Color(0, 153, 0));
-        btnDarEntrada.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
+        btnDarEntrada.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         btnDarEntrada.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\entrada.png")); // NOI18N
         btnDarEntrada.setText(" Dar Entrada");
         btnDarEntrada.setBorder(new javax.swing.border.MatteBorder(null));
@@ -249,17 +171,13 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
             }
         });
 
-        lblErro.setFont(new java.awt.Font("Comic Sans MS", 0, 24)); // NOI18N
-        lblErro.setForeground(new java.awt.Color(255, 0, 0));
-        lblErro.setText("Selecione um produto!");
-
-        lblStringNomeProduto.setFont(new java.awt.Font("Comic Sans MS", 0, 20)); // NOI18N
+        lblStringNomeProduto.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
         lblStringNomeProduto.setText("Nome do Produto:");
 
-        txtPesquisa.setFont(new java.awt.Font("Comic Sans MS", 0, 20)); // NOI18N
+        txtPesquisa.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
 
         btnOk.setBackground(new java.awt.Color(0, 153, 204));
-        btnOk.setFont(new java.awt.Font("Comic Sans MS", 0, 20)); // NOI18N
+        btnOk.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
         btnOk.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\pesquisar (1).png")); // NOI18N
         btnOk.setText("Buscar");
         btnOk.setBorder(new javax.swing.border.MatteBorder(null));
@@ -270,115 +188,72 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
             }
         });
 
-        filler1.setBackground(new java.awt.Color(0, 0, 0));
-        filler1.setOpaque(true);
+        btnDarEntrada1.setBackground(new java.awt.Color(255, 0, 0));
+        btnDarEntrada1.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        btnDarEntrada1.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\entrada.png")); // NOI18N
+        btnDarEntrada1.setText("   Dar Baixa");
+        btnDarEntrada1.setBorder(new javax.swing.border.MatteBorder(null));
+        btnDarEntrada1.setBorderPainted(false);
+        btnDarEntrada1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDarEntrada1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblStringNomeProduto)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnOk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(btnMovimentacao, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 521, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(lblStringSelecione)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbEscolherProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btnDarEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(117, 117, 117))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(lblErro)
-                                .addGap(75, 75, 75))))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnStringProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(205, 205, 205)
+                        .addComponent(btnStringProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnLancador)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnLancador)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblStringUsuario)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(76, 76, 76)
-                .addComponent(lblStringFuncao)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblFuncao, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(141, 141, 141))
+                        .addGap(36, 36, 36)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 604, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblStringNomeProduto)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(41, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnDarEntrada1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
+                .addComponent(btnDarEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(117, 117, 117))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, 977, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 4, Short.MAX_VALUE)))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addComponent(linha2, javax.swing.GroupLayout.PREFERRED_SIZE, 981, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(linha1, javax.swing.GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblStringUsuario)
-                        .addComponent(lblUsuario)
-                        .addComponent(lblStringFuncao)
-                        .addComponent(lblFuncao))
-                    .addComponent(btnLancador, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
-                .addComponent(btnStringProdutos)
-                .addGap(36, 36, 36)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnMovimentacao, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(11, 11, 11)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(lblStringSelecione)
-                                    .addComponent(cbEscolherProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(25, 25, 25)
-                                .addComponent(lblErro)
-                                .addGap(41, 41, 41)
-                                .addComponent(btnDarEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(200, 200, 200))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(txtPesquisa, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
-                                        .addComponent(lblStringNomeProduto))
-                                    .addComponent(btnOk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(18, 18, 18)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(69, 69, 69))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(filler1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnLancador, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnStringProdutos))
+                .addGap(49, 49, 49)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblStringNomeProduto))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDarEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDarEntrada1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(110, 110, 110)
+                    .addGap(63, 63, 63)
                     .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(507, Short.MAX_VALUE)))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(42, 42, 42)
-                    .addComponent(linha2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(575, Short.MAX_VALUE)))
+                    .addContainerGap(494, Short.MAX_VALUE)))
         );
 
         pack();
@@ -389,36 +264,26 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnLancadorActionPerformed
 
-    private void btnMovimentacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovimentacaoActionPerformed
-        dispose();
-        new MovimentacaoEstoque().setVisible(true); 
-    }//GEN-LAST:event_btnMovimentacaoActionPerformed
-
     private void btnDarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDarEntradaActionPerformed
-        if(verificaIndice()){
-            Object i = cbEscolherProduto.getSelectedItem();
-            String i2 = (String)i;
-            Integer id = Integer.parseInt(i2);
-            DarEntrada entrada = new DarEntrada(new javax.swing.JFrame(), true, id);
-            entrada.setVisible(true); 
-            dispose();
-        }
-        else{
-            lblErro.setVisible(true);
-        }
-    }//GEN-LAST:event_btnDarEntradaActionPerformed
+        Integer idSelecionado = (Integer)jtProdutos.getValueAt(jtProdutos.getSelectedRow(), 0);
 
-    private void cbEscolherProdutoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbEscolherProdutoItemStateChanged
-        int escolhido = cbEscolherProduto.getSelectedIndex();
-        if (escolhido > 0){
-            lblErro.setVisible(false);
-        }
-        
-    }//GEN-LAST:event_cbEscolherProdutoItemStateChanged
+        DarEntrada entrada = new DarEntrada(new javax.swing.JFrame(), true, idSelecionado);
+        entrada.setVisible(true); 
+        dispose();
+
+    }//GEN-LAST:event_btnDarEntradaActionPerformed
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
         criarTabelaNome(txtPesquisa.getText());
     }//GEN-LAST:event_btnOkActionPerformed
+
+    private void btnDarEntrada1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDarEntrada1ActionPerformed
+        Integer idSelecionado = (Integer)jtProdutos.getValueAt(jtProdutos.getSelectedRow(), 0);
+
+        DarBaixa baixa = new DarBaixa(new javax.swing.JFrame(), true, idSelecionado);
+        baixa.setVisible(true); 
+        dispose();
+    }//GEN-LAST:event_btnDarEntrada1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -464,23 +329,14 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDarEntrada;
+    private javax.swing.JButton btnDarEntrada1;
     private javax.swing.JButton btnLancador;
-    private javax.swing.JButton btnMovimentacao;
     private javax.swing.JButton btnOk;
     private javax.swing.JLabel btnStringProdutos;
-    private static javax.swing.JComboBox<String> cbEscolherProduto;
-    private javax.swing.Box.Filler filler1;
     private javax.swing.JScrollPane jScrollPane1;
     private static javax.swing.JTable jtProdutos;
-    public static javax.swing.JLabel lblErro;
-    private javax.swing.JLabel lblFuncao;
-    private javax.swing.JLabel lblStringFuncao;
     private javax.swing.JLabel lblStringNomeProduto;
-    private javax.swing.JLabel lblStringSelecione;
-    private javax.swing.JLabel lblStringUsuario;
-    private javax.swing.JLabel lblUsuario;
     private javax.swing.Box.Filler linha1;
-    private javax.swing.Box.Filler linha2;
     private javax.swing.JTextField txtPesquisa;
     // End of variables declaration//GEN-END:variables
 }

@@ -134,21 +134,21 @@ public class FormaDinheiro extends javax.swing.JDialog {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose(); 
-        FormaPagamento forma = new FormaPagamento(new javax.swing.JFrame(), true);
+        FormaPagamentoOLD forma = new FormaPagamentoOLD(new javax.swing.JFrame(), true);
         forma.setVisible(true);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
        try{
-            if (Double.parseDouble(txtEntrada.getText()) < EncerrarComanda.comandaSelecionada.getValor()){
+            Double valor = Double.parseDouble(GerenciadorComandas.tornarCompativel(txtEntrada.getText()));
+            if (valor < EncerrarComanda.comandaSelecionada.getValor()){
                 EncerrarComanda.flagValor = false;
                 JOptionPane.showMessageDialog(null, "Valor Inválido");
             }else{
                 EncerrarComanda.flagValor = true;
                 dispose();
-                String valor = GerenciadorComandas.tornarCompativel(txtEntrada.getText());
-                FormaPagamento.valorRecebido = Double.parseDouble(valor);
-                FormaPagamento forma = new FormaPagamento(new javax.swing.JFrame(), true);
+                FormaPagamentoOLD.valorRecebido = valor;
+                FormaPagamentoOLD forma = new FormaPagamentoOLD(new javax.swing.JFrame(), true);
                 forma.setVisible(true);
             }
        }catch(java.lang.NumberFormatException ex){

@@ -51,7 +51,6 @@ public class NovoPrato extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Novo Prato");
-        setMaximumSize(new java.awt.Dimension(516, 311));
         setMinimumSize(new java.awt.Dimension(516, 311));
         setResizable(false);
 
@@ -96,7 +95,7 @@ public class NovoPrato extends javax.swing.JDialog {
         filler1.setOpaque(true);
 
         grupo1.add(cbBuffet);
-        cbBuffet.setFont(new java.awt.Font("Comic Sans MS", 0, 20)); // NOI18N
+        cbBuffet.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
         cbBuffet.setText("Buffet à vontade");
         cbBuffet.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -110,7 +109,7 @@ public class NovoPrato extends javax.swing.JDialog {
         });
 
         grupo1.add(cbPeso);
-        cbPeso.setFont(new java.awt.Font("Comic Sans MS", 0, 20)); // NOI18N
+        cbPeso.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
         cbPeso.setText("Peso");
         cbPeso.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -193,7 +192,7 @@ public class NovoPrato extends javax.swing.JDialog {
                     .addComponent(lblStringkg)
                     .addComponent(txtEntradaPreco, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblStringPeso))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -231,18 +230,19 @@ public class NovoPrato extends javax.swing.JDialog {
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         //try{
+            
             ItemComandaDAO item = new ItemComandaDAO();
             if (cbPeso.isSelected()){
                 String preco = GerenciadorComandas.tornarCompativel(txtEntradaPreco.getText());
                 preco = GerenciadorComandas.arredondarValor(preco);
                 System.out.println("Preço: "+preco);
                 Double precoPrato = Double.parseDouble(preco);
-                GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1).setPratos(precoPrato);
-                item.create(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1), precoPrato);
+                GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).setPratos(precoPrato);
+                item.create(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado), precoPrato);
             }
             else{
-                GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1).setPratos(24.90);
-                item.create(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1), 24.90);
+                GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).setPratos(24.90);
+                item.create(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado), 24.90);
             }
             new GerenciadorComandas().setVisible(true);
             dispose();

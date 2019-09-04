@@ -10,7 +10,7 @@ import model.bean.Produto;
 import model.dao.ProdutoDAO;
 
 public class AlterarProduto extends javax.swing.JFrame {
-    public static ArrayList<Produto> listaProdutos = new ArrayList<>();
+    /*public static ArrayList<Produto> listaProdutos = new ArrayList<>();
     
     public void criarCb(){
         cbCategoria.removeAllItems();
@@ -48,7 +48,7 @@ public class AlterarProduto extends javax.swing.JFrame {
            listaProdutos.add(p);
        }
        getRootPane().setDefaultButton(btnConfirmar);
-    }
+    }*/
 
 
     @SuppressWarnings("unchecked")
@@ -311,7 +311,7 @@ public class AlterarProduto extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        boolean flagId = true;
+        /*boolean flagId = true;
         String cat = (String)cbCategoria.getSelectedItem();
         String id = txtId.getText();
         String nome = txtNome.getText();
@@ -382,7 +382,7 @@ public class AlterarProduto extends javax.swing.JFrame {
                 msg += ("- Preço\n");
             }
             JOptionPane.showMessageDialog(null, "O(s) seguinte(s) campo(s) deve(m) ser preenchido(s):"+msg);
-        }
+        }*/
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed

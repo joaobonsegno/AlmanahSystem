@@ -8,7 +8,7 @@ public class Caixa {
     private String dataAbertura, dataFechamento;
     private Double dinheiro;
     private int idCaixa, status;
-    private Turno turno;
+    private Funcionario funcionario;
     
     public String dataAtual(){
         Calendar data = new GregorianCalendar();
@@ -55,12 +55,12 @@ public class Caixa {
         this.dinheiro = dinheiro;
     }
 
-    public Turno getTurno() {
-        return turno;
+    public Funcionario getFuncionario() {
+        return funcionario;
     }
 
-    public void setTurno(Turno turno) {
-        this.turno = turno;
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
     }
 
     public int getStatus() {

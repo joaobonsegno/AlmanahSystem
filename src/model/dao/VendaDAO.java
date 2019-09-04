@@ -6,10 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import main.GerenciadorProdutos;
-import model.bean.Comanda;
-import model.bean.Produto;
-import model.bean.Turno;
+import main.Login;
+import model.bean.Caixa;
 import model.bean.Venda;
 
 public class VendaDAO {
@@ -18,12 +16,12 @@ public class VendaDAO {
         PreparedStatement stmt = null;
         
         try{
-            String sql = "INSERT INTO venda (data, formaPagamento, total, idTurno)VALUES(?,?,?,?)";
+            String sql = "INSERT INTO venda (data, formaPagamento, total, idCaixa)VALUES(?,?,?,?)";
             stmt = con.prepareStatement(sql);
             stmt.setString(1, v.getData());
             stmt.setString(2, v.getFormaPagamento());
             stmt.setDouble(3, v.getTotal());
-            stmt.setInt(4, v.getTurno().getIdTurno());  
+            stmt.setInt(4, Login.caixaAtual.getIdCaixa());
             
             stmt.executeUpdate();
             System.out.println("Salvo com sucesso!");
@@ -35,7 +33,7 @@ public class VendaDAO {
     }
     
     public ArrayList<Venda> read(){
-        TurnoDAO turnoDao = new TurnoDAO();
+        CaixaDAO caixaDao = new CaixaDAO();
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -51,9 +49,9 @@ public class VendaDAO {
                 v.setData(rs.getString("data"));
                 v.setFormaPagamento(rs.getString("formaPagamento"));
                 v.setTotal(rs.getDouble("total"));
-                for(Turno t:turnoDao.read()){
-                    if(rs.getInt("idTurno") == t.getIdTurno()){
-                        v.setTurno(t);
+                for(Caixa c:caixaDao.read()){
+                    if(rs.getInt("idCaixa") == c.getIdCaixa()){
+                        v.setCaixa(c);
                     }
                 }
                 vendas.add(v);

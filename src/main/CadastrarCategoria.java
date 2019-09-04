@@ -21,11 +21,6 @@ public class CadastrarCategoria extends javax.swing.JFrame {
 
         lblStringNovoProduto = new javax.swing.JLabel();
         linha1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
-        linha2 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
-        lblStringUsuario = new javax.swing.JLabel();
-        lblUsuario = new javax.swing.JLabel();
-        lblStringFuncao = new javax.swing.JLabel();
-        lblFuncao = new javax.swing.JLabel();
         btnConfirmar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         txtNome = new javax.swing.JTextField();
@@ -36,36 +31,19 @@ public class CadastrarCategoria extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Cadastrar Categoria");
-        setMaximumSize(new java.awt.Dimension(570, 460));
         setMinimumSize(new java.awt.Dimension(570, 460));
-        setPreferredSize(new java.awt.Dimension(570, 460));
         setResizable(false);
 
         lblStringNovoProduto.setBackground(new java.awt.Color(0, 102, 204));
-        lblStringNovoProduto.setFont(new java.awt.Font("Comic Sans MS", 0, 24)); // NOI18N
+        lblStringNovoProduto.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
         lblStringNovoProduto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblStringNovoProduto.setText("Cadastrar Categoria");
 
         linha1.setBackground(new java.awt.Color(0, 0, 0));
         linha1.setOpaque(true);
 
-        linha2.setBackground(new java.awt.Color(0, 0, 0));
-        linha2.setOpaque(true);
-
-        lblStringUsuario.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
-        lblStringUsuario.setText("Usuário:");
-
-        lblUsuario.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
-        lblUsuario.setText("Joao");
-
-        lblStringFuncao.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
-        lblStringFuncao.setText("Função:");
-
-        lblFuncao.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
-        lblFuncao.setText("Gerente");
-
         btnConfirmar.setBackground(new java.awt.Color(0, 153, 0));
-        btnConfirmar.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
+        btnConfirmar.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         btnConfirmar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\confirm.png")); // NOI18N
         btnConfirmar.setText("  Confirmar");
         btnConfirmar.setBorder(new javax.swing.border.MatteBorder(null));
@@ -77,7 +55,7 @@ public class CadastrarCategoria extends javax.swing.JFrame {
         });
 
         btnCancelar.setBackground(new java.awt.Color(204, 0, 0));
-        btnCancelar.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
+        btnCancelar.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         btnCancelar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\cancel.png")); // NOI18N
         btnCancelar.setText("  Cancelar");
         btnCancelar.setBorder(new javax.swing.border.MatteBorder(null));
@@ -88,16 +66,16 @@ public class CadastrarCategoria extends javax.swing.JFrame {
             }
         });
 
-        txtNome.setFont(new java.awt.Font("Comic Sans MS", 0, 20)); // NOI18N
+        txtNome.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
 
-        lblStringNome.setFont(new java.awt.Font("Comic Sans MS", 0, 20)); // NOI18N
+        lblStringNome.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
         lblStringNome.setText("Nome:");
 
-        lblStringDescricao.setFont(new java.awt.Font("Comic Sans MS", 0, 20)); // NOI18N
+        lblStringDescricao.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
         lblStringDescricao.setText("Observações:");
 
         txtDescricao.setColumns(20);
-        txtDescricao.setFont(new java.awt.Font("Comic Sans MS", 0, 16)); // NOI18N
+        txtDescricao.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtDescricao.setRows(5);
         jScrollPane2.setViewportView(txtDescricao);
 
@@ -106,51 +84,34 @@ public class CadastrarCategoria extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(80, 80, 80)
-                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(70, 70, 70)
-                        .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(138, 138, 138)
-                        .addComponent(lblStringNovoProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblStringNome)
-                            .addComponent(lblStringDescricao))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
-                            .addComponent(txtNome))))
-                .addContainerGap(47, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addComponent(lblStringUsuario)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblStringFuncao)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblFuncao, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28))
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblStringNome)
+                    .addComponent(lblStringDescricao))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+                    .addComponent(txtNome))
+                .addContainerGap(37, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(lblStringNovoProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(140, 140, 140))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(70, 70, 70)
+                .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(76, 76, 76))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(linha1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 571, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(linha2, javax.swing.GroupLayout.DEFAULT_SIZE, 571, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblStringUsuario)
-                    .addComponent(lblUsuario)
-                    .addComponent(lblStringFuncao)
-                    .addComponent(lblFuncao))
-                .addGap(38, 38, 38)
+                .addContainerGap()
                 .addComponent(lblStringNovoProduto)
-                .addGap(56, 56, 56)
+                .addGap(48, 48, 48)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblStringNome)
                     .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -158,21 +119,16 @@ public class CadastrarCategoria extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblStringDescricao)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21))
+                .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(110, 110, 110)
+                    .addGap(60, 60, 60)
                     .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(349, Short.MAX_VALUE)))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(42, 42, 42)
-                    .addComponent(linha2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(417, Short.MAX_VALUE)))
+                    .addContainerGap(327, Short.MAX_VALUE)))
         );
 
         pack();
@@ -192,12 +148,12 @@ public class CadastrarCategoria extends javax.swing.JFrame {
         }
         Login.categorias.add(c);
         
-        new GerenciadorProdutos().setVisible(true); 
+        new Menu().setVisible(true); 
         dispose();
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        new GerenciadorProdutos().setVisible(true);
+        new Menu().setVisible(true);
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
@@ -271,15 +227,10 @@ public class CadastrarCategoria extends javax.swing.JFrame {
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnConfirmar;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel lblFuncao;
     private javax.swing.JLabel lblStringDescricao;
-    private javax.swing.JLabel lblStringFuncao;
     private javax.swing.JLabel lblStringNome;
     private javax.swing.JLabel lblStringNovoProduto;
-    private javax.swing.JLabel lblStringUsuario;
-    private javax.swing.JLabel lblUsuario;
     private javax.swing.Box.Filler linha1;
-    private javax.swing.Box.Filler linha2;
     private javax.swing.JTextArea txtDescricao;
     private javax.swing.JTextField txtNome;
     // End of variables declaration//GEN-END:variables

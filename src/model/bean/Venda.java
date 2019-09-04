@@ -11,7 +11,7 @@ public class Venda {
     private Integer idBanco;
     private Double total;
     private String data, formaPagamento;
-    private Turno turno;
+    private Caixa caixa;
     private ArrayList<Produto> itens = new ArrayList<>();
     private ArrayList<String> qnt = new ArrayList<>();
     private ArrayList<Double> pratos = new ArrayList<>();
@@ -23,11 +23,10 @@ public class Venda {
         return dataFormatada;
     }
     
-    public void setAtributos(String data, String formaPagamento, Double total, Turno turno){
+    public void setAtributos(String data, String formaPagamento, Double total){
         this.data = data;
         this.formaPagamento = formaPagamento;
         this.total = total;
-        this.turno = turno;
     }
     
     public Integer getIdBanco() {
@@ -87,15 +86,13 @@ public class Venda {
 
     public void setFormaPagamento(String formaPagamento) {
         this.formaPagamento = formaPagamento;
+    }   
+
+    public Caixa getCaixa() {
+        return caixa;
     }
 
-    public Turno getTurno() {
-        return turno;
+    public void setCaixa(Caixa caixa) {
+        this.caixa = caixa;
     }
-
-    public void setTurno(Turno turno) {
-        this.turno = turno;
-    }
-    
-    
 }

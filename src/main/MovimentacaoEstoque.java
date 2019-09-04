@@ -16,12 +16,14 @@ public class MovimentacaoEstoque extends javax.swing.JFrame {
         DefaultTableModel dtmLogs = (DefaultTableModel) jtLogs.getModel();
         logDao = new LogDAO();
         for (Log l:logDao.read()){
-            dtmLogs.addRow(
-                new Object[]{
-                    l.getId(),
-                    l.getDescricao(),
-                    l.getData()}
-            );
+            if (l.getCategoria().equals("Estoque")){
+                dtmLogs.addRow(
+                    new Object[]{
+                        l.getId(),
+                        l.getDescricao(),
+                        l.getData()}
+                );
+            }
         }
     }
     
@@ -30,12 +32,14 @@ public class MovimentacaoEstoque extends javax.swing.JFrame {
         LogDAO lDao = new LogDAO();
         limparTabela();
         for (Log l: lDao.readForNome(nome)){
-            dtmLogs.addRow(
-                new Object[]{
-                    l.getId(),
-                    l.getDescricao(),
-                    l.getData()}
-            ); 
+            if (l.getCategoria().equals("Estoque")){
+                dtmLogs.addRow(
+                    new Object[]{
+                        l.getId(),
+                        l.getDescricao(),
+                        l.getData()}
+                ); 
+            }
         }
     }
     
@@ -51,6 +55,8 @@ public class MovimentacaoEstoque extends javax.swing.JFrame {
     
     public MovimentacaoEstoque() {
        initComponents();
+       jtLogs.setRowHeight(22);
+       getRootPane().setDefaultButton(btnBuscar);
        this.setLocationRelativeTo(null);
        jtLogs.getColumnModel().getColumn(0).setPreferredWidth(80); 
        jtLogs.getColumnModel().getColumn(1).setPreferredWidth(620);
@@ -78,16 +84,15 @@ public class MovimentacaoEstoque extends javax.swing.JFrame {
         btnVoltar = new javax.swing.JButton();
         lblStringNomeProduto = new javax.swing.JLabel();
         txtPesquisa = new javax.swing.JTextField();
-        btnOk = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Movimentação do Estoque");
-        setMaximumSize(new java.awt.Dimension(1009, 495));
         setMinimumSize(new java.awt.Dimension(1009, 495));
         setResizable(false);
 
         btnStringProdutos.setBackground(new java.awt.Color(0, 102, 204));
-        btnStringProdutos.setFont(new java.awt.Font("Comic Sans MS", 0, 20)); // NOI18N
+        btnStringProdutos.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
         btnStringProdutos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btnStringProdutos.setText("Movimentação");
 
@@ -95,7 +100,7 @@ public class MovimentacaoEstoque extends javax.swing.JFrame {
         linha1.setOpaque(true);
 
         jtLogs.setBorder(new javax.swing.border.MatteBorder(null));
-        jtLogs.setFont(new java.awt.Font("Comic Sans MS", 0, 16)); // NOI18N
+        jtLogs.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         jtLogs.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -130,20 +135,20 @@ public class MovimentacaoEstoque extends javax.swing.JFrame {
             }
         });
 
-        lblStringNomeProduto.setFont(new java.awt.Font("Comic Sans MS", 0, 20)); // NOI18N
+        lblStringNomeProduto.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
         lblStringNomeProduto.setText("Pesquisa:");
 
-        txtPesquisa.setFont(new java.awt.Font("Comic Sans MS", 0, 20)); // NOI18N
+        txtPesquisa.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
 
-        btnOk.setBackground(new java.awt.Color(0, 153, 204));
-        btnOk.setFont(new java.awt.Font("Comic Sans MS", 0, 20)); // NOI18N
-        btnOk.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\pesquisar (1).png")); // NOI18N
-        btnOk.setText(" Buscar");
-        btnOk.setBorder(new javax.swing.border.MatteBorder(null));
-        btnOk.setBorderPainted(false);
-        btnOk.addActionListener(new java.awt.event.ActionListener() {
+        btnBuscar.setBackground(new java.awt.Color(0, 153, 204));
+        btnBuscar.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
+        btnBuscar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\pesquisar (1).png")); // NOI18N
+        btnBuscar.setText(" Buscar");
+        btnBuscar.setBorder(new javax.swing.border.MatteBorder(null));
+        btnBuscar.setBorderPainted(false);
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOkActionPerformed(evt);
+                btnBuscarActionPerformed(evt);
             }
         });
 
@@ -154,21 +159,21 @@ public class MovimentacaoEstoque extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(309, 309, 309)
+                        .addComponent(btnStringProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGap(49, 49, 49)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 901, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 922, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(lblStringNomeProduto)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(309, 309, 309)
-                        .addComponent(btnStringProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(59, Short.MAX_VALUE))
+                                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(38, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(linha1, javax.swing.GroupLayout.DEFAULT_SIZE, 1009, Short.MAX_VALUE))
         );
@@ -184,7 +189,7 @@ public class MovimentacaoEstoque extends javax.swing.JFrame {
                     .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lblStringNomeProduto)
-                        .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25))
@@ -200,12 +205,12 @@ public class MovimentacaoEstoque extends javax.swing.JFrame {
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         dispose();
-        new GerenciadorEstoque().setVisible(true);
+        new Menu().setVisible(true);
     }//GEN-LAST:event_btnVoltarActionPerformed
 
-    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         criarTabelaNome(txtPesquisa.getText());
-    }//GEN-LAST:event_btnOkActionPerformed
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -250,7 +255,7 @@ public class MovimentacaoEstoque extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnOk;
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JLabel btnStringProdutos;
     private javax.swing.JButton btnVoltar;
     private javax.swing.JScrollPane jScrollPane1;

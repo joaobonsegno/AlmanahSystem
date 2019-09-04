@@ -8,9 +8,6 @@
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
     <Property name="title" type="java.lang.String" value="Novo Prato"/>
-    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[516, 311]"/>
-    </Property>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[516, 311]"/>
     </Property>
@@ -102,7 +99,7 @@
                   <Component id="txtEntradaPreco" alignment="3" min="-2" pref="39" max="-2" attributes="0"/>
                   <Component id="lblStringPeso" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="26" max="32767" attributes="0"/>
+              <EmptySpace pref="30" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnCancelar" alignment="3" min="-2" pref="56" max="-2" attributes="0"/>
                   <Component id="btnConfirmar" alignment="3" min="-2" pref="56" max="-2" attributes="0"/>
@@ -239,7 +236,7 @@
           <ComponentRef name="grupo1"/>
         </Property>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Comic Sans MS" size="20" style="0"/>
+          <Font name="Century Gothic" size="20" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Buffet &#xe0; vontade"/>
       </Properties>
@@ -254,7 +251,7 @@
           <ComponentRef name="grupo1"/>
         </Property>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Comic Sans MS" size="20" style="0"/>
+          <Font name="Century Gothic" size="20" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Peso"/>
       </Properties>

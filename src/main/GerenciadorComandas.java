@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.Font;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
@@ -8,8 +9,8 @@ import model.bean.Produto;
 import model.dao.ComandaDAO;
 
 public class GerenciadorComandas extends javax.swing.JFrame {
-    public static int numeroNovaComanda = 00;
     public static ArrayList<Comanda> comandasAbertas = new ArrayList<>();
+    public static int numeroNovaComanda = 00;
     public static DecimalFormat formato = new DecimalFormat("#.##");
     public static Integer indiceSelecionado, idSelecionado;
     
@@ -17,7 +18,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         int tamanho = ordenador.size();
         for (int i = 0; i < tamanho-1; i++){
             for (int j = i+1; j < tamanho; j++){
-                if (ordenador.get(i).getIdSistema() > ordenador.get(j).getIdSistema()){
+                if (ordenador.get(i).getIdProduto() > ordenador.get(j).getIdProduto()){
                     Produto x = ordenador.get(i);
                     ordenador.set(i, ordenador.get(j));
                     ordenador.set(j, x);
@@ -285,12 +286,9 @@ public class GerenciadorComandas extends javax.swing.JFrame {
             ordenador.add(numero.getId());
         }
 
-        cbEscolherComanda.removeAllItems();
-        cbEscolherComanda.addItem("");
         ordenador = ordenarListas(ordenador);
         for (Integer numero : ordenador){
             String numNovaComanda = Integer.toString(numero);
-            cbEscolherComanda.addItem(numNovaComanda);
         }  
     }
     
@@ -301,18 +299,6 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         }
         else{
             lblErro.setText("Não há comandas abertas");
-            lblErro.setVisible(true);
-            return false;
-        }
-    }
-
-    public static boolean verificaIndice(){
-        int escolhido = cbEscolherComanda.getSelectedIndex();
-        if (escolhido > 0){
-            return true;
-        }
-        else{
-            lblErro.setText("Selecione uma comanda!");
             lblErro.setVisible(true);
             return false;
         }
@@ -329,8 +315,20 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         ordenarComandas();
     }
     
+    public int retornaIndice(){
+        int contador = 0;
+        for(Comanda c:comandasAbertas){
+            if(c.getId() == idSelecionado){
+                break;  
+            }
+            contador += 1;
+        }
+        return contador;
+    }
+    
     public GerenciadorComandas() {
         initComponents();
+        jtComandas.setRowHeight(19);
         DefaultTableModel dtmComandas = (DefaultTableModel) jtComandas.getModel();
         jtComandas.getColumnModel().getColumn(0).setPreferredWidth(80); 
         jtComandas.getColumnModel().getColumn(1).setPreferredWidth(180);
@@ -338,11 +336,11 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         jtComandas.getColumnModel().getColumn(1).setMinWidth(180);
         jtComandas.getColumnModel().getColumn(0).setMaxWidth(80);
         jtComandas.getColumnModel().getColumn(1).setMaxWidth(180);
-        cbEscolherComanda.removeAllItems();
         novaInstancia();
         lblErro.setVisible(false);
         this.setLocationRelativeTo(null);
         getRootPane().setDefaultButton(btnNovaComanda);
+        jtComandas.getTableHeader().setFont(new Font("Century Gothic", 1, 14));
     }
 
     @SuppressWarnings("unchecked")
@@ -351,64 +349,41 @@ public class GerenciadorComandas extends javax.swing.JFrame {
 
         btnStringGerenciador = new javax.swing.JLabel();
         linha1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
-        linha2 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
         btnLancador = new javax.swing.JButton();
-        lblStringUsuario = new javax.swing.JLabel();
-        lblUsuario = new javax.swing.JLabel();
-        lblStringFuncao = new javax.swing.JLabel();
-        lblFuncao = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtComandas = new javax.swing.JTable();
-        cbEscolherComanda = new javax.swing.JComboBox<>();
-        lblStringSelecione = new javax.swing.JLabel();
         btnNovaComanda = new javax.swing.JButton();
         btnBebida = new javax.swing.JButton();
         btnSobremesa = new javax.swing.JButton();
         btnEncerrar = new javax.swing.JButton();
         lblErro = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(1, 1), new java.awt.Dimension(1, 1), new java.awt.Dimension(1, 1));
-        btnBebida1 = new javax.swing.JButton();
+        btnRefeicao = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gerenciador de Comandas");
-        setMaximumSize(new java.awt.Dimension(1130, 570));
-        setMinimumSize(new java.awt.Dimension(1130, 570));
+        setMaximumSize(new java.awt.Dimension(791, 501));
+        setMinimumSize(new java.awt.Dimension(791, 501));
         setResizable(false);
 
         btnStringGerenciador.setBackground(new java.awt.Color(0, 102, 204));
-        btnStringGerenciador.setFont(new java.awt.Font("Comic Sans MS", 0, 24)); // NOI18N
+        btnStringGerenciador.setFont(new java.awt.Font("Century Gothic", 0, 21)); // NOI18N
         btnStringGerenciador.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btnStringGerenciador.setText("Gerenciador de Comandas");
 
         linha1.setBackground(new java.awt.Color(0, 0, 0));
         linha1.setOpaque(true);
 
-        linha2.setBackground(new java.awt.Color(0, 0, 0));
-        linha2.setOpaque(true);
-
-        btnLancador.setFont(new java.awt.Font("Comic Sans MS", 0, 17)); // NOI18N
+        btnLancador.setFont(new java.awt.Font("Century Gothic", 0, 17)); // NOI18N
         btnLancador.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\voltar (1).png")); // NOI18N
-        btnLancador.setText("Lançador");
+        btnLancador.setText("Menu");
         btnLancador.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLancadorActionPerformed(evt);
             }
         });
 
-        lblStringUsuario.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
-        lblStringUsuario.setText("Usuário:");
-
-        lblUsuario.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
-        lblUsuario.setText("Joao");
-
-        lblStringFuncao.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
-        lblStringFuncao.setText("Função:");
-
-        lblFuncao.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
-        lblFuncao.setText("Gerente");
-
         jtComandas.setBorder(new javax.swing.border.MatteBorder(null));
-        jtComandas.setFont(new java.awt.Font("Comic Sans MS", 0, 16)); // NOI18N
+        jtComandas.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         jtComandas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -423,20 +398,9 @@ public class GerenciadorComandas extends javax.swing.JFrame {
             jtComandas.getColumnModel().getColumn(1).setResizable(false);
         }
 
-        cbEscolherComanda.setFont(new java.awt.Font("Comic Sans MS", 0, 22)); // NOI18N
-        cbEscolherComanda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cbEscolherComanda.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cbEscolherComandaItemStateChanged(evt);
-            }
-        });
-
-        lblStringSelecione.setFont(new java.awt.Font("Comic Sans MS", 0, 24)); // NOI18N
-        lblStringSelecione.setText("Selecione a comanda:");
-
-        btnNovaComanda.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
+        btnNovaComanda.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         btnNovaComanda.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\add (1).png")); // NOI18N
-        btnNovaComanda.setText("   Nova Comanda");
+        btnNovaComanda.setText(" Nova Comanda");
         btnNovaComanda.setBorder(new javax.swing.border.MatteBorder(null));
         btnNovaComanda.setBorderPainted(false);
         btnNovaComanda.addActionListener(new java.awt.event.ActionListener() {
@@ -446,7 +410,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         });
 
         btnBebida.setBackground(new java.awt.Color(0, 153, 153));
-        btnBebida.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
+        btnBebida.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         btnBebida.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\bebida2.png")); // NOI18N
         btnBebida.setText("  Bebida");
         btnBebida.setBorder(new javax.swing.border.MatteBorder(null));
@@ -458,7 +422,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         });
 
         btnSobremesa.setBackground(new java.awt.Color(0, 153, 153));
-        btnSobremesa.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
+        btnSobremesa.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         btnSobremesa.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\93093.png")); // NOI18N
         btnSobremesa.setText("Sobremesa");
         btnSobremesa.setBorder(new javax.swing.border.MatteBorder(null));
@@ -470,7 +434,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         });
 
         btnEncerrar.setBackground(new java.awt.Color(0, 153, 0));
-        btnEncerrar.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
+        btnEncerrar.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         btnEncerrar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\encerrar (1).png")); // NOI18N
         btnEncerrar.setText("  Encerrar");
         btnEncerrar.setBorder(new javax.swing.border.MatteBorder(null));
@@ -481,22 +445,19 @@ public class GerenciadorComandas extends javax.swing.JFrame {
             }
         });
 
-        lblErro.setFont(new java.awt.Font("Comic Sans MS", 0, 24)); // NOI18N
+        lblErro.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
         lblErro.setForeground(new java.awt.Color(255, 0, 0));
         lblErro.setText("Selecione uma comanda!");
 
-        filler1.setBackground(new java.awt.Color(0, 0, 0));
-        filler1.setOpaque(true);
-
-        btnBebida1.setBackground(new java.awt.Color(0, 153, 153));
-        btnBebida1.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
-        btnBebida1.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\refeicao (2).png")); // NOI18N
-        btnBebida1.setText(" Refeição");
-        btnBebida1.setBorder(new javax.swing.border.MatteBorder(null));
-        btnBebida1.setBorderPainted(false);
-        btnBebida1.addActionListener(new java.awt.event.ActionListener() {
+        btnRefeicao.setBackground(new java.awt.Color(0, 153, 153));
+        btnRefeicao.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        btnRefeicao.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\refeicao (2).png")); // NOI18N
+        btnRefeicao.setText(" Refeição");
+        btnRefeicao.setBorder(new javax.swing.border.MatteBorder(null));
+        btnRefeicao.setBorderPainted(false);
+        btnRefeicao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBebida1ActionPerformed(evt);
+                btnRefeicaoActionPerformed(evt);
             }
         });
 
@@ -504,118 +465,75 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnStringGerenciador, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(415, 415, 415))
             .addGroup(layout.createSequentialGroup()
-                .addComponent(btnLancador)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(121, 121, 121)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnLancador)
+                        .addGap(135, 135, 135)
+                        .addComponent(btnStringGerenciador))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(152, 152, 152)
-                        .addComponent(btnNovaComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 169, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lblErro)
-                        .addGap(182, 182, 182))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lblStringSelecione)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbEscolherComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(139, 139, 139))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblStringUsuario)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(68, 68, 68)
-                                .addComponent(lblStringFuncao)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblFuncao, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnBebida1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(49, 49, 49)
-                                .addComponent(btnBebida, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(44, 44, 44)
-                                .addComponent(btnSobremesa, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(56, 56, 56))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnEncerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(231, 231, 231))))
+                        .addGap(66, 66, 66)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnSobremesa, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBebida, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnRefeicao, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(62, 62, 62)
+                        .addComponent(btnEncerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(87, 87, 87)
+                        .addComponent(btnNovaComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addComponent(lblErro)))
+                .addContainerGap(36, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, 1137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, 791, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(linha2, javax.swing.GroupLayout.DEFAULT_SIZE, 1137, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(497, 497, 497)
-                    .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(639, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblStringUsuario)
-                        .addComponent(lblUsuario)
-                        .addComponent(lblStringFuncao)
-                        .addComponent(lblFuncao))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(btnStringGerenciador))
                     .addComponent(btnLancador, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(50, 50, 50)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(btnStringGerenciador)
-                        .addGap(110, 110, 110)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblStringSelecione)
-                            .addComponent(cbEscolherComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(36, 36, 36)
-                        .addComponent(lblErro)
-                        .addGap(33, 33, 33)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnSobremesa, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnBebida, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnBebida1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(27, 27, 27)
-                        .addComponent(btnEncerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(155, 155, 155)
                         .addComponent(btnNovaComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(56, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(lblErro))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(83, 83, 83)
+                        .addComponent(btnRefeicao, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(34, 34, 34)
+                                .addComponent(btnBebida, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(btnEncerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(30, 30, 30)
+                        .addComponent(btnSobremesa, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(35, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(110, 110, 110)
+                    .addGap(52, 52, 52)
                     .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(456, Short.MAX_VALUE)))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(42, 42, 42)
-                    .addComponent(linha2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(524, Short.MAX_VALUE)))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(120, 120, 120)
-                    .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addContainerGap(448, Short.MAX_VALUE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLancadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLancadorActionPerformed
-        new Lancador().setVisible(true); 
+        new Menu().setVisible(true); 
         dispose();
     }//GEN-LAST:event_btnLancadorActionPerformed
 
@@ -627,63 +545,40 @@ public class GerenciadorComandas extends javax.swing.JFrame {
 
     private void btnBebidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBebidaActionPerformed
         try{
-            indiceSelecionado = cbEscolherComanda.getSelectedIndex();
-            Object i = cbEscolherComanda.getSelectedItem();
-            String i2 = (String)i;
-            idSelecionado = Integer.parseInt(i2);
-            if (existeComanda() && verificaIndice()){
+            idSelecionado = (Integer)jtComandas.getValueAt(jtComandas.getSelectedRow(), 0);
+            indiceSelecionado = retornaIndice()+1;
+            if (existeComanda()){
                 new NovaBebida().setVisible(true); 
                 dispose();
             }
-        }catch(java.lang.NumberFormatException ex){
+        }catch(java.lang.ArrayIndexOutOfBoundsException ex){
             lblErro.setVisible(true);
         }
     }//GEN-LAST:event_btnBebidaActionPerformed
 
     private void btnSobremesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSobremesaActionPerformed
         try{
-            indiceSelecionado = cbEscolherComanda.getSelectedIndex();
-            Object i = cbEscolherComanda.getSelectedItem();
-            String i2 = (String)i;
-            idSelecionado = Integer.parseInt(i2);
-            if (existeComanda() && verificaIndice()){
+            idSelecionado = (Integer)jtComandas.getValueAt(jtComandas.getSelectedRow(), 0);
+            indiceSelecionado = retornaIndice()+1;
+            if (existeComanda()){
                 new NovaSobremesa().setVisible(true); 
                 dispose();
             }
-        }catch(java.lang.NumberFormatException ex){
+        }catch(java.lang.ArrayIndexOutOfBoundsException ex){
             lblErro.setVisible(true);
         }
     }//GEN-LAST:event_btnSobremesaActionPerformed
 
     private void btnEncerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEncerrarActionPerformed
-        /*Object ii = cbEscolherComanda.getSelectedItem();
-        String i2 = (String)ii;
-        idSelecionado = Integer.parseInt(i2);
         try{
-            DefaultTableModel dtmComandas = (DefaultTableModel) jtComandas.getModel();
-            if (verificaIndice()){
-                int i = cbEscolherComanda.getSelectedIndex();
-                i -= 1;
-                System.out.println("Posição do Elemento: "+i);
-                dtmComandas.removeRow(i);
-                comandasAbertas.remove(i);
-                ordenarComandas();  
-            }
-        }catch(java.lang.IndexOutOfBoundsException ex){
-            System.out.println("Lista vazia!");
-        }*/
-        try{
-            Object i = cbEscolherComanda.getSelectedItem();
-            String i2 = (String)i;
-            idSelecionado = Integer.parseInt(i2);
+            idSelecionado = (Integer)jtComandas.getValueAt(jtComandas.getSelectedRow(), 0);
+            indiceSelecionado = retornaIndice();
             for(Comanda c:comandasAbertas){
                 if(c.getId() == idSelecionado){
                     if(c.getValor() == 0){
                         ComandaDAO comandaDao = new ComandaDAO();
                         DefaultTableModel dtmComandas = (DefaultTableModel) jtComandas.getModel();
-                        int indice = cbEscolherComanda.getSelectedIndex();
-                        indice -= 1;
-                        System.out.println("Posição do Elemento: "+i);
+                        int indice = retornaIndice();
                         dtmComandas.removeRow(indice);
                         comandasAbertas.remove(indice);
                         ordenarComandas();  
@@ -696,51 +591,26 @@ public class GerenciadorComandas extends javax.swing.JFrame {
                 }
             }    
         }catch(java.lang.NumberFormatException|java.lang.NullPointerException ex){
-            System.out.println(ex);
-            /*System.out.println(ex);
-            Object ii = cbEscolherComanda.getSelectedItem();
-            String i2 = (String)ii;
-            idSelecionado = Integer.parseInt(i2);
-            try{
-                DefaultTableModel dtmComandas = (DefaultTableModel) jtComandas.getModel();
-                if (verificaIndice()){
-                    int i = cbEscolherComanda.getSelectedIndex();
-                    i -= 1;
-                    System.out.println("Posição do Elemento: "+i);
-                    dtmComandas.removeRow(i);
-                    comandasAbertas.remove(i);
-                    ordenarComandas();  
-                }
-            }catch(java.lang.IndexOutOfBoundsException ex1){
-                System.out.println("Lista vazia!");
-            }*/
             lblErro.setVisible(true);
         }
     }//GEN-LAST:event_btnEncerrarActionPerformed
 
-    private void cbEscolherComandaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbEscolherComandaItemStateChanged
-        int escolhido = cbEscolherComanda.getSelectedIndex();
-        if (escolhido > 0){
-            lblErro.setVisible(false);
-        }
-        
-    }//GEN-LAST:event_cbEscolherComandaItemStateChanged
-
-    private void btnBebida1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBebida1ActionPerformed
+    private void btnRefeicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefeicaoActionPerformed
         try{
-            indiceSelecionado = cbEscolherComanda.getSelectedIndex();
-            Object i = cbEscolherComanda.getSelectedItem();
+            idSelecionado = (Integer)jtComandas.getValueAt(jtComandas.getSelectedRow(), 0);
+            indiceSelecionado = retornaIndice()+1;
+            /*Object i = cbEscolherComanda.getSelectedItem();
             String i2 = (String)i;
-            idSelecionado = Integer.parseInt(i2);
-            if (existeComanda() && verificaIndice()){
+            idSelecionado = Integer.parseInt(i2);*/
+            if (existeComanda()){
                 NovoPrato novoPrato = new NovoPrato(new javax.swing.JFrame(), true);
                 novoPrato.setVisible(true); 
                 dispose();
             }
-        }catch(java.lang.NumberFormatException ex){
+        }catch(java.lang.ArrayIndexOutOfBoundsException ex){
             lblErro.setVisible(true);
         }
-    }//GEN-LAST:event_btnBebida1ActionPerformed
+    }//GEN-LAST:event_btnRefeicaoActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -776,24 +646,16 @@ public class GerenciadorComandas extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBebida;
-    private javax.swing.JButton btnBebida1;
     private javax.swing.JButton btnEncerrar;
     private javax.swing.JButton btnLancador;
     private javax.swing.JButton btnNovaComanda;
+    private javax.swing.JButton btnRefeicao;
     private javax.swing.JButton btnSobremesa;
     private javax.swing.JLabel btnStringGerenciador;
-    private static javax.swing.JComboBox<String> cbEscolherComanda;
-    private javax.swing.Box.Filler filler1;
     private javax.swing.JScrollPane jScrollPane1;
     private static javax.swing.JTable jtComandas;
     public static javax.swing.JLabel lblErro;
-    private javax.swing.JLabel lblFuncao;
-    private javax.swing.JLabel lblStringFuncao;
-    private javax.swing.JLabel lblStringSelecione;
-    private javax.swing.JLabel lblStringUsuario;
-    private javax.swing.JLabel lblUsuario;
     private javax.swing.Box.Filler linha1;
-    private javax.swing.Box.Filler linha2;
     // End of variables declaration//GEN-END:variables
 }
 

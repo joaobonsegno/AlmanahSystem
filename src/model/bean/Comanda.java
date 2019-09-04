@@ -1,8 +1,10 @@
 package model.bean;
 
 import java.util.ArrayList;
-import main.GerenciadorComandas;
 import model.dao.ComandaDAO;
+import model.dao.ItemComandaDAO;
+import model.dao.ProdutoDAO;
+import model.dao.PromocaoUmDAO;
 
 public class Comanda {
     private Integer id, idBanco, status;
@@ -10,6 +12,8 @@ public class Comanda {
     private ArrayList<Produto> itens = new ArrayList<>();
     private ArrayList<String> qnt = new ArrayList<>();
     private ArrayList<Double> pratos = new ArrayList<>();
+    private ItemComandaDAO itemDao;
+    private ComandaDAO cDao;
     
     public Comanda(Integer id){
         this.id = id;
@@ -56,11 +60,23 @@ public class Comanda {
     }
     
     public void setItens(Produto item, String qtd) {
+        PromocaoUmDAO promoUmDao = new PromocaoUmDAO();
+        PromocaoUm promoUm = promoUmDao.read();
         ComandaDAO comandaDao = new ComandaDAO();
         this.itens.add(item);
         this.qnt.add(qtd);
         Integer qtdInt = Integer.parseInt(qtd);
-        Double total = item.getPreco()*qtdInt;
+        Double total;
+        
+        if (promoUm.getStatus() == 1){
+            if (item.getCategoria().getNome().equals("Suco")){
+                total = item.getPrecoComDesconto()*qtdInt;
+            }else{
+                total = item.getPreco()*qtdInt;
+            }
+        }else{
+            total = item.getPreco()*qtdInt;
+        }   
         atualizarValor(total);
         comandaDao.update(this);
     }
@@ -107,6 +123,53 @@ public class Comanda {
     
     public void setListaPratos(ArrayList<Double> lista){
         this.pratos = lista;
+    }
+    
+    public void removerProduto(int i){
+        cDao = new ComandaDAO();
+        Produto p = itens.get(i);
+        int quant = Integer.parseInt(qnt.get(i));
+        Double totalLinha = p.getPreco()*quant;
+        valor -= totalLinha;
+        itens.remove(i);
+        qnt.remove(i);
+        cDao.update(this);
+    }
+    
+    public String getQntEspecifica(int i){
+        return qnt.get(i);
+    }
+    
+    public void removerPrato(int i){
+        cDao = new ComandaDAO();
+        itemDao = new ItemComandaDAO();
+        Double d = pratos.get(i);
+        pratos.remove(i);
+        valor -= d;
+        itemDao.deletePrato(this, d);
+        cDao.update(this);
+    }
+    
+    public void removerItem(int i){
+        cDao = new ComandaDAO();
+        itemDao = new ItemComandaDAO();
+        ProdutoDAO pDao = new ProdutoDAO();
+        
+        Produto prod = itens.get(i);
+        Integer q = Integer.parseInt(qnt.get(i));
+        if (!prod.getQtdEstoque().equals("X")){
+            Integer qtdProdEstoque = Integer.parseInt(prod.getQtdEstoque());            
+            qtdProdEstoque += q;
+            prod.setQtdEstoque(Integer.toString(qtdProdEstoque));
+        }
+        
+        Double v = prod.getPrecoComDesconto()*q;
+        valor -= v;
+        itens.remove(i);
+        qnt.remove(i);
+        itemDao.deleteProduto(this, prod.getIdProduto());
+        pDao.updateEstoque(prod);
+        cDao.update(this);
     }
     
     public Comanda clonarComanda(Comanda c) {

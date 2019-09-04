@@ -7,24 +7,21 @@ import static main.GerenciadorProdutos.listaProdutos;
 import model.bean.Caixa;
 import model.bean.Categoria;
 import model.bean.Comanda;
+import model.bean.Funcionario;
 import model.bean.Produto;
-import model.bean.Turno;
 import model.dao.CaixaDAO;
 import model.dao.CategoriaDAO;
 import model.dao.ComandaDAO;
+import model.dao.FuncionarioDAO;
 import model.dao.ItemComandaDAO;
+import model.dao.LogDAO;
 import model.dao.ProdutoDAO;
-import model.dao.TurnoDAO;
-
-/*import java.awt.Dimension;
-import java.awt.Toolkit;*/
-
 
 
 public class Login extends javax.swing.JFrame {
     public static Boolean flagNovaComanda = false;
-    public static Turno turnoAtual;
     public static Caixa caixaAtual;
+    public static Funcionario funcAtual;
     public static String user, password;
     public static String cargo = "Gerente";
     public static Random gerador = new Random();
@@ -34,11 +31,12 @@ public class Login extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         CategoriaDAO cDao = new CategoriaDAO();
-        TurnoDAO tDao = new TurnoDAO();
         CaixaDAO caixaDao = new CaixaDAO();
         ComandaDAO comandaDao = new ComandaDAO();
         ItemComandaDAO itemDao = new ItemComandaDAO();
+        LogDAO logDao = new LogDAO();
         ProdutoDAO pDao = new ProdutoDAO();
+        
         for (Produto p: pDao.read()){
             listaProdutos.add(p);
         }
@@ -47,29 +45,20 @@ public class Login extends javax.swing.JFrame {
             categorias.add(c);
         }
         
-        for (Turno t:tDao.read()){
-            if(t.getStatus() == 1){
-                turnoAtual = t;
-                break;
-            }else{
-                //turnoAtual = null;
-            }
-        }
         for (Caixa c:caixaDao.read()){
             if(c.getStatus() == 1){
                 caixaAtual = c;
                 break;
-            }else{
-                //caixaAtual = null;
             }
         }
+
         for (Comanda c:comandaDao.read()){
             if(c.getStatus() == 1){
                 GerenciadorComandas.comandasAbertas.add(c);
                 GerenciadorComandas.numeroNovaComanda = c.getId();
                 itemDao.read(c);
             }else{
-                
+                comandaDao.delete(c.getIdBanco());
             }
         }
         getRootPane().setDefaultButton(btnLogin);
@@ -84,14 +73,15 @@ public class Login extends javax.swing.JFrame {
         btnLogin = new javax.swing.JButton();
         lblStringAlmanah = new javax.swing.JLabel();
         linha1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Almanah System");
-        setMaximumSize(new java.awt.Dimension(425, 226));
         setMinimumSize(new java.awt.Dimension(425, 226));
         setResizable(false);
 
-        txtUsuario.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
+        txtUsuario.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtUsuario.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtUsuario.setText("Usuário");
         txtUsuario.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -107,7 +97,8 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        txtSenha.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtSenha.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtSenha.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtSenha.setText("testesenha");
         txtSenha.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -118,7 +109,7 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        btnLogin.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
+        btnLogin.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         btnLogin.setText("Login");
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -126,11 +117,18 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        lblStringAlmanah.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
+        lblStringAlmanah.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         lblStringAlmanah.setText("Almanah System");
 
         linha1.setBackground(new java.awt.Color(153, 153, 0));
         linha1.setBorder(javax.swing.BorderFactory.createMatteBorder(5, 5, 5, 5, new java.awt.Color(0, 0, 0)));
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -140,18 +138,24 @@ public class Login extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(166, 166, 166)
-                        .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(139, 139, 139)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
-                            .addComponent(txtSenha, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
-                            .addComponent(lblStringAlmanah))))
-                .addContainerGap(142, Short.MAX_VALUE))
+                            .addComponent(txtUsuario)
+                            .addComponent(txtSenha, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(134, 134, 134)
+                .addComponent(lblStringAlmanah)
+                .addContainerGap(142, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -165,8 +169,10 @@ public class Login extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         pack();
@@ -195,13 +201,23 @@ public class Login extends javax.swing.JFrame {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         user = txtUsuario.getText();
         password = txtSenha.getText();
-        if(user.equals("123")&password.equals("123")){
-            new Menu().setVisible(true);
-            dispose();
-        }else{
+        funcAtual = new Funcionario();
+        FuncionarioDAO fDao = new FuncionarioDAO();
+        boolean logado = false;
+ 
+        for (Funcionario f:fDao.readLogin(user)){
+            if (f.getSenha().equals(password)){       
+                funcAtual = f.clonarFuncionario(funcAtual); 
+                
+                new Menu().setVisible(true);
+                dispose();
+                logado = true;
+                break;
+            }
+        }
+        if (!logado){
             JOptionPane.showMessageDialog(null, "Usuário ou senha incorretos");
         }
-        
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void txtUsuarioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsuarioFocusLost
@@ -219,6 +235,11 @@ public class Login extends javax.swing.JFrame {
             txtSenha.setText("testesenha");
         }
     }//GEN-LAST:event_txtSenhaFocusLost
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        new Menu().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -255,6 +276,7 @@ public class Login extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogin;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel lblStringAlmanah;
     private javax.swing.Box.Filler linha1;
     private javax.swing.JPasswordField txtSenha;

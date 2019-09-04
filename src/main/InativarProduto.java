@@ -10,7 +10,7 @@ public class InativarProduto extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
-        lblId.setText(Integer.toString(GerenciadorProdutos.prodSelecionado.getIdSistema()));
+        lblId.setText(Integer.toString(GerenciadorProdutos.prodSelecionado.getIdProduto()));
         lblNome.setText(GerenciadorProdutos.prodSelecionado.getNome());
         lblQtd.setText(GerenciadorProdutos.prodSelecionado.getQtdEstoque());
         try{

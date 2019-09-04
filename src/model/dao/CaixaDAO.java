@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import main.Login;
 import model.bean.Caixa;
 import model.bean.Categoria;
-import model.bean.Turno;
 
 public class CaixaDAO {
     public void create(Caixa c){
@@ -17,12 +16,12 @@ public class CaixaDAO {
         PreparedStatement stmt = null;
         
         try{
-            String sql = "INSERT INTO caixa (dinheiro, dataAbertura, status, idTurno)VALUES(?,?,?,?)";
+            String sql = "INSERT INTO caixa (dinheiro, dataAbertura, status, idFuncionario)VALUES(?,?,?,?)";
             stmt = con.prepareStatement(sql);
             stmt.setDouble(1, c.getDinheiro());
             stmt.setString(2, c.getDataAbertura());
             stmt.setInt(3, c.getStatus());
-            stmt.setInt(4, c.getTurno().getIdTurno());
+            stmt.setInt(4, c.getFuncionario().getIdFuncionario());
             
             stmt.executeUpdate();
             System.out.println("Salvo com sucesso!");
@@ -34,6 +33,7 @@ public class CaixaDAO {
     }
     
     public ArrayList<Caixa> read(){
+        FuncionarioDAO funcDao = new FuncionarioDAO();
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -50,7 +50,8 @@ public class CaixaDAO {
                 c.setDataFechamento(rs.getString("dataFechamento"));
                 c.setDinheiro(rs.getDouble("dinheiro"));
                 c.setStatus(rs.getInt("status"));
-                c.setTurno(Login.turnoAtual);
+                c.setFuncionario(funcDao.readForId(rs.getInt("idFuncionario")));
+                
                 
                 caixas.add(c);
             }
@@ -67,14 +68,13 @@ public class CaixaDAO {
         PreparedStatement stmt = null;
         
         try{
-            String sql = "UPDATE caixa SET dataAbertura=?, dataFechamento=?, status=?, dinheiro=?, idTurno=? WHERE idCaixa = ?";
+            String sql = "UPDATE caixa SET dataAbertura=?, dataFechamento=?, status=?, dinheiro=? WHERE idCaixa = ?";
             stmt = con.prepareStatement(sql);
             stmt.setString(1, c.getDataAbertura());
             stmt.setString(2, c.getDataFechamento());
             stmt.setInt(3, c.getStatus());
             stmt.setDouble(4, c.getDinheiro());
-            stmt.setInt(5, c.getTurno().getIdTurno());
-            stmt.setInt(6, c.getIdCaixa());
+            stmt.setInt(5, c.getIdCaixa());
             
             stmt.executeUpdate();
             System.out.println("Atualizado com sucesso!");

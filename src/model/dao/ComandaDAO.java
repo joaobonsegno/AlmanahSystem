@@ -41,19 +41,14 @@ public class ComandaDAO {
             stmt = con.prepareStatement("SELECT * FROM comanda");
             rs = stmt.executeQuery();
             while (rs.next()){
-                if (rs.getInt("status") == 0){
-                    //cDao.delete(rs.getInt("idComanda"));
-                    //iDao.delete(rs.getInt("idComanda"));
-                }else{
-                    Comanda c = new Comanda();
+                Comanda c = new Comanda();
 
-                    c.setIdBanco(rs.getInt("idComanda"));
-                    c.setValor(rs.getDouble("valor"));
-                    c.setStatus(rs.getInt("status"));
-                    c.setId(rs.getInt("idSistema"));
+                c.setIdBanco(rs.getInt("idComanda"));
+                c.setValor(rs.getDouble("valor"));
+                c.setStatus(rs.getInt("status"));
+                c.setId(rs.getInt("idSistema"));
 
-                    comandas.add(c);
-                }
+                comandas.add(c);
             }
         }catch(SQLException ex){
             System.err.println("Erro no READ MySQL: "+ex);
@@ -90,7 +85,26 @@ public class ComandaDAO {
         PreparedStatement stmt = null;
         
         try{
+            deletarItens(c);
             String sql = "DELETE FROM comanda WHERE idComanda = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, c);
+            
+            stmt.executeUpdate();
+        }catch(SQLException ex){
+            System.err.println("Erro SQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+    }
+    
+    public void deletarItens(Integer c){
+        ItemComandaDAO iDao = new ItemComandaDAO();
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        
+        try{
+            String sql = "DELETE FROM item_comanda WHERE idComanda = ?";
             stmt = con.prepareStatement(sql);
             stmt.setInt(1, c);
             
