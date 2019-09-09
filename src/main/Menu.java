@@ -27,7 +27,7 @@ public class Menu extends javax.swing.JFrame {
         timer.start();
         this.setLocationRelativeTo(null);
 
-        if (null != funcAtual.getCargo().getId())
+        /*if (null != funcAtual.getCargo().getId())
             switch (funcAtual.getCargo().getId()) {
                 case 1:
                     setGarcom();
@@ -38,7 +38,7 @@ public class Menu extends javax.swing.JFrame {
                 case 3:
                     setCozinheiro();
                     break;
-            }
+            }*/
             
         if(Login.caixaAtual != null){
             pdv_comandas.setEnabled(true);
@@ -58,22 +58,8 @@ public class Menu extends javax.swing.JFrame {
             }
         }
     
-        lblNome.setText(Login.funcAtual.getNome());
-        lblFuncao.setText(Login.funcAtual.getCargo().getNome());
-
-        /*ComandaDAO comandaDao = new ComandaDAO();
-        ItemComandaDAO itemDao = new ItemComandaDAO();
-        for (Comanda c:comandaDao.read()){
-            if(c.getStatus() == 1){
-                System.out.println("Comanda Aberta");
-                GerenciadorComandas.comandasAbertas.add(c);
-                GerenciadorComandas.numeroNovaComanda = c.getId();
-                itemDao.read(c);
-            }else{
-                System.out.println("Comanda Fechada");
-                comandaDao.delete(c.getIdBanco());
-            }
-        }*/
+        //lblNome.setText(Login.funcAtual.getNome());
+        //lblFuncao.setText(Login.funcAtual.getCargo().getNome());
     }
 
     public void setGarcom(){

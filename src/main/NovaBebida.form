@@ -67,19 +67,17 @@
               <EmptySpace min="-2" pref="209" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="btnCancelar" min="-2" pref="150" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
-                      <Component id="btnConfirmar" min="-2" pref="150" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
                       <Component id="lblStringCodigo1" min="-2" pref="152" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="SpinnerQtd" min="-2" pref="65" max="-2" attributes="0"/>
-                      <EmptySpace pref="74" max="-2" attributes="0"/>
                   </Group>
+                  <Component id="btnCancelar" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="btnConfirmar" min="-2" pref="150" max="-2" attributes="0"/>
+                  <Component id="SpinnerQtd" min="-2" pref="65" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="197" max="32767" attributes="0"/>
           </Group>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
               <Component id="linha1" alignment="0" pref="770" max="32767" attributes="0"/>

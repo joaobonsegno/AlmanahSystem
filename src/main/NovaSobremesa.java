@@ -420,7 +420,7 @@ public class NovaSobremesa extends javax.swing.JFrame {
             }
         }
         if(!flag){
-            new GerenciadorComandas().setVisible(true);
+            //new GerenciadorComandas().setVisible(true);
             dispose();
         }
     }//GEN-LAST:event_btnConfirmarActionPerformed

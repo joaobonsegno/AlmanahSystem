@@ -116,6 +116,7 @@ public class EncerrarComanda extends javax.swing.JFrame {
         jtItens.getColumnModel().getColumn(2).setMaxWidth(412); // NOME
         jtItens.getColumnModel().getColumn(3).setMaxWidth(100); // UNITARIO
         jtItens.getColumnModel().getColumn(4).setMaxWidth(120);
+
         String comString = Integer.toString(GerenciadorComandas.idSelecionado);
         comandaSelecionada = new Comanda();
         for(Comanda c:GerenciadorComandas.comandasAbertas){
@@ -332,7 +333,7 @@ public class EncerrarComanda extends javax.swing.JFrame {
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         
-        FormaPagamentoOLD forma = new FormaPagamentoOLD(new javax.swing.JFrame(), true);
+        FormaPagamento forma = new FormaPagamento(new javax.swing.JFrame(), true);
         forma.setVisible(true); 
         dispose();
         

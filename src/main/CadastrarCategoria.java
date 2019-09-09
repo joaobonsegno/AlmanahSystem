@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import model.bean.Categoria;
 import model.bean.Produto;
 import model.dao.CategoriaDAO;
+import main.CadastrarProduto;
 
 public class CadastrarCategoria extends javax.swing.JFrame {
     public static ArrayList<Produto> listaProdutos = new ArrayList<>();
@@ -148,12 +149,11 @@ public class CadastrarCategoria extends javax.swing.JFrame {
         }
         Login.categorias.add(c);
         
-        new Menu().setVisible(true); 
+        
         dispose();
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        new Menu().setVisible(true);
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 

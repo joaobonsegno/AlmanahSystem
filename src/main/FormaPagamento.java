@@ -3,12 +3,16 @@ package main;
 import ArrumarString.Monetarios;
 import java.awt.Color;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import model.bean.Comanda;
+import model.bean.Forma;
 import model.bean.Log;
 import model.bean.Produto;
 import model.bean.Venda;
 import model.dao.CaixaDAO;
 import model.dao.ComandaDAO;
+import model.dao.FormaDAO;
 import model.dao.ItemComandaDAO;
 import model.dao.ItemVendaDAO;
 import model.dao.LogDAO;
@@ -18,64 +22,34 @@ public class FormaPagamento extends javax.swing.JDialog {
     Integer formaPag;
     public static String formaPagamento;
     public static Double valorRecebido;
-    
-    public void mudarCor(){
-        if(formaPag == 1){
-            btnDinheiro.setBackground(Color.GREEN);
-            btnDebito.setBackground(null);
-            btnCredito.setBackground(null);
-            btnVoucher.setBackground(null);
-        }else if(formaPag == 2){
-            btnDinheiro.setBackground(null);
-            btnDebito.setBackground(Color.GREEN);
-            btnCredito.setBackground(null);
-            btnVoucher.setBackground(null);
-        }else if(formaPag == 3){
-            btnDinheiro.setBackground(null);
-            btnDebito.setBackground(null);
-            btnCredito.setBackground(Color.GREEN);
-            btnVoucher.setBackground(null);
-        }else{
-            btnDinheiro.setBackground(null);
-            btnDebito.setBackground(null);
-            btnCredito.setBackground(null);
-            btnVoucher.setBackground(Color.GREEN);
-        }
-    }
+    private ArrayList<Forma> formas = new ArrayList<>();
     
     public FormaPagamento(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        this.setLocationRelativeTo(null);
-//        String comString = Integer.toString(GerenciadorComandas.idSelecionado);
-        //lblComanda.setText(comString);
-        btnConfirmar.setEnabled(false);
-        /*String preco = Double.toString(EncerrarComanda.comandaSelecionada.getValor());
-        preco = GerenciadorComandas.tornarCompativel(preco);
-        preco = GerenciadorComandas.arredondarValor(preco);
-        EncerrarComanda.comandaSelecionada.setValor(Double.parseDouble(preco));*/
-        /*lblValorTotal.setText("R$ "+GerenciadorComandas.valorMonetario(EncerrarComanda.comandaSelecionada.getValor()));
-        if (EncerrarComanda.flagValor == false){
-            lblRecebido.setText("R$ 0,00");
-        }else{
-            String valor = GerenciadorComandas.valorMonetario(valorRecebido);
-            lblRecebido.setText("R$ "+ valor);
-            formaPag = 1;
-            formaPagamento = "Dinheiro";
-            mudarCor();
-            btnConfirmar.setEnabled(true);
-            Double troco = EncerrarComanda.comandaSelecionada.getValor() - valorRecebido;
-            troco = Math.abs(troco);
-            String trocoString = GerenciadorComandas.valorMonetario(troco);
-            lblTroco.setText("R$ "+trocoString);
-        }*/
+        this.setLocationRelativeTo(null);       
+        jtPagamento.setRowHeight(30);
+        
         getRootPane().setDefaultButton(btnConfirmar);
-        txtTotal.setDocument(new Monetarios(7,2));
+        btnConfirmar.setEnabled(false);
+        btnRemover.setEnabled(false);
+        txtValorASerCobrado.setDocument(new Monetarios(7,2));
         txtEntregue.setDocument(new Monetarios(7,2));
+        lblValorTotal.setText("R$ "+GerenciadorComandas.valorMonetario(EncerrarComanda.comandaSelecionada.getValor()));
+        lblValorPendente.setText("R$ "+GerenciadorComandas.valorMonetario(EncerrarComanda.comandaSelecionada.getValorPendente()));
         jpTroco.setVisible(false);
+        
+        FormaDAO formaDao = new FormaDAO();
+        for (Forma f : formaDao.readForComanda(EncerrarComanda.comandaSelecionada)){
+            formas.add(f);
+            adicionarLinha(f, EncerrarComanda.comandaSelecionada);
+        }
+        
+        EncerrarComanda.comandaSelecionada.setFormasDePagamento(formas);
+        GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).setFormasDePagamento(formas);
        // panelDinheiro();
     }
-
+    
     public void panelDinheiro(){
         if (txtEntregue.isEnabled()){
             lblStringValorEntregue.setEnabled(false);
@@ -93,6 +67,47 @@ public class FormaPagamento extends javax.swing.JDialog {
         }
     }
     
+    public void adicionarLinha(Forma f, Comanda c){
+        DefaultTableModel dtmPagamentos = (DefaultTableModel) jtPagamento.getModel();
+
+        String valor = GerenciadorComandas.valorMonetario(f.getValor());
+        Object[] dados = {f.getFormaPagamento(), valor};
+        dtmPagamentos.addRow(dados); 
+        if (c.getValorPendente() == 0){
+            btnConfirmar.setEnabled(true);
+            txtValorASerCobrado.setEnabled(false);
+        }
+    }
+    
+    public void limparSelecao(){
+        btnRemover.setEnabled(false);
+        jtPagamento.clearSelection();
+    }
+    
+    public void adicionarFormaDePagamento(String formaDePagamento){
+        limparSelecao(); // Limpa a seleção da JTable (visual only)
+        formaPagamento = formaDePagamento; // Seta a forma de pagamento
+        Double valorASerCobrado = Double.parseDouble(GerenciadorComandas.tornarCompativel(txtValorASerCobrado.getText()));
+        Forma forma = new Forma(valorASerCobrado, formaPagamento, GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado)); // Instancia a nova forma de pagamento
+     
+        //Seta a forma de pagamento nova na comanda
+        //EncerrarComanda.comandaSelecionada.setForma(forma);
+        GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).setForma(forma);
+        
+        //Chama o método que atualiza o valor pendente e atualiza no banco
+        //EncerrarComanda.comandaSelecionada.reduzirValorPendente();
+        GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).reduzirValorPendente();
+        //---------------------------------------------------
+
+        lblValorPendente.setText("R$ "+GerenciadorComandas.valorMonetario(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getValorPendente())); // Seta o valor pendente novo no label
+        adicionarLinha(forma, GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado)); // Adiciona à tabela a nova forma de pagamento
+        txtValorASerCobrado.setText("0,00"); // Reseta o campo de entrada de valor recebido
+       
+        //Faz as atualizações no banco
+        FormaDAO formaDao = new FormaDAO();
+        formaDao.create(forma);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -102,7 +117,7 @@ public class FormaPagamento extends javax.swing.JDialog {
         linha = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
         jpFormas = new javax.swing.JPanel();
         lblStringValorCobrado = new javax.swing.JLabel();
-        txtTotal = new javax.swing.JTextField();
+        txtValorASerCobrado = new javax.swing.JTextField();
         btnDinheiro = new javax.swing.JButton();
         btnDebito = new javax.swing.JButton();
         btnCredito = new javax.swing.JButton();
@@ -116,8 +131,8 @@ public class FormaPagamento extends javax.swing.JDialog {
         lblStringTroco = new javax.swing.JLabel();
         btnAdicionar = new javax.swing.JButton();
         jpValores = new javax.swing.JPanel();
-        lblStringValorTotal1 = new javax.swing.JLabel();
-        lblValorTotal1 = new javax.swing.JLabel();
+        lblStringValorPendente = new javax.swing.JLabel();
+        lblValorPendente = new javax.swing.JLabel();
         lblValorTotal = new javax.swing.JLabel();
         lblStringValorTotal = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -146,8 +161,23 @@ public class FormaPagamento extends javax.swing.JDialog {
         lblStringValorCobrado.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblStringValorCobrado.setText("Valor a ser cobrado: R$");
 
-        txtTotal.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        txtTotal.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        txtValorASerCobrado.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        txtValorASerCobrado.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        txtValorASerCobrado.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtValorASerCobradoFocusGained(evt);
+            }
+        });
+        txtValorASerCobrado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtValorASerCobradoActionPerformed(evt);
+            }
+        });
+        txtValorASerCobrado.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtValorASerCobradoKeyReleased(evt);
+            }
+        });
 
         btnDinheiro.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         btnDinheiro.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\money.png")); // NOI18N
@@ -204,7 +234,7 @@ public class FormaPagamento extends javax.swing.JDialog {
                         .addGap(27, 27, 27)
                         .addComponent(lblStringValorCobrado)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtValorASerCobrado, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jpFormasLayout.createSequentialGroup()
                         .addComponent(btnDinheiro, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -221,7 +251,7 @@ public class FormaPagamento extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jpFormasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblStringValorCobrado, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtValorASerCobrado, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpFormasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDinheiro, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -255,6 +285,9 @@ public class FormaPagamento extends javax.swing.JDialog {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtPagamentoFocusGained(evt);
             }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtPagamentoFocusLost(evt);
+            }
         });
         jScrollPane1.setViewportView(jtPagamento);
         if (jtPagamento.getColumnModel().getColumnCount() > 0) {
@@ -270,6 +303,16 @@ public class FormaPagamento extends javax.swing.JDialog {
 
         txtEntregue.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtEntregue.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        txtEntregue.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtEntregueFocusGained(evt);
+            }
+        });
+        txtEntregue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtEntregueActionPerformed(evt);
+            }
+        });
         txtEntregue.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtEntregueKeyPressed(evt);
@@ -343,14 +386,14 @@ public class FormaPagamento extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        lblStringValorTotal1.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        lblStringValorTotal1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblStringValorTotal1.setText("Valor Pendente");
+        lblStringValorPendente.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        lblStringValorPendente.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblStringValorPendente.setText("Valor Pendente");
 
-        lblValorTotal1.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        lblValorTotal1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblValorTotal1.setText("R$ 0,00");
-        lblValorTotal1.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(0, 0, 0)));
+        lblValorPendente.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        lblValorPendente.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblValorPendente.setText("R$ 0,00");
+        lblValorPendente.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(0, 0, 0)));
 
         lblValorTotal.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         lblValorTotal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -375,8 +418,8 @@ public class FormaPagamento extends javax.swing.JDialog {
                 .addGroup(jpValoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpValoresLayout.createSequentialGroup()
                         .addGap(11, 11, 11)
-                        .addComponent(lblValorTotal1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblStringValorTotal1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblValorPendente, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblStringValorPendente, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         jpValoresLayout.setVerticalGroup(
@@ -385,9 +428,9 @@ public class FormaPagamento extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jpValoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpValoresLayout.createSequentialGroup()
-                        .addComponent(lblStringValorTotal1)
+                        .addComponent(lblStringValorPendente)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblValorTotal1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblValorPendente, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpValoresLayout.createSequentialGroup()
                         .addComponent(lblStringValorTotal)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -420,7 +463,7 @@ public class FormaPagamento extends javax.swing.JDialog {
         btnVoltar.setBackground(new java.awt.Color(255, 51, 51));
         btnVoltar.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnVoltar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\cancel.png")); // NOI18N
-        btnVoltar.setText("  Cancelar");
+        btnVoltar.setText("    Voltar");
         btnVoltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVoltarActionPerformed(evt);
@@ -510,89 +553,50 @@ public class FormaPagamento extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDebitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDebitoActionPerformed
-        EncerrarComanda.flagValor = false;
-        btnConfirmar.setEnabled(true);
-        formaPag = 2;
-        formaPagamento = "Debito";
-        //lblRecebido.setText("R$ "+GerenciadorComandas.valorMonetario(EncerrarComanda.comandaSelecionada.getValor()));
-        lblTroco.setText("R$ 0,00");
-        mudarCor();
+        adicionarFormaDePagamento("Débito");         
     }//GEN-LAST:event_btnDebitoActionPerformed
 
     private void btnDinheiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDinheiroActionPerformed
-        //dispose();
+        limparSelecao();
         jpTroco.setVisible(true);
-        btnConfirmar.setEnabled(true);
-        formaPagamento = "Dinheiro";
-        //panelDinheiro();
     }//GEN-LAST:event_btnDinheiroActionPerformed
 
     private void btnVoucherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoucherActionPerformed
-        EncerrarComanda.flagValor = false;
-        btnConfirmar.setEnabled(true);
-        formaPag = 4;
-        //lblRecebido.setText("R$ "+GerenciadorComandas.valorMonetario(EncerrarComanda.comandaSelecionada.getValor()));
-        formaPagamento = "Voucher";
-        lblTroco.setText("R$ 0,00");
-        mudarCor();
+        adicionarFormaDePagamento("Voucher");
     }//GEN-LAST:event_btnVoucherActionPerformed
 
     private void btnCreditoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreditoActionPerformed
-        EncerrarComanda.flagValor = false;
-        btnConfirmar.setEnabled(true);
-        formaPag = 3;
-        //lblRecebido.setText("R$ "+GerenciadorComandas.valorMonetario(EncerrarComanda.comandaSelecionada.getValor()));
-        formaPagamento = "Credito";
-        lblTroco.setText("R$ 0,00");
-        mudarCor();
+        adicionarFormaDePagamento("Crédito");
     }//GEN-LAST:event_btnCreditoActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         //EncerrarComanda.flagValor = false;
         dispose();
-        new Menu().setVisible(true);
+        new EncerrarComanda().setVisible(true);
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        Log l = new Log(1);
+        // Instancia os objetos necessários para o encerramento da venda
+        Log l = new Log(1);              
+        Venda venda = new Venda();       
+        ArrayList<Produto> itens = new ArrayList<>();
+        ArrayList<String> qtd = new ArrayList<>();
+        
+        // Instancia todos os objetos de DAO
         LogDAO logDao = new LogDAO();
         VendaDAO vendaDao = new VendaDAO();
+        FormaDAO formaDao = new FormaDAO();
         ComandaDAO comandaDao = new ComandaDAO();
         CaixaDAO caixaDao = new CaixaDAO();
         ItemComandaDAO iDao = new ItemComandaDAO();
-        ArrayList<Produto> itens = new ArrayList<>();
-        ArrayList<String> qtd = new ArrayList<>();
-        Venda venda = new Venda();
-        String data = venda.dataAtual();
-        EncerrarComanda.flagValor = false;
-        
-        /*for(Comanda c:GerenciadorComandas.comandasAbertas){
-            if(EncerrarComanda.comandaSelecionada.getId() == c.getId()){
-                c.setValor(EncerrarComanda.comandaSelecionada.getValor());
-            }
-        }*/
+
         for(Comanda c:GerenciadorComandas.comandasAbertas){
-            if(GerenciadorComandas.idSelecionado == c.getId()){
-                if (formaPagamento.equals("Dinheiro")){
-                    l.setCategoria("Caixa");
-                    l.setData(l.dataAtual());
-                    l.setTipo("Crédito");
-                    l.setDescricao(Login.funcAtual.getNome()+" fechou uma comanda no valor de R$ "+c.getValor());
-                    l.setValor(c.getValor());
-                    //System.out.println("Dinheiro antes da soma: "+dinheiroAtual);
-                    
-                    //System.out.println("Dinheiro depois da soma: "+dinheiroAtual);
-                    
-                    
-                    Double dinheiroCaixa = Login.caixaAtual.getDinheiro();
-                    dinheiroCaixa += c.getValor();
-                    Login.caixaAtual.setDinheiro(dinheiroCaixa);
-                    l.setSaldo(dinheiroCaixa);
-                    logDao.create(l);
-                    caixaDao.update(Login.caixaAtual);
-                }
-                venda.setAtributos(data, formaPagamento, c.getValor());
+            if(GerenciadorComandas.idSelecionado == c.getId()){              
+                String data = venda.dataAtual();
+                venda.setAtributos(data, c.getValor());
                 vendaDao.create(venda);
+                
+                // Após a criação da nova venda no banco, puxa o ID que foi criado e coloca dentro do objeto VENDA que está sendo trabalhado
                 int i = vendaDao.read().size()-1;
                 int j = 0;
                 for(Venda v:vendaDao.read()){
@@ -601,6 +605,27 @@ public class FormaPagamento extends javax.swing.JDialog {
                     }
                     j+=1;
                 }
+                
+                // Seta o ID da venda, que acabou de vir do banco, dentro das formas de pagamento
+                for (Forma forma : GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getFormasDePagamento()){                    
+                    if (forma.getFormaPagamento().equals("Dinheiro")){
+                        l.setCategoria("Caixa");
+                        l.setData(l.dataAtual());
+                        l.setTipo("Crédito");
+                        l.setDescricao(Login.funcAtual.getNome()+" fez uma venda no valor de R$ "+c.getValor());
+                        l.setValor(forma.getValor());
+                        Double dinheiroCaixa = Login.caixaAtual.getDinheiro();
+                        dinheiroCaixa += forma.getValor();
+                        Login.caixaAtual.setDinheiro(dinheiroCaixa);
+                        l.setSaldo(dinheiroCaixa);
+                        logDao.create(l);
+                        caixaDao.update(Login.caixaAtual);
+                    }
+                    forma.setVenda(venda);
+                    formaDao.updateVenda(forma);
+                }
+                
+                // Seta os itens que estavam na comanda dentro do objeto de itemVenda
                 for(Produto p:c.getItens()){
                     itens.add(p);
                 }
@@ -615,6 +640,8 @@ public class FormaPagamento extends javax.swing.JDialog {
                     ItemVendaDAO itemDao = new ItemVendaDAO();
                     itemDao.create(p, venda);
                 }
+                
+                // Atualiza a comanda que está sendo fechada
                 c.setStatus(0);
                 comandaDao.update(c);
             }
@@ -631,7 +658,7 @@ public class FormaPagamento extends javax.swing.JDialog {
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void jtPagamentoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtPagamentoFocusGained
-
+        btnRemover.setEnabled(true);
     }//GEN-LAST:event_jtPagamentoFocusGained
 
     private void txtEntregueKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEntregueKeyPressed
@@ -639,7 +666,7 @@ public class FormaPagamento extends javax.swing.JDialog {
     }//GEN-LAST:event_txtEntregueKeyPressed
 
     private void txtEntregueKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEntregueKeyReleased
-        Double troco = Double.parseDouble(GerenciadorComandas.tornarCompativel(txtTotal.getText())) - Double.parseDouble(GerenciadorComandas.tornarCompativel(txtEntregue.getText()));
+        Double troco = Double.parseDouble(GerenciadorComandas.tornarCompativel(txtValorASerCobrado.getText())) - Double.parseDouble(GerenciadorComandas.tornarCompativel(txtEntregue.getText()));
         if (troco < 0){
             troco = Math.abs(troco);
             lblTroco.setText("R$ "+GerenciadorComandas.valorMonetario(troco));
@@ -653,16 +680,63 @@ public class FormaPagamento extends javax.swing.JDialog {
     }//GEN-LAST:event_txtEntregueKeyTyped
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
-        //removerItem();
+        int quantidadeDeSelecionados = jtPagamento.getSelectedRows().length;
+        int indice = jtPagamento.getSelectedRow();
+        if (quantidadeDeSelecionados > 1){
+            JOptionPane.showMessageDialog(null, "Selecione somente uma linha!");
+        }else{
+            DefaultTableModel dtm = (DefaultTableModel) jtPagamento.getModel();
+            Double v = Double.parseDouble(GerenciadorComandas.tornarCompativel((String)dtm.getValueAt(indice, 1)));
+            dtm.removeRow(indice);
+
+            // Deleta a forma do banco da comanda
+            FormaDAO formaDao = new FormaDAO();
+            formaDao.delete(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getFormasDePagamento().get(indice));
+            GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).removerForma(indice);
+            //GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).removerForma(indice);
+            
+            // Atualizar o valor da comanda
+            //EncerrarComanda.comandaSelecionada.aumentarValorPendente(v);
+            GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).aumentarValorPendente(v);
+            lblValorPendente.setText("R$ "+GerenciadorComandas.valorMonetario(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getValorPendente()));
+            txtValorASerCobrado.setEnabled(true);
+            btnConfirmar.setEnabled(false);
+            btnRemover.setEnabled(false);
+        }
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        // TODO add your handling code here:
+        adicionarFormaDePagamento("Dinheiro");
     }//GEN-LAST:event_btnAdicionarActionPerformed
+    private void jtPagamentoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtPagamentoFocusLost
+        
+    }//GEN-LAST:event_jtPagamentoFocusLost
 
-    /**
-     * @param args the command line arguments
-     */
+    private void txtValorASerCobradoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtValorASerCobradoKeyReleased
+        Character entrada = evt.getKeyChar();
+        if (entrada == 'f' || entrada == 'F'){
+            txtValorASerCobrado.setText(GerenciadorComandas.valorMonetario(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getValorPendente()));
+        }
+    }//GEN-LAST:event_txtValorASerCobradoKeyReleased
+
+    private void txtEntregueFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEntregueFocusGained
+        if (txtValorASerCobrado.getText().equals("") || txtValorASerCobrado.getText().equals("0,00")){
+            txtEntregue.setEnabled(false);
+        }
+    }//GEN-LAST:event_txtEntregueFocusGained
+
+    private void txtValorASerCobradoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtValorASerCobradoFocusGained
+        jpTroco.setVisible(false);
+    }//GEN-LAST:event_txtValorASerCobradoFocusGained
+
+    private void txtValorASerCobradoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtValorASerCobradoActionPerformed
+        limparSelecao();
+    }//GEN-LAST:event_txtValorASerCobradoActionPerformed
+
+    private void txtEntregueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEntregueActionPerformed
+        limparSelecao();
+    }//GEN-LAST:event_txtEntregueActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -753,13 +827,13 @@ public class FormaPagamento extends javax.swing.JDialog {
     private javax.swing.JLabel lblStringTroco;
     private javax.swing.JLabel lblStringValorCobrado;
     private javax.swing.JLabel lblStringValorEntregue;
+    private javax.swing.JLabel lblStringValorPendente;
     private javax.swing.JLabel lblStringValorTotal;
-    private javax.swing.JLabel lblStringValorTotal1;
     private javax.swing.JLabel lblTroco;
+    private javax.swing.JLabel lblValorPendente;
     private javax.swing.JLabel lblValorTotal;
-    private javax.swing.JLabel lblValorTotal1;
     private javax.swing.Box.Filler linha;
     private javax.swing.JTextField txtEntregue;
-    private javax.swing.JTextField txtTotal;
+    private javax.swing.JTextField txtValorASerCobrado;
     // End of variables declaration//GEN-END:variables
 }

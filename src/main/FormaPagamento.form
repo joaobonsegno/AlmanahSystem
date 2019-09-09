@@ -152,7 +152,7 @@
                           <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                           <Component id="lblStringValorCobrado" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtTotal" min="-2" pref="79" max="-2" attributes="0"/>
+                          <Component id="txtValorASerCobrado" min="-2" pref="79" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="btnDinheiro" min="-2" pref="159" max="-2" attributes="0"/>
@@ -175,7 +175,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="lblStringValorCobrado" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
-                      <Component id="txtTotal" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
+                      <Component id="txtValorASerCobrado" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -205,13 +205,18 @@
             <Property name="text" type="java.lang.String" value="Valor a ser cobrado: R$"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtTotal">
+        <Component class="javax.swing.JTextField" name="txtValorASerCobrado">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Century Gothic" size="16" style="0"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
+          <Events>
+            <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtValorASerCobradoFocusGained"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtValorASerCobradoActionPerformed"/>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtValorASerCobradoKeyReleased"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnDinheiro">
           <Properties>
@@ -338,6 +343,7 @@
           </Properties>
           <Events>
             <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jtPagamentoFocusGained"/>
+            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jtPagamentoFocusLost"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
@@ -427,6 +433,8 @@
             <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
           <Events>
+            <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtEntregueFocusGained"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtEntregueActionPerformed"/>
             <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtEntregueKeyPressed"/>
             <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtEntregueKeyReleased"/>
             <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtEntregueKeyTyped"/>
@@ -495,9 +503,9 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                          <Component id="lblValorTotal1" min="-2" pref="128" max="-2" attributes="0"/>
+                          <Component id="lblValorPendente" min="-2" pref="128" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="lblStringValorTotal1" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
+                      <Component id="lblStringValorPendente" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -509,9 +517,9 @@
                   <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="lblStringValorTotal1" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblStringValorPendente" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="lblValorTotal1" min="-2" pref="50" max="-2" attributes="0"/>
+                          <Component id="lblValorPendente" min="-2" pref="50" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="lblStringValorTotal" min="-2" max="-2" attributes="0"/>
@@ -525,7 +533,7 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="lblStringValorTotal1">
+        <Component class="javax.swing.JLabel" name="lblStringValorPendente">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Century Gothic" size="18" style="0"/>
@@ -534,7 +542,7 @@
             <Property name="text" type="java.lang.String" value="Valor Pendente"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="lblValorTotal1">
+        <Component class="javax.swing.JLabel" name="lblValorPendente">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Century Gothic" size="18" style="0"/>
@@ -658,7 +666,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="2" name="C:\Projetos Netbeans\AlmanahSystem\images\cancel.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="  Cancelar"/>
+            <Property name="text" type="java.lang.String" value="    Voltar"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVoltarActionPerformed"/>

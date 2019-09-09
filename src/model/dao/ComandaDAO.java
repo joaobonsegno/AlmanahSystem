@@ -14,11 +14,12 @@ public class ComandaDAO {
         PreparedStatement stmt = null;
         
         try{
-            String sql = "INSERT INTO comanda (valor, idSistema, status)VALUES(?,?,?)";
+            String sql = "INSERT INTO comanda (valor, valorPendente, idSistema, status)VALUES(?,?,?,?)";
             stmt = con.prepareStatement(sql);
             stmt.setDouble(1, c.getValor());
-            stmt.setInt(2, c.getId());
-            stmt.setInt(3, c.getStatus());
+            stmt.setDouble(2, c.getValorPendente());
+            stmt.setInt(3, c.getId());
+            stmt.setInt(4, c.getStatus());
             
             stmt.executeUpdate();
             System.out.println("Salvo com sucesso!");
@@ -45,6 +46,7 @@ public class ComandaDAO {
 
                 c.setIdBanco(rs.getInt("idComanda"));
                 c.setValor(rs.getDouble("valor"));
+                c.setValorPendente(rs.getDouble("valorPendente"));
                 c.setStatus(rs.getInt("status"));
                 c.setId(rs.getInt("idSistema"));
 
@@ -63,12 +65,32 @@ public class ComandaDAO {
         PreparedStatement stmt = null;
         
         try{
-            String sql = "UPDATE comanda SET valor=?, idSistema=?, status=? WHERE idComanda = ?";
+            String sql = "UPDATE comanda SET valor=?, valorPendente=?, idSistema=?, status=? WHERE idComanda = ?";
             stmt = con.prepareStatement(sql);
             stmt.setDouble(1, c.getValor());
-            stmt.setInt(2, c.getId());
-            stmt.setInt(3, c.getStatus());
-            stmt.setInt(4, c.getIdBanco());
+            stmt.setDouble(2, c.getValorPendente());
+            stmt.setInt(3, c.getId());
+            stmt.setInt(4, c.getStatus());
+            stmt.setInt(5, c.getIdBanco());
+            
+            stmt.executeUpdate();
+           // System.out.println("Atualizado com sucesso!");
+        }catch(SQLException ex){
+            System.err.println("Erro ao atualizar: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+    }
+    
+    public void updatePendente(Comanda c){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        
+        try{
+            String sql = "UPDATE comanda SET valorPendente = ? WHERE idComanda = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setDouble(1, c.getValorPendente());
+            stmt.setInt(2, c.getIdBanco());
             
             stmt.executeUpdate();
             System.out.println("Atualizado com sucesso!");

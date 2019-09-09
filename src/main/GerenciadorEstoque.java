@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import javax.swing.table.DefaultTableModel;
 import static main.GerenciadorComandas.comandasAbertas;
 import static main.GerenciadorComandas.lblErro;
@@ -29,8 +30,9 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
         
         for (Produto prod : pDao.read()){
             ordenador.add(prod);
+            System.out.println("Produto: "+prod.getIdProduto());
         }
-        ordenador = GerenciadorComandas.ordenarListasProduto(ordenador);
+        Collections.sort(ordenador);
         
         DefaultTableModel dtmProdutos = (DefaultTableModel) jtProdutos.getModel();
 
@@ -94,6 +96,7 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
        jtProdutos.getColumnModel().getColumn(1).setMaxWidth(100);
        jtProdutos.getColumnModel().getColumn(2).setMaxWidth(430);
        criarTabela();
+       
     }
 
 

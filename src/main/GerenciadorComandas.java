@@ -14,6 +14,34 @@ public class GerenciadorComandas extends javax.swing.JFrame {
     public static DecimalFormat formato = new DecimalFormat("#.##");
     public static Integer indiceSelecionado, idSelecionado;
     
+    
+    
+    public GerenciadorComandas() {
+        initComponents();
+        jtComandas.setRowHeight(25);
+        DefaultTableModel dtmComandas = (DefaultTableModel) jtComandas.getModel();
+        jtComandas.getColumnModel().getColumn(0).setPreferredWidth(80); 
+        jtComandas.getColumnModel().getColumn(1).setPreferredWidth(180);
+        jtComandas.getColumnModel().getColumn(0).setMinWidth(80);
+        jtComandas.getColumnModel().getColumn(1).setMinWidth(180);
+        jtComandas.getColumnModel().getColumn(0).setMaxWidth(80);
+        jtComandas.getColumnModel().getColumn(1).setMaxWidth(180);
+        this.novaInstancia();
+        lblErro.setVisible(false);
+        this.setLocationRelativeTo(null);
+        getRootPane().setDefaultButton(btnNovaComanda);
+        jtComandas.getTableHeader().setFont(new Font("Century Gothic", 1, 14));
+    }
+
+    public void limparTabela(){
+        DefaultTableModel dtmComandas = (DefaultTableModel) jtComandas.getModel();
+        int i = jtComandas.getRowCount();
+        
+        for (int j = 0; j < i; j++){
+            dtmComandas.removeRow(0);
+        }       
+    }
+    
     public static ArrayList<Produto> ordenarListasProduto(ArrayList<Produto> ordenador){
         int tamanho = ordenador.size();
         for (int i = 0; i < tamanho-1; i++){
@@ -262,7 +290,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
             }
         }
         GerenciadorComandas.comandasAbertas.add(comanda);
-        ordenarComandas();
+//        ordenarComandas();
     }
     
     public static ArrayList<Integer> ordenarListas(ArrayList<Integer> ordenador){
@@ -278,20 +306,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         }
         return ordenador;
     }
- 
-    public static void ordenarComandas(){  
-        ArrayList<Integer> ordenador = new ArrayList<>();
-        
-        for (Comanda numero : comandasAbertas){
-            ordenador.add(numero.getId());
-        }
 
-        ordenador = ordenarListas(ordenador);
-        for (Integer numero : ordenador){
-            String numNovaComanda = Integer.toString(numero);
-        }  
-    }
-    
     public static boolean existeComanda(){
         int quantidade = comandasAbertas.size();
         if (quantidade > 0){
@@ -304,7 +319,8 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         }
     }
     
-    public static void novaInstancia(){
+    public void novaInstancia(){
+        limparTabela();
         DefaultTableModel dtmComandas = (DefaultTableModel) jtComandas.getModel();
         
         for(Comanda c : comandasAbertas){
@@ -312,7 +328,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
             Object[] dados = {c.getId(), valor};
             dtmComandas.addRow(dados);
         }
-        ordenarComandas();
+        //ordenarComandas();
     }
     
     public int retornaIndice(){
@@ -326,23 +342,6 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         return contador;
     }
     
-    public GerenciadorComandas() {
-        initComponents();
-        jtComandas.setRowHeight(19);
-        DefaultTableModel dtmComandas = (DefaultTableModel) jtComandas.getModel();
-        jtComandas.getColumnModel().getColumn(0).setPreferredWidth(80); 
-        jtComandas.getColumnModel().getColumn(1).setPreferredWidth(180);
-        jtComandas.getColumnModel().getColumn(0).setMinWidth(80);
-        jtComandas.getColumnModel().getColumn(1).setMinWidth(180);
-        jtComandas.getColumnModel().getColumn(0).setMaxWidth(80);
-        jtComandas.getColumnModel().getColumn(1).setMaxWidth(180);
-        novaInstancia();
-        lblErro.setVisible(false);
-        this.setLocationRelativeTo(null);
-        getRootPane().setDefaultButton(btnNovaComanda);
-        jtComandas.getTableHeader().setFont(new Font("Century Gothic", 1, 14));
-    }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -364,6 +363,13 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         setMaximumSize(new java.awt.Dimension(791, 501));
         setMinimumSize(new java.awt.Dimension(791, 501));
         setResizable(false);
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+                formWindowGainedFocus(evt);
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+            }
+        });
 
         btnStringGerenciador.setBackground(new java.awt.Color(0, 102, 204));
         btnStringGerenciador.setFont(new java.awt.Font("Century Gothic", 0, 21)); // NOI18N
@@ -549,7 +555,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
             indiceSelecionado = retornaIndice()+1;
             if (existeComanda()){
                 new NovaBebida().setVisible(true); 
-                dispose();
+                //dispose();
             }
         }catch(java.lang.ArrayIndexOutOfBoundsException ex){
             lblErro.setVisible(true);
@@ -562,7 +568,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
             indiceSelecionado = retornaIndice()+1;
             if (existeComanda()){
                 new NovaSobremesa().setVisible(true); 
-                dispose();
+              //  dispose();
             }
         }catch(java.lang.ArrayIndexOutOfBoundsException ex){
             lblErro.setVisible(true);
@@ -581,7 +587,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
                         int indice = retornaIndice();
                         dtmComandas.removeRow(indice);
                         comandasAbertas.remove(indice);
-                        ordenarComandas();  
+                        //ordenarComandas();  
                         c.setStatus(0);
                         comandaDao.update(c);
                     }else{
@@ -605,12 +611,16 @@ public class GerenciadorComandas extends javax.swing.JFrame {
             if (existeComanda()){
                 NovoPrato novoPrato = new NovoPrato(new javax.swing.JFrame(), true);
                 novoPrato.setVisible(true); 
-                dispose();
+               // dispose();
             }
         }catch(java.lang.ArrayIndexOutOfBoundsException ex){
             lblErro.setVisible(true);
         }
     }//GEN-LAST:event_btnRefeicaoActionPerformed
+
+    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+        novaInstancia();
+    }//GEN-LAST:event_formWindowGainedFocus
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -659,4 +669,15 @@ public class GerenciadorComandas extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 }
 
+/*public static void ordenarComandas(){  
+        ArrayList<Integer> ordenador = new ArrayList<>();
+        
+        for (Comanda numero : comandasAbertas){
+            ordenador.add(numero.getId());
+        }
 
+        ordenador = ordenarListas(ordenador);
+        for (Integer numero : ordenador){
+            String numNovaComanda = Integer.toString(numero);
+        }  
+    }*/

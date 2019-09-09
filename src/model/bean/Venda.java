@@ -4,13 +4,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import main.GerenciadorComandas;
-import model.dao.ComandaDAO;
 
 public class Venda {
     private Integer idBanco;
     private Double total;
-    private String data, formaPagamento;
+    private String data;
     private Caixa caixa;
     private ArrayList<Produto> itens = new ArrayList<>();
     private ArrayList<String> qnt = new ArrayList<>();
@@ -23,9 +21,8 @@ public class Venda {
         return dataFormatada;
     }
     
-    public void setAtributos(String data, String formaPagamento, Double total){
+    public void setAtributos(String data, Double total){
         this.data = data;
-        this.formaPagamento = formaPagamento;
         this.total = total;
     }
     
@@ -79,14 +76,6 @@ public class Venda {
     public void setData(String data) {
         this.data = data;
     }
-
-    public String getFormaPagamento() {
-        return formaPagamento;
-    }
-
-    public void setFormaPagamento(String formaPagamento) {
-        this.formaPagamento = formaPagamento;
-    }   
 
     public Caixa getCaixa() {
         return caixa;

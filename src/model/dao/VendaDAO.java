@@ -16,17 +16,16 @@ public class VendaDAO {
         PreparedStatement stmt = null;
         
         try{
-            String sql = "INSERT INTO venda (data, formaPagamento, total, idCaixa)VALUES(?,?,?,?)";
+            String sql = "INSERT INTO venda (data, total, idCaixa)VALUES(?,?,?)";
             stmt = con.prepareStatement(sql);
             stmt.setString(1, v.getData());
-            stmt.setString(2, v.getFormaPagamento());
-            stmt.setDouble(3, v.getTotal());
-            stmt.setInt(4, Login.caixaAtual.getIdCaixa());
+            stmt.setDouble(2, v.getTotal());
+            stmt.setInt(3, Login.caixaAtual.getIdCaixa());
             
             stmt.executeUpdate();
             System.out.println("Salvo com sucesso!");
         }catch(SQLException ex){
-            System.err.println("Erro SQL (ItemComandaDAO): "+ex);
+            System.err.println("Erro no CREATE da Venda: "+ex);
         }finally{
             ConnectionFactory.closeConnection(con, stmt);
         }
@@ -47,7 +46,6 @@ public class VendaDAO {
                 
                 v.setIdBanco(rs.getInt("idVenda"));
                 v.setData(rs.getString("data"));
-                v.setFormaPagamento(rs.getString("formaPagamento"));
                 v.setTotal(rs.getDouble("total"));
                 for(Caixa c:caixaDao.read()){
                     if(rs.getInt("idCaixa") == c.getIdCaixa()){

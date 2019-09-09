@@ -237,14 +237,14 @@ public class NovoPrato extends javax.swing.JDialog {
                 preco = GerenciadorComandas.arredondarValor(preco);
                 System.out.println("Preço: "+preco);
                 Double precoPrato = Double.parseDouble(preco);
-                GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).setPratos(precoPrato);
-                item.create(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado), precoPrato);
+                GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1).setPratos(precoPrato);
+                item.create(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1), precoPrato);
             }
             else{
-                GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).setPratos(24.90);
-                item.create(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado), 24.90);
+                GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1).setPratos(24.90);
+                item.create(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1), 24.90);
             }
-            new GerenciadorComandas().setVisible(true);
+            //new GerenciadorComandas().setVisible(true);
             dispose();
         /*catch(java.lang.NumberFormatException ex){
             System.out.println(ex);
