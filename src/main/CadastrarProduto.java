@@ -1,13 +1,11 @@
 package main;
 
 import ArrumarString.Monetarios;
-import ArrumarString.SoNumeros;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 import model.bean.Categoria;
-import model.bean.Comanda;
 import model.bean.Produto;
+import model.dao.MateriaPrimaDAO;
 import model.dao.ProdutoDAO;
 
 public class CadastrarProduto extends javax.swing.JFrame {
@@ -37,28 +35,7 @@ public class CadastrarProduto extends javax.swing.JFrame {
         getRootPane().setDefaultButton(btnConfirmar);
         txtDescricao.setWrapStyleWord(true);
         lblAdicionar.setText("<html><u>[Adicionar]</u></html>");
-        
-       
-        if (Menu.acaoEscolhida == 2){
-            if(GerenciadorProdutos.prodSelecionado.getQtdMinima().equals("X")){
-                txtNome.setText(GerenciadorProdutos.prodSelecionado.getNome());
-                txtNcm.setText(GerenciadorProdutos.prodSelecionado.getNcm());
-                txtQtdMinima.setEnabled(false);
-                txtEan.setText(GerenciadorProdutos.prodSelecionado.getEan());
-                txtPreco.setText(GerenciadorComandas.valorMonetario(GerenciadorProdutos.prodSelecionado.getPreco()));
-                txtDescricao.setText(GerenciadorProdutos.prodSelecionado.getDescricao());
-            }else{
-                txtNome.setText(GerenciadorProdutos.prodSelecionado.getNome());
-                txtNcm.setText(GerenciadorProdutos.prodSelecionado.getNcm());
-                txtQtdMinima.setText(GerenciadorProdutos.prodSelecionado.getQtdMinima());
-                txtEan.setText(GerenciadorProdutos.prodSelecionado.getEan());
-                txtPreco.setText(GerenciadorComandas.valorMonetario(GerenciadorProdutos.prodSelecionado.getPreco()));
-                txtDescricao.setText(GerenciadorProdutos.prodSelecionado.getDescricao());
-                cbCategoria.setSelectedItem(GerenciadorProdutos.prodSelecionado.getCategoria().getNome());
-                cbUnidade.setSelectedItem(GerenciadorProdutos.prodSelecionado.getUnidadeDeMedida());
-                //System.out.println("ID: "+GerenciadorProdutos.prodSelecionado.getIdProduto());
-            }
-       }
+
         txtPreco.setDocument(new Monetarios(7,2));
     }
 
@@ -326,13 +303,18 @@ public class CadastrarProduto extends javax.swing.JFrame {
                                         .addComponent(lblStringNfe)
                                         .addComponent(lblStringNcm)
                                         .addComponent(lblStringNome))
-                                    .addGap(5, 5, 5)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txtQtdMinima, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(txtEan, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE)
-                                            .addComponent(txtNcm, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE)
-                                            .addComponent(txtNome)))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGap(5, 5, 5)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(txtQtdMinima, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 562, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(txtEan, javax.swing.GroupLayout.PREFERRED_SIZE, 562, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(txtNcm, javax.swing.GroupLayout.PREFERRED_SIZE, 562, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGap(7, 7, 7))))
                         .addGroup(layout.createSequentialGroup()
                             .addGap(295, 295, 295)
@@ -343,7 +325,7 @@ public class CadastrarProduto extends javax.swing.JFrame {
                             .addGap(85, 85, 85)
                             .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(157, 157, 157))))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(linha1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 810, Short.MAX_VALUE))
         );
@@ -356,46 +338,42 @@ public class CadastrarProduto extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblStringNome)
                     .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNcm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblStringNcm))
+                .addGap(9, 9, 9)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtEan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblStringNfe))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblStringId1)
+                        .addComponent(lblAdicionar1))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblStringQuantidadeMin)
+                        .addComponent(txtQtdMinima, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblStringUnidade)
+                    .addComponent(cbUnidade, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblStringPreco)
+                    .addComponent(txtPreco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblStringPreco1))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(95, 95, 95)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lblStringId1)
-                                .addComponent(lblAdicionar1))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(lblStringQuantidadeMin)
-                                .addComponent(txtQtdMinima, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblStringUnidade)
-                            .addComponent(cbUnidade, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblStringPreco)
-                            .addComponent(txtPreco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblStringPreco1))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblStringDescricao)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblStringNcm)
-                            .addComponent(txtNcm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblStringNfe)
-                            .addComponent(txtEan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(lblStringDescricao)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -412,18 +390,24 @@ public class CadastrarProduto extends javax.swing.JFrame {
         String unid = (String)cbUnidade.getSelectedItem();
         String nome = txtNome.getText();
         String precoString = txtPreco.getText();
-        Produto p = new Produto();
-        ProdutoDAO pDao = new ProdutoDAO();
-        
+               
         if(!(cat.equals("")|nome.equals(""))){
             try{
-                if (!precoString.equals("")){
-                    p.setPreco(Double.parseDouble(GerenciadorComandas.tornarCompativel(precoString)));
-                    p.setPrecoComDesconto(Double.parseDouble(GerenciadorComandas.tornarCompativel(precoString)));
+                // Instancia o produto e seu objeto de acesso de dados
+                Produto p = new Produto();
+                ProdutoDAO pDao = new ProdutoDAO();
+                
+                // Verifica se o produto sendo cadastrado vai ter preço
+                if (!precoString.equals("")){ 
+                    // Se o usuário tiver entrado algum preço, seta este no produto
+                    p.setPreco(Double.parseDouble(GerenciadorComandas.tornarCompativel(precoString)));              //Atributo 1
+                    p.setPrecoComDesconto(Double.parseDouble(GerenciadorComandas.tornarCompativel(precoString)));   //Atributo 2
                 }else{
+                    // Se o usuário não tiver entrado preço, seta o preço como 0 (zero)
                     p.setPreco(0.0);
                 }
-                //System.out.println("Preço: "+preco);
+
+                // Instancia o objeto categoria do novo produto
                 Categoria categoria = new Categoria();
                 for(Categoria c:Login.categorias){
                     if(cat.equals(c.getNome())){
@@ -432,22 +416,46 @@ public class CadastrarProduto extends javax.swing.JFrame {
                         categoria.setDescricao(c.getDescricao());
                     }
                 }
+                p.setCategoria(categoria);                     //Atributo 3
                 
-                p.setUnidadeDeMedida(unid);
-                p.setNome(txtNome.getText());
-                p.setDescricao(txtDescricao.getText());
-                p.setNcm(txtNcm.getText());
-                p.setEan(txtEan.getText());
-                p.setValidade("");
-                p.setQtdEstoque("0");
-                p.setCategoria(categoria);
+                // Seta os outros atributos do novo produto
+                p.setUnidadeDeMedida(unid);                    //Atributo 4
+                p.setNome(txtNome.getText());                  //Atributo 5
+                p.setDescricao(txtDescricao.getText());        //Atributo 6
+                p.setNcm(txtNcm.getText());                    //Atributo 7
+                p.setEan(txtEan.getText());                    //Atributo 8
+                p.setValidade("");                             //Atributo 9
+                p.setQtdEstoque("0");                          //Atributo 10
+                
+                // Verifica se o sistema controlará o ESTOQUE do produto
                 if(!txtQtdMinima.getText().equals("")){
-                    p.setQtdMinima(txtQtdMinima.getText());
+                    p.setQtdMinima(txtQtdMinima.getText());    //Atributo 11
                 }else{
                     p.setQtdMinima("X");
                     p.setQtdEstoque("X");
                 }
-                               
+                
+                // Cria o sistema no banco, para depois pegar o ID gerado e colocar no objeto
+                pDao.create(p); 
+                for (Produto prod:pDao.read()){
+                    if (p.getNome().equals(prod.getNome())){
+                        p.setIdProduto(prod.getIdProduto());                        
+                    }
+                }
+                
+                // Pega os subprodutos (matérias-primas) do novo produto
+                if (!CadastrarMateriaPrima.materiasSelecionadas.isEmpty()){ // Verifica de a lista de matérias selecionadas NÃO é vazia
+                    for (Produto materia : CadastrarMateriaPrima.materiasSelecionadas){
+                        p.setMateriaPrima(materia);
+                    }
+                    MateriaPrimaDAO materiaDao = new MateriaPrimaDAO();
+                    materiaDao.create(p);
+                }
+                
+                listaProdutos.add(p);
+                CadastrarMateriaPrima.materiasSelecionadas.removeAll(CadastrarMateriaPrima.materiasSelecionadas);
+                new Menu().setVisible(true);
+                dispose();                               
             }catch(java.lang.NumberFormatException ex){
                 JOptionPane.showMessageDialog(null, "Campo \"Preço\" inválido");
             }
@@ -460,26 +468,7 @@ public class CadastrarProduto extends javax.swing.JFrame {
                 msg += ("- Nome\n");
             }
             JOptionPane.showMessageDialog(null, "O(s) seguinte(s) campo(s) deve(m) ser preenchido(s):"+msg);
-        }  
-    
-        if (Menu.acaoEscolhida == 2){
-            p.setIdProduto(GerenciadorProdutos.prodSelecionado.getIdProduto());
-            pDao.update(p);
-            new GerenciadorProdutos().setVisible(true);
-            dispose();
-        }else{
-            pDao.create(p); 
-            for (Produto prod:pDao.read()){
-                if (p.getNome().equals(prod.getNome())){
-                    p.setIdProduto(prod.getIdProduto());
-                    listaProdutos.add(p);
-                }
-            }
-            new Menu().setVisible(true);
-            dispose();
-        }
-        
-        
+        }                         
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -523,12 +512,23 @@ public class CadastrarProduto extends javax.swing.JFrame {
     }//GEN-LAST:event_formFocusGained
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        String materias = "";
-        if (!CadastrarMateriaPrima.materiasSelecionadas.isEmpty())
+        lblStringMaterias.setText("");
+        String materias = "<html><body>";   
+        int i = 0;
+        if (!CadastrarMateriaPrima.materiasSelecionadas.isEmpty()){ //Verifica se a lista de matérias NÃO está vazia
+           // Integer tamanho = CadastrarMateriaPrima.materiasSelecionadas.size(); //Pega o tamanho da lista de matérias
             for (Produto p:CadastrarMateriaPrima.materiasSelecionadas){
-                 materias += p.getNome();
-                 materias += "  ";
+                if (i == 3 & i == 6){
+                    System.out.println("entrei");
+                    materias += "<br>";
+                }
+                materias += i+1+". "; //Concatena à string qual é o número da matéria-prima
+                materias += p.getNome(); //Pega o nome da matéria-prima que está sendo adicionada
+                materias += "  "; //Adiciona espaço entre uma matéria-prima e outra
+                i += 1;
             }
+        }
+        materias += "</body></html>";
         lblStringMaterias.setText(materias);
     }//GEN-LAST:event_formComponentShown
 

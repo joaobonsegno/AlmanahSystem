@@ -2,6 +2,7 @@ package main;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import javafx.scene.control.SelectionModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Categoria;
@@ -19,22 +20,24 @@ public class CadastrarMateriaPrima extends javax.swing.JDialog {
         initComponents();
         this.setLocationRelativeTo(null);
         getRootPane().setDefaultButton(btnConfirmar);
-        materiasSelecionadas.removeAll(materiasSelecionadas);
+        
         jtProdutos.setRowHeight(25);
-        jtProdutos.getColumnModel().getColumn(0).setPreferredWidth(50); 
-        jtProdutos.getColumnModel().getColumn(1).setPreferredWidth(500);
+        jtProdutos.getColumnModel().getColumn(0).setPreferredWidth(500); 
+        jtProdutos.getColumnModel().getColumn(1).setPreferredWidth(50);
 
-        jtProdutos.getColumnModel().getColumn(0).setMinWidth(50);
-        jtProdutos.getColumnModel().getColumn(1).setMinWidth(500);
+        jtProdutos.getColumnModel().getColumn(0).setMinWidth(500);
+        jtProdutos.getColumnModel().getColumn(1).setMinWidth(50);
 
-        jtProdutos.getColumnModel().getColumn(0).setMaxWidth(50);
-        jtProdutos.getColumnModel().getColumn(1).setMaxWidth(500);
+        jtProdutos.getColumnModel().getColumn(0).setMaxWidth(500);
+        jtProdutos.getColumnModel().getColumn(1).setMaxWidth(50);
+        
         listaProdutos.removeAll(listaProdutos);
         for (Produto p: pDao.read()){
             listaProdutos.add(p);
         }
         criarTabela();
-        criarComboBox();
+        criarComboBox();  
+        
     }
     
     public void criarTabela(){
@@ -51,10 +54,11 @@ public class CadastrarMateriaPrima extends javax.swing.JDialog {
             String valor = GerenciadorComandas.valorMonetario(p.getPreco());
             dtmBebidas.addRow(
                 new Object[]{
-                    p.getIdProduto(),
-                    p.getNome()}
+                    p.getNome(),
+                    p.getIdProduto()}
             );
-        }  
+        } 
+        setarSelecionado();
     }
     
     public void criarTabelaCategoria(String nome){
@@ -71,9 +75,25 @@ public class CadastrarMateriaPrima extends javax.swing.JDialog {
             String valor = GerenciadorComandas.valorMonetario(p.getPreco());
             dtmBebidas.addRow(
                 new Object[]{
-                    p.getIdProduto(),
-                    p.getNome()}
+                    p.getNome(),
+                    p.getIdProduto()}
             );
+        }
+        setarSelecionado();
+    }
+    
+    public void setarSelecionado(){
+        DefaultTableModel dtmBebidas = (DefaultTableModel) jtProdutos.getModel();
+        int quantidadeDeProdutos = dtmBebidas.getRowCount();
+        
+        for (int i = 0; i < quantidadeDeProdutos; i++){
+            Integer id = (Integer)dtmBebidas.getValueAt(i, 1);
+            for (Produto p : materiasSelecionadas){
+                if (p.getIdProduto() == id){
+                    //jtProdutos.setRowSelectionInterval(i, i);
+                    jtProdutos.addRowSelectionInterval(i, i);
+                }
+            }
         }
     }
     
@@ -168,7 +188,7 @@ public class CadastrarMateriaPrima extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Nome"
+                "Nome", "ID"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -185,6 +205,10 @@ public class CadastrarMateriaPrima extends javax.swing.JDialog {
             }
         });
         jScrollPane1.setViewportView(jtProdutos);
+        if (jtProdutos.getColumnModel().getColumnCount() > 0) {
+            jtProdutos.getColumnModel().getColumn(0).setResizable(false);
+            jtProdutos.getColumnModel().getColumn(1).setResizable(false);
+        }
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -261,17 +285,16 @@ public class CadastrarMateriaPrima extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
+        materiasSelecionadas.removeAll(materiasSelecionadas);
         int quantidadeDeSelecionados = jtProdutos.getSelectedRows().length;
         if (quantidadeDeSelecionados > 9){
             JOptionPane.showMessageDialog(null, "Falha no cadastro:\nSó é possível selecionar até 9 matérias-primas para um produto.");
         }else{
             for (int i = 0; i < quantidadeDeSelecionados; i++){
-            Integer idSelecionado = (Integer)jtProdutos.getValueAt(jtProdutos.getSelectedRows()[i], 0);
-                System.out.println("ID selecionado: "+idSelecionado);
+            Integer idSelecionado = (Integer)jtProdutos.getValueAt(jtProdutos.getSelectedRows()[i], 1);
                 for (Produto p:listaProdutos){
                     if (p.getIdProduto() == idSelecionado){
                         materiasSelecionadas.add(p);
-                        System.out.println("Produto: "+p.getNome());
                     }
                 }
             }

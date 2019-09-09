@@ -3,6 +3,8 @@ package main;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Log;
 import model.bean.Produto;
@@ -17,21 +19,7 @@ public class NovaBebida extends javax.swing.JFrame {
     
     public NovaBebida() {
         initComponents();
-        jtBebidas.setRowHeight(26);
-        jtBebidas.getColumnModel().getColumn(0).setPreferredWidth(80); 
-        jtBebidas.getColumnModel().getColumn(1).setPreferredWidth(80);
-        jtBebidas.getColumnModel().getColumn(2).setPreferredWidth(80);
-        jtBebidas.getColumnModel().getColumn(3).setPreferredWidth(600);
-        
-        jtBebidas.getColumnModel().getColumn(0).setMinWidth(80);
-        jtBebidas.getColumnModel().getColumn(1).setMinWidth(80);
-        jtBebidas.getColumnModel().getColumn(2).setMinWidth(80);
-        jtBebidas.getColumnModel().getColumn(3).setMinWidth(600);
-        
-        jtBebidas.getColumnModel().getColumn(0).setMaxWidth(80);
-        jtBebidas.getColumnModel().getColumn(1).setMaxWidth(80);
-        jtBebidas.getColumnModel().getColumn(2).setMaxWidth(80);
-        jtBebidas.getColumnModel().getColumn(3).setMaxWidth(600);
+        formatarTabela();
         String comString = Integer.toString(GerenciadorComandas.idSelecionado);
         lblComanda.setText(comString);
         SpinnerNumberModel nm = new SpinnerNumberModel(1, 1, 50, 1);
@@ -50,6 +38,34 @@ public class NovaBebida extends javax.swing.JFrame {
         SpinnerQtd.setModel(nm);*/
     }
     
+    public void formatarTabela(){
+        DefaultTableCellRenderer direita = new DefaultTableCellRenderer();
+        DefaultTableCellRenderer centro = new DefaultTableCellRenderer();
+        DefaultTableCellRenderer esquerda = new DefaultTableCellRenderer();       
+        centro.setHorizontalAlignment(SwingConstants.CENTER);
+        direita.setHorizontalAlignment(SwingConstants.RIGHT);
+        esquerda.setHorizontalAlignment(SwingConstants.LEFT);
+        
+        jtBebidas.setRowHeight(26);
+        jtBebidas.getColumnModel().getColumn(0).setPreferredWidth(0); 
+        jtBebidas.getColumnModel().getColumn(1).setPreferredWidth(530);
+        jtBebidas.getColumnModel().getColumn(2).setPreferredWidth(60);
+        jtBebidas.getColumnModel().getColumn(3).setPreferredWidth(110);
+        
+        jtBebidas.getColumnModel().getColumn(0).setMinWidth(0);
+        jtBebidas.getColumnModel().getColumn(1).setMinWidth(530);
+        jtBebidas.getColumnModel().getColumn(2).setMinWidth(60);
+        jtBebidas.getColumnModel().getColumn(3).setMinWidth(110);
+        
+        jtBebidas.getColumnModel().getColumn(0).setMaxWidth(0);
+        jtBebidas.getColumnModel().getColumn(1).setMaxWidth(530);
+        jtBebidas.getColumnModel().getColumn(2).setMaxWidth(60);
+        jtBebidas.getColumnModel().getColumn(3).setMaxWidth(110);
+   
+        jtBebidas.getColumnModel().getColumn(2).setCellRenderer(centro);
+        jtBebidas.getColumnModel().getColumn(3).setCellRenderer(direita);
+    }
+    
     public void limparTabela(){
         DefaultTableModel dtmBebidas = (DefaultTableModel) jtBebidas.getModel();
         int i = dtmBebidas.getRowCount();
@@ -59,15 +75,7 @@ public class NovaBebida extends javax.swing.JFrame {
         }
     }
     
-    public void criarTabela(){
-        /*ArrayList<Produto> ordenador = new ArrayList<>();
-        
-        
-        for (Produto prod : pDao.read()){
-            ordenador.add(prod);
-        }
-        ordenador = GerenciadorComandas.ordenarListasProduto(ordenador);*/
-        
+    public void criarTabela(){        
         ProdutoDAO pDao = new ProdutoDAO();
         DefaultTableModel dtmBebidas = (DefaultTableModel) jtBebidas.getModel();
         for (Produto p: pDao.read()){
@@ -78,9 +86,9 @@ public class NovaBebida extends javax.swing.JFrame {
                 dtmBebidas.addRow(
                     new Object[]{
                         p.getIdProduto(),
-                        p.getQtdEstoque(),
-                        valor,
-                        p.getNome()}
+                        p.getNome(),
+                        p.getQtdEstoque(),                       
+                        valor}
                 );
             }
         }
@@ -96,9 +104,9 @@ public class NovaBebida extends javax.swing.JFrame {
                     dtmBebidas.addRow(
                         new Object[]{
                             p.getIdProduto(),
+                            p.getNome()+" (PROMOÇÃO)",
                             p.getQtdEstoque(),
-                            valor,
-                            p.getNome()+" (PROMOÇÃO)"}
+                            valor}
                     );
                 }
             }else{
@@ -109,9 +117,9 @@ public class NovaBebida extends javax.swing.JFrame {
                     dtmBebidas.addRow(
                         new Object[]{
                             p.getIdProduto(),
+                            p.getNome(),
                             p.getQtdEstoque(),
-                            valor,
-                            p.getNome()}
+                            valor}
                     );
                 }
             }
@@ -119,14 +127,6 @@ public class NovaBebida extends javax.swing.JFrame {
     }
     
     public void criarTabelaNome(String nome){
-        /*ArrayList<Produto> ordenador = new ArrayList<>();
-        
-        ProdutoDAO pDao = new ProdutoDAO();
-        for (Produto prod : pDao.readForNome(nome)){
-            ordenador.add(prod);
-        }
-        ordenador = GerenciadorComandas.ordenarListasProduto(ordenador);*/
-
         limparTabela();
         ProdutoDAO pDao = new ProdutoDAO();
         DefaultTableModel dtmBebidas = (DefaultTableModel) jtBebidas.getModel();
@@ -138,9 +138,9 @@ public class NovaBebida extends javax.swing.JFrame {
                 dtmBebidas.addRow(
                     new Object[]{
                         p.getIdProduto(),
-                        p.getQtdEstoque(),
-                        valor,
-                        p.getNome()}
+                        p.getNome(),
+                        p.getQtdEstoque(),                       
+                        valor}
                 );
             }
         }
@@ -156,9 +156,9 @@ public class NovaBebida extends javax.swing.JFrame {
                     dtmBebidas.addRow(
                         new Object[]{
                             p.getIdProduto(),
+                            p.getNome()+" (PROMOÇÃO)",
                             p.getQtdEstoque(),
-                            valor,
-                            p.getNome()}
+                            valor}
                     );
                 }
             }else{
@@ -169,9 +169,9 @@ public class NovaBebida extends javax.swing.JFrame {
                     dtmBebidas.addRow(
                         new Object[]{
                             p.getIdProduto(),
+                            p.getNome(),
                             p.getQtdEstoque(),
-                            valor,
-                            p.getNome()}
+                            valor}
                     );
                 }
             }
@@ -222,7 +222,7 @@ public class NovaBebida extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Qtd", "Preço", "Nome"
+                "ID", "Nome", "Qtd", "Preço (R$)"
             }
         ) {
             boolean[] canEdit = new boolean [] {

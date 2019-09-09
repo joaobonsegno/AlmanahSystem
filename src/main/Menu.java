@@ -123,9 +123,8 @@ public class Menu extends javax.swing.JFrame {
         produtos = new javax.swing.JMenu();
         produtos_gerenciar = new javax.swing.JMenuItem();
         produtos_cadastrar = new javax.swing.JMenuItem();
-        produtos_pratos = new javax.swing.JMenuItem();
         produtos_pratos1 = new javax.swing.JMenuItem();
-        produtos_categorias = new javax.swing.JMenuItem();
+        produtos_pratos = new javax.swing.JMenuItem();
         funcionarios = new javax.swing.JMenu();
         funcionarios_gerenciar = new javax.swing.JMenuItem();
         funcionarios_cadastrar = new javax.swing.JMenuItem();
@@ -272,16 +271,6 @@ public class Menu extends javax.swing.JFrame {
         });
         produtos.add(produtos_cadastrar);
 
-        produtos_pratos.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
-        produtos_pratos.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\novoproduto2.png")); // NOI18N
-        produtos_pratos.setText("Cadastrar Prato");
-        produtos_pratos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                produtos_pratosActionPerformed(evt);
-            }
-        });
-        produtos.add(produtos_pratos);
-
         produtos_pratos1.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
         produtos_pratos1.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\novoproduto2.png")); // NOI18N
         produtos_pratos1.setText("Gerenciar Pratos");
@@ -292,15 +281,15 @@ public class Menu extends javax.swing.JFrame {
         });
         produtos.add(produtos_pratos1);
 
-        produtos_categorias.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
-        produtos_categorias.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\novoproduto2.png")); // NOI18N
-        produtos_categorias.setText("Categorias de Produtos");
-        produtos_categorias.addActionListener(new java.awt.event.ActionListener() {
+        produtos_pratos.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        produtos_pratos.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\novoproduto2.png")); // NOI18N
+        produtos_pratos.setText("Cadastrar Prato");
+        produtos_pratos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                produtos_categoriasActionPerformed(evt);
+                produtos_pratosActionPerformed(evt);
             }
         });
-        produtos.add(produtos_categorias);
+        produtos.add(produtos_pratos);
 
         jMenuBar1.add(produtos);
 
@@ -506,11 +495,6 @@ public class Menu extends javax.swing.JFrame {
                 
     }//GEN-LAST:event_estoque_movimentacaoActionPerformed
 
-    private void produtos_categoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_produtos_categoriasActionPerformed
-        new CadastrarCategoria().setVisible(true);
-        dispose();
-    }//GEN-LAST:event_produtos_categoriasActionPerformed
-
     private void financeiro_gerenciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_financeiro_gerenciarActionPerformed
         new CadastrarDespesa(new javax.swing.JFrame(), true).setVisible(true);
         dispose();
@@ -608,7 +592,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JMenuItem pdv_comandas;
     private javax.swing.JMenu produtos;
     private javax.swing.JMenuItem produtos_cadastrar;
-    private javax.swing.JMenuItem produtos_categorias;
     private javax.swing.JMenuItem produtos_gerenciar;
     private javax.swing.JMenuItem produtos_pratos;
     private javax.swing.JMenuItem produtos_pratos1;

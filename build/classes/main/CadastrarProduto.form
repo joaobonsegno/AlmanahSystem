@@ -82,13 +82,21 @@
                                       <Component id="lblStringNcm" alignment="1" min="-2" max="-2" attributes="0"/>
                                       <Component id="lblStringNome" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="txtQtdMinima" min="-2" pref="160" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="txtEan" pref="562" max="32767" attributes="0"/>
-                                          <Component id="txtNcm" pref="562" max="32767" attributes="0"/>
-                                          <Component id="txtNome" alignment="0" max="32767" attributes="0"/>
+                                      <Group type="102" attributes="0">
+                                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="txtQtdMinima" min="-2" pref="160" max="-2" attributes="0"/>
+                                              <Component id="txtNome" alignment="0" min="-2" pref="562" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="txtEan" min="-2" pref="562" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="txtNcm" min="-2" pref="562" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
@@ -108,7 +116,7 @@
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace pref="24" max="32767" attributes="0"/>
+              <EmptySpace pref="27" max="32767" attributes="0"/>
           </Group>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
               <Component id="linha1" alignment="1" pref="810" max="32767" attributes="0"/>
@@ -125,57 +133,50 @@
                   <Component id="lblStringNome" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtNome" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="txtNcm" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblStringNcm" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="txtEan" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblStringNfe" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                      <Component id="cbCategoria" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
+                      <Component id="lblStringId1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblAdicionar1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblStringQuantidadeMin" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtQtdMinima" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblStringUnidade" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cbUnidade" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
+                  <Component id="lblStringPreco" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtPreco" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblStringPreco1" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="95" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                              <Component id="cbCategoria" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
-                              <Component id="lblStringId1" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblAdicionar1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="lblStringQuantidadeMin" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtQtdMinima" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lblStringUnidade" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cbUnidade" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
-                          <Component id="lblStringPreco" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtPreco" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblStringPreco1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane2" pref="0" max="32767" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="lblStringDescricao" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="59" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="btnConfirmar" alignment="3" min="-2" pref="53" max="-2" attributes="0"/>
-                          <Component id="btnCancelar" alignment="3" min="-2" pref="53" max="-2" attributes="0"/>
-                      </Group>
+                  <Component id="jScrollPane2" pref="0" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="lblStringDescricao" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="77" max="32767" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lblStringNcm" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtNcm" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lblStringNfe" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtEan" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="btnConfirmar" alignment="3" min="-2" pref="53" max="-2" attributes="0"/>
+                  <Component id="btnCancelar" alignment="3" min="-2" pref="53" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>

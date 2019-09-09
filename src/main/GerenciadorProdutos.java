@@ -19,15 +19,15 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
        jtProdutos.setRowHeight(22);
        getRootPane().setDefaultButton(btnOk);
        this.setLocationRelativeTo(null);
-       jtProdutos.getColumnModel().getColumn(0).setPreferredWidth(80); 
+       jtProdutos.getColumnModel().getColumn(0).setPreferredWidth(500); 
        jtProdutos.getColumnModel().getColumn(1).setPreferredWidth(150);
        jtProdutos.getColumnModel().getColumn(2).setPreferredWidth(400);
         
-       jtProdutos.getColumnModel().getColumn(0).setMinWidth(80);
+       jtProdutos.getColumnModel().getColumn(0).setMinWidth(500);
        jtProdutos.getColumnModel().getColumn(1).setMinWidth(150);
        jtProdutos.getColumnModel().getColumn(2).setMinWidth(400);
         
-       jtProdutos.getColumnModel().getColumn(0).setMaxWidth(80);
+       jtProdutos.getColumnModel().getColumn(0).setMaxWidth(500);
        jtProdutos.getColumnModel().getColumn(1).setMaxWidth(150);
        jtProdutos.getColumnModel().getColumn(2).setMaxWidth(400);
        pDao = new ProdutoDAO();
@@ -54,17 +54,17 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
             if (p.getPreco() == 0.0){
                 dtmBebidas.addRow(
                     new Object[]{
-                        p.getIdProduto(),
+                        p.getNome(),
                         "X",
-                        p.getNome()}
+                        p.getIdProduto()}
                 );
             }else{
                 String valor = GerenciadorComandas.valorMonetario(p.getPreco());
                 dtmBebidas.addRow(
                     new Object[]{
-                        p.getIdProduto(),
+                        p.getNome(),
                         valor,
-                        p.getNome()}
+                        p.getIdProduto()}
                 );
             }
         }
@@ -84,17 +84,17 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
             if (p.getPreco() == 0.0){
                 dtmBebidas.addRow(
                     new Object[]{
-                        p.getIdProduto(),
+                        p.getNome(),
                         "X",
-                        p.getNome()}
+                        p.getIdProduto()}
                 );
             }else{
                 String valor = GerenciadorComandas.valorMonetario(p.getPreco());
                 dtmBebidas.addRow(
                     new Object[]{
-                        p.getIdProduto(),
+                        p.getNome(),
                         valor,
-                        p.getNome()}
+                        p.getIdProduto()}
                 );
             }
         }
@@ -114,17 +114,17 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
             if (p.getPreco() == 0.0){
                 dtmBebidas.addRow(
                     new Object[]{
-                        p.getIdProduto(),
+                        p.getNome(),
                         "X",
-                        p.getNome()}
+                        p.getIdProduto()}
                 );
             }else{
                 String valor = GerenciadorComandas.valorMonetario(p.getPreco());
                 dtmBebidas.addRow(
                     new Object[]{
-                        p.getIdProduto(),
+                        p.getNome(),
                         valor,
-                        p.getNome()}
+                        p.getIdProduto()}
                 );
             }
         }
@@ -195,7 +195,7 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Valor de Venda (R$)", "Nome"
+                "Nome", "Valor de Venda (R$)", "ID"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -346,12 +346,12 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
         Menu.acaoEscolhida = 2;
-        Integer idSelecionado = (Integer)jtProdutos.getValueAt(jtProdutos.getSelectedRow(), 0);
+        Integer idSelecionado = (Integer)jtProdutos.getValueAt(jtProdutos.getSelectedRow(), 2);
 
         for(Produto p:listaProdutos){
             if(p.getIdProduto().equals(idSelecionado)){
                 prodSelecionado = p;
-                new CadastrarProduto().setVisible(true); 
+                new AlterarProduto().setVisible(true); 
                 dispose();
             }
         }
@@ -360,7 +360,7 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
 
     private void btnInativarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInativarActionPerformed
         try{
-            Integer idSelecionado = (Integer)jtProdutos.getValueAt(jtProdutos.getSelectedRow(), 0); 
+            Integer idSelecionado = (Integer)jtProdutos.getValueAt(jtProdutos.getSelectedRow(), 2); 
             
             for(Produto p:listaProdutos){
                 if(p.getIdProduto().equals(idSelecionado)){

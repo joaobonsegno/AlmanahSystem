@@ -17,6 +17,22 @@ public class Produto implements Comparable<Produto>{
         return 0; //os dois são iguais
     }
     
+    public void limparMaterias(){
+        this.materiasPrimas.removeAll(materiasPrimas);
+    }
+    
+    public ArrayList<Produto> getMateriasPrimas() {
+        return materiasPrimas;
+    }
+
+    public void setMateriasPrimas(ArrayList<Produto> materiasPrimas) {
+        this.materiasPrimas = materiasPrimas;
+    }
+    
+    public void setMateriaPrima(Produto p){
+        this.materiasPrimas.add(p);
+    }
+    
     public Integer getIdProduto() {
         return idProduto;
     }

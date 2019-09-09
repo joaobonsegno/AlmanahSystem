@@ -301,12 +301,12 @@ public class FormaPagamentoOLD extends javax.swing.JDialog {
     }//GEN-LAST:event_btnDebitoActionPerformed
 
     private void btnDinheiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDinheiroActionPerformed
-        dispose();
+       /* dispose();
         FormaDinheiro forma = new FormaDinheiro(new javax.swing.JFrame(), true);
         forma.setVisible(true); 
         btnConfirmar.setEnabled(true);
         formaPagamento = "Dinheiro";
-        lblRecebido.setText("R$ 0,00");
+        lblRecebido.setText("R$ 0,00");*/
     }//GEN-LAST:event_btnDinheiroActionPerformed
 
     private void btnVoucherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoucherActionPerformed
@@ -336,7 +336,7 @@ public class FormaPagamentoOLD extends javax.swing.JDialog {
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        Log l = new Log(1);
+        /*Log l = new Log(1);
         LogDAO logDao = new LogDAO();
         VendaDAO vendaDao = new VendaDAO();
         ComandaDAO comandaDao = new ComandaDAO();
@@ -353,7 +353,7 @@ public class FormaPagamentoOLD extends javax.swing.JDialog {
                 c.setValor(EncerrarComanda.comandaSelecionada.getValor());
             }
         }*/
-        for(Comanda c:GerenciadorComandas.comandasAbertas){
+        /*for(Comanda c:GerenciadorComandas.comandasAbertas){
             if(GerenciadorComandas.idSelecionado == c.getId()){
                 if (formaPagamento.equals("Dinheiro")){
                     l.setCategoria("Caixa");
@@ -409,7 +409,7 @@ public class FormaPagamentoOLD extends javax.swing.JDialog {
             }
         }
         dispose();
-        new GerenciadorComandas().setVisible(true);
+        new GerenciadorComandas().setVisible(true);*/
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     /**
