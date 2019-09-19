@@ -1,5 +1,6 @@
 package main;
 
+import ArrumarString.Monetarios;
 import javax.swing.JOptionPane;
 import model.dao.ItemComandaDAO;
 
@@ -29,6 +30,7 @@ public class NovoPrato extends javax.swing.JDialog {
         String comString = Integer.toString(GerenciadorComandas.idSelecionado);
         lblComanda.setText(comString);
         getRootPane().setDefaultButton(btnConfirmar);
+        txtEntradaPreco.setDocument(new Monetarios(7,2));
     }
     
     @SuppressWarnings("unchecked")
@@ -62,13 +64,13 @@ public class NovoPrato extends javax.swing.JDialog {
         linha.setBackground(new java.awt.Color(0, 0, 0));
         linha.setOpaque(true);
 
-        lblStringPeso.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
+        lblStringPeso.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         lblStringPeso.setText("Valor da Refeição:");
 
-        txtEntradaPreco.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        txtEntradaPreco.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
 
         btnCancelar.setBackground(new java.awt.Color(204, 0, 0));
-        btnCancelar.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
+        btnCancelar.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         btnCancelar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\cancel.png")); // NOI18N
         btnCancelar.setText("  Cancelar");
         btnCancelar.setBorder(new javax.swing.border.MatteBorder(null));
@@ -80,7 +82,7 @@ public class NovoPrato extends javax.swing.JDialog {
         });
 
         btnConfirmar.setBackground(new java.awt.Color(0, 153, 0));
-        btnConfirmar.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
+        btnConfirmar.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         btnConfirmar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\confirm.png")); // NOI18N
         btnConfirmar.setText(" Confirmar");
         btnConfirmar.setBorder(new javax.swing.border.MatteBorder(null));
@@ -122,7 +124,7 @@ public class NovoPrato extends javax.swing.JDialog {
             }
         });
 
-        lblStringkg.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
+        lblStringkg.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         lblStringkg.setText("R$");
 
         lblStringComanda.setFont(new java.awt.Font("Comic Sans MS", 0, 20)); // NOI18N
@@ -230,13 +232,13 @@ public class NovoPrato extends javax.swing.JDialog {
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         //try{
-            
+            String valor = txtEntradaPreco.getText();
+            valor = valor.replace("." , "");
             ItemComandaDAO item = new ItemComandaDAO();
             if (cbPeso.isSelected()){
-                String preco = GerenciadorComandas.tornarCompativel(txtEntradaPreco.getText());
-                preco = GerenciadorComandas.arredondarValor(preco);
-                System.out.println("Preço: "+preco);
-                Double precoPrato = Double.parseDouble(preco);
+                valor = GerenciadorComandas.tornarCompativel(valor);
+                //preco = GerenciadorComandas.arredondarValor(preco);
+                Double precoPrato = Double.parseDouble(valor);
                 GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1).setPratos(precoPrato);
                 item.create(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1), precoPrato);
             }

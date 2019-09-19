@@ -14,27 +14,28 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
     public static Produto prodSelecionado;
     
     public GerenciadorProdutos() {        
-       initComponents();
+        initComponents();
        
-       jtProdutos.setRowHeight(22);
-       getRootPane().setDefaultButton(btnOk);
-       this.setLocationRelativeTo(null);
-       jtProdutos.getColumnModel().getColumn(0).setPreferredWidth(500); 
-       jtProdutos.getColumnModel().getColumn(1).setPreferredWidth(150);
-       jtProdutos.getColumnModel().getColumn(2).setPreferredWidth(400);
-        
-       jtProdutos.getColumnModel().getColumn(0).setMinWidth(500);
-       jtProdutos.getColumnModel().getColumn(1).setMinWidth(150);
-       jtProdutos.getColumnModel().getColumn(2).setMinWidth(400);
-        
-       jtProdutos.getColumnModel().getColumn(0).setMaxWidth(500);
-       jtProdutos.getColumnModel().getColumn(1).setMaxWidth(150);
-       jtProdutos.getColumnModel().getColumn(2).setMaxWidth(400);
-       pDao = new ProdutoDAO();
-       listaProdutos.removeAll(listaProdutos);
-       for (Produto p: pDao.read()){
+        jtProdutos.setRowHeight(27);
+        getRootPane().setDefaultButton(btnOk);
+        this.setLocationRelativeTo(null);
+        jtProdutos.getColumnModel().getColumn(0).setPreferredWidth(500); 
+        jtProdutos.getColumnModel().getColumn(1).setPreferredWidth(150);
+        jtProdutos.getColumnModel().getColumn(2).setPreferredWidth(400);
+         
+        jtProdutos.getColumnModel().getColumn(0).setMinWidth(500);
+        jtProdutos.getColumnModel().getColumn(1).setMinWidth(150);
+        jtProdutos.getColumnModel().getColumn(2).setMinWidth(400);
+         
+        jtProdutos.getColumnModel().getColumn(0).setMaxWidth(500);
+        jtProdutos.getColumnModel().getColumn(1).setMaxWidth(150);
+        jtProdutos.getColumnModel().getColumn(2).setMaxWidth(400);
+        pDao = new ProdutoDAO();
+        listaProdutos.removeAll(listaProdutos);
+        for (Produto p: pDao.read()){
             listaProdutos.add(p);
         }
+        CadastrarMateriaPrima.materiasSelecionadas.removeAll(CadastrarMateriaPrima.materiasSelecionadas);
         criarTabela();
         criarComboBox();
     }

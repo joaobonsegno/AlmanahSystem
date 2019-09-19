@@ -46,6 +46,7 @@ public class CadastrarFuncionario extends javax.swing.JFrame {
        initComponents();
        this.setLocationRelativeTo(null);
        txtNumero.setDocument(new SoNumeros()); 
+
        for (Estado e : eDao.read()){
            listaEstados.add(e);
        }

@@ -35,17 +35,17 @@ public class NovaComanda extends javax.swing.JDialog {
         setResizable(false);
 
         lblStringNovaComanda.setBackground(new java.awt.Color(0, 102, 204));
-        lblStringNovaComanda.setFont(new java.awt.Font("Comic Sans MS", 0, 17)); // NOI18N
+        lblStringNovaComanda.setFont(new java.awt.Font("Century Gothic", 0, 17)); // NOI18N
         lblStringNovaComanda.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblStringNovaComanda.setText("Nova Comanda");
 
         linha.setBackground(new java.awt.Color(0, 0, 0));
         linha.setOpaque(true);
 
-        lblStringNovoID.setFont(new java.awt.Font("Comic Sans MS", 0, 16)); // NOI18N
+        lblStringNovoID.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblStringNovoID.setText("Novo ID:");
 
-        lblNovoID.setFont(new java.awt.Font("Comic Sans MS", 0, 17)); // NOI18N
+        lblNovoID.setFont(new java.awt.Font("Century Gothic", 1, 17)); // NOI18N
         lblNovoID.setText("R$");
 
         btnCancelar.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
@@ -75,9 +75,6 @@ public class NovaComanda extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(92, 92, 92)
-                        .addComponent(lblStringNovaComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(108, 108, 108)
                         .addComponent(lblStringNovoID)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -86,7 +83,10 @@ public class NovaComanda extends javax.swing.JDialog {
                         .addGap(49, 49, 49)
                         .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
-                        .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(92, 92, 92)
+                        .addComponent(lblStringNovaComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(45, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -107,7 +107,7 @@ public class NovaComanda extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnConfirmar, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(41, 41, 41)

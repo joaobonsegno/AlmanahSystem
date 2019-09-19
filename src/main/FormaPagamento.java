@@ -666,7 +666,11 @@ public class FormaPagamento extends javax.swing.JDialog {
     }//GEN-LAST:event_txtEntregueKeyPressed
 
     private void txtEntregueKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEntregueKeyReleased
-        Double troco = Double.parseDouble(GerenciadorComandas.tornarCompativel(txtValorASerCobrado.getText())) - Double.parseDouble(GerenciadorComandas.tornarCompativel(txtEntregue.getText()));
+        String valorASerCobrado = txtValorASerCobrado.getText();
+        String valorEntregue = txtEntregue.getText();
+        valorASerCobrado = valorASerCobrado.replace("." , "");
+        valorEntregue = valorEntregue.replace("." , "");
+        Double troco = Double.parseDouble(GerenciadorComandas.tornarCompativel(valorASerCobrado)) - Double.parseDouble(GerenciadorComandas.tornarCompativel(valorEntregue));
         if (troco < 0){
             troco = Math.abs(troco);
             lblTroco.setText("R$ "+GerenciadorComandas.valorMonetario(troco));

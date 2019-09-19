@@ -27,7 +27,7 @@ public class Menu extends javax.swing.JFrame {
         timer.start();
         this.setLocationRelativeTo(null);
 
-        /*if (null != funcAtual.getCargo().getId())
+        if (null != funcAtual.getCargo().getId())
             switch (funcAtual.getCargo().getId()) {
                 case 1:
                     setGarcom();
@@ -38,8 +38,8 @@ public class Menu extends javax.swing.JFrame {
                 case 3:
                     setCozinheiro();
                     break;
-            }*/
-            
+            }
+           
         if(Login.caixaAtual != null){
             pdv_comandas.setEnabled(true);
         }else{
@@ -58,8 +58,8 @@ public class Menu extends javax.swing.JFrame {
             }
         }
     
-        //lblNome.setText(Login.funcAtual.getNome());
-        //lblFuncao.setText(Login.funcAtual.getCargo().getNome());
+        lblNome.setText(Login.funcAtual.getNome());
+        lblFuncao.setText(Login.funcAtual.getCargo().getNome());
     }
 
     public void setGarcom(){
@@ -516,8 +516,7 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_funcionarios_cadastrar1ActionPerformed
 
     private void financeiro_gerenciar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_financeiro_gerenciar1ActionPerformed
-        FormaPagamento forma = new FormaPagamento(new javax.swing.JFrame(), true);
-        forma.setVisible(true); 
+        new GerenciadorRelatorios().setVisible(true);
         dispose();
     }//GEN-LAST:event_financeiro_gerenciar1ActionPerformed
 

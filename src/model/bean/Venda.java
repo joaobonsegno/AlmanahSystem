@@ -16,7 +16,7 @@ public class Venda {
 
     public String dataAtual(){
         Calendar data = new GregorianCalendar();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy   HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         String dataFormatada = sdf.format(data.getTime());
         return dataFormatada;
     }

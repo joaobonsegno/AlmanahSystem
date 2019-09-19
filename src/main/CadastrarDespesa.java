@@ -1,5 +1,6 @@
 package main;
 
+import ArrumarString.Monetarios;
 import model.dao.LogDAO;
 import model.bean.Despesa;
 import model.dao.DespesaDAO;
@@ -10,6 +11,7 @@ public class CadastrarDespesa extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
+        txtValor.setDocument(new Monetarios(7,2));
         getRootPane().setDefaultButton(btnConfirmar);
         LogDAO logDao = new LogDAO();
         txtDescricao.setWrapStyleWord(true);
@@ -155,9 +157,10 @@ public class CadastrarDespesa extends javax.swing.JDialog {
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         Despesa d = new Despesa();
         DespesaDAO dDao = new DespesaDAO();
-        
+        String valor = txtValor.getText();
+        valor = valor.replace("." , "");
         d.setDescricao(txtDescricao.getText());
-        d.setValor(Double.parseDouble(GerenciadorComandas.tornarCompativel(txtValor.getText())));
+        d.setValor(Double.parseDouble(GerenciadorComandas.tornarCompativel(valor)));
         d.setData(d.dataAtual());
         dDao.create(d);    
         dispose();
