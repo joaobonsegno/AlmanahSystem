@@ -6,11 +6,13 @@ import javax.swing.JOptionPane;
 import static main.GerenciadorProdutos.listaProdutos;
 import model.bean.Caixa;
 import model.bean.Categoria;
+import model.bean.CategoriaPrato;
 import model.bean.Comanda;
 import model.bean.Funcionario;
 import model.bean.Produto;
 import model.dao.CaixaDAO;
 import model.dao.CategoriaDAO;
+import model.dao.CategoriaPratoDAO;
 import model.dao.ComandaDAO;
 import model.dao.FuncionarioDAO;
 import model.dao.ItemComandaDAO;
@@ -24,13 +26,14 @@ public class Login extends javax.swing.JFrame {
     public static Funcionario funcAtual;
     public static String user, password;
     public static String cargo = "Gerente";
-    public static Random gerador = new Random();
     public static ArrayList<Categoria> categorias = new ArrayList<>();
+    public static ArrayList<CategoriaPrato> categoriasPratos = new ArrayList<>();
     
     public Login() {
         initComponents();
         this.setLocationRelativeTo(null);
         CategoriaDAO cDao = new CategoriaDAO();
+        CategoriaPratoDAO cpDao = new CategoriaPratoDAO();
         CaixaDAO caixaDao = new CaixaDAO();
         ComandaDAO comandaDao = new ComandaDAO();
         ItemComandaDAO itemDao = new ItemComandaDAO();
@@ -43,6 +46,10 @@ public class Login extends javax.swing.JFrame {
         
         for (Categoria c:cDao.read()){
             categorias.add(c);
+        }
+        
+        for (CategoriaPrato c:cpDao.read()){
+            categoriasPratos.add(c);
         }
         
         for (Caixa c:caixaDao.read()){

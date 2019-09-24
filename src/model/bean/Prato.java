@@ -2,17 +2,26 @@ package model.bean;
 
 import java.util.ArrayList;
 
-public class Prato {
+public class Prato implements Comparable<Prato>{
     private String nome, descricao;
     private int id;
+    private CategoriaPrato categoria;
     private ArrayList<Produto> subprodutos = new ArrayList<>();
 
-    public Prato() {
+    @Override
+    public int compareTo(Prato outro){
+        int compareInt = this.nome.compareTo(outro.getNome());
+        if (compareInt < 0) return -1; //this.nome é maior 
+        if (compareInt > 0) return 1; //outro.nome é maior
+        return 0; //os dois são iguais
     }
+    
+    public Prato(){}
+    
     public String getNome() {
         return nome;
     }
-
+  
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -43,5 +52,13 @@ public class Prato {
     
     public void setSubproduto(Produto produto){
         this.subprodutos.add(produto);
+    }
+
+    public CategoriaPrato getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(CategoriaPrato categoria) {
+        this.categoria = categoria;
     }
 }

@@ -609,7 +609,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
             String i2 = (String)i;
             idSelecionado = Integer.parseInt(i2);*/
             if (existeComanda()){
-                NovoPrato novoPrato = new NovoPrato(new javax.swing.JFrame(), true);
+                NovaRefeicao novoPrato = new NovaRefeicao(new javax.swing.JFrame(), true);
                 novoPrato.setVisible(true); 
                // dispose();
             }

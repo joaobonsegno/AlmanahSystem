@@ -96,7 +96,7 @@ public class NovaBebida extends javax.swing.JFrame {
         PromocaoUmDAO promoDao = new PromocaoUmDAO();
         PromocaoUm promocaoUm = promoDao.read();
         for (Produto p: pDao.read()){
-            if (promocaoUm.getStatus() == 1){
+            if (Menu.flagDia){
                 p.getCategoria().getId();
                 if(p.getCategoria().getNome().equals("Suco")){
                     String valor = GerenciadorComandas.valorMonetario(p.getPrecoComDesconto());
@@ -148,7 +148,7 @@ public class NovaBebida extends javax.swing.JFrame {
         PromocaoUmDAO promoDao = new PromocaoUmDAO();
         PromocaoUm promocaoUm = promoDao.read();
         for (Produto p: pDao.readForNome(txtPesquisa.getText())){
-            if (promocaoUm.getStatus() == 1){
+            if (Menu.flagDia){
                 p.getCategoria().getId();
                 if(p.getCategoria().getNome().equals("Suco")){
                     String valor = GerenciadorComandas.valorMonetario(p.getPrecoComDesconto());

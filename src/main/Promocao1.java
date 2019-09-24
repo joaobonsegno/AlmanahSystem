@@ -534,12 +534,12 @@ public class Promocao1 extends javax.swing.JDialog {
         if (jrAtivo.isSelected()){
             p.setStatus(1);
         }else{
+            Menu.flagDia = false;
             p.setStatus(2);
         }
     }
     
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        
         Double porcentagem;
         boolean flagPorcentagemErrada = false;
         

@@ -17,11 +17,26 @@ public class Cardapio {
         return dataFormatada;
     }
     
+    public String dataAtualSemHora(){
+        Calendar data = new GregorianCalendar();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String dataFormatada = sdf.format(data.getTime());
+        return dataFormatada;
+    }
+    
     public void setDataAtual(){
         Calendar data = new GregorianCalendar();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String dataFormatada = sdf.format(data.getTime());
         this.data = dataFormatada;
+    }
+
+    public int getDiaSemana() {
+        return diaSemana;
+    }
+
+    public void setDiaSemana(int diaSemana) {
+        this.diaSemana = diaSemana;
     }
     
     public int getId() {

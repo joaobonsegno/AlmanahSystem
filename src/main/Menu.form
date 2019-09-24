@@ -125,32 +125,46 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="produtos_cadastrarActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="produtos_pratos1">
+            <MenuItem class="javax.swing.JMenuItem" name="produtos_gerenciarPratos">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Century Gothic" size="15" style="0"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="2" name="C:\Projetos Netbeans\AlmanahSystem\images\novoproduto2.png"/>
+                  <Image iconType="2" name="C:\Projetos Netbeans\AlmanahSystem\images\menu (1).png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Gerenciar Pratos"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="produtos_pratos1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="produtos_gerenciarPratosActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="produtos_pratos">
+            <MenuItem class="javax.swing.JMenuItem" name="produtos_cadastrarPratos">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Century Gothic" size="15" style="0"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="2" name="C:\Projetos Netbeans\AlmanahSystem\images\novoproduto2.png"/>
+                  <Image iconType="2" name="C:\Projetos Netbeans\AlmanahSystem\images\manage meal (1) (1).png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Cadastrar Prato"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="produtos_pratosActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="produtos_cadastrarPratosActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="produtos_cardapio">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Century Gothic" size="15" style="0"/>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="2" name="C:\Projetos Netbeans\AlmanahSystem\images\cardapio.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Card&#xe1;pio"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="produtos_cardapioActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>

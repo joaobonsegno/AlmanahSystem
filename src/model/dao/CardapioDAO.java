@@ -14,10 +14,11 @@ public class CardapioDAO {
         PreparedStatement stmt = null;
         
         try{
-            String sql = "INSERT INTO cardapio (status, data)VALUES(?,?)";
+            String sql = "INSERT INTO cardapio (status, data, diaSemana)VALUES(?,?,?)";
             stmt = con.prepareStatement(sql);
             stmt.setInt(1, c.getId());
             stmt.setString(2, c.getData());
+            stmt.setInt(3, c.getDiaSemana());
             
             stmt.executeUpdate();
             System.out.println("Salvo com sucesso!");
@@ -66,6 +67,25 @@ public class CardapioDAO {
         }
     }
     
+    public void formatarData(){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        CardapioDAO cDao = new CardapioDAO();
+        ItemComandaDAO iDao = new ItemComandaDAO();
+        
+        try{
+            stmt = con.prepareStatement("SELECT  FROM cardapio");
+            rs = stmt.executeQuery();                        
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return setCardapios(rs);
+    }
+    
     private ArrayList<Cardapio> setCardapios(ResultSet rs){
         ArrayList<Cardapio> cardapios = new ArrayList<>();
         try{
@@ -75,7 +95,7 @@ public class CardapioDAO {
                 c.setId(rs.getInt("idCardapio"));
                 c.setData(rs.getString("data"));
                 c.setStatus(rs.getInt("status"));
-
+                c.setDiaSemana(rs.getInt("diaSemana"));
                 cardapios.add(c);
             }
         }catch(SQLException ex){
@@ -83,6 +103,7 @@ public class CardapioDAO {
         }
         return cardapios;
     }
+    
     
     /*
     public void updatePendente(Comanda c){

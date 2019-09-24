@@ -1,17 +1,14 @@
 package main;
 
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import javax.swing.Timer;
-import javax.swing.UIManager;
 import static main.Login.funcAtual;
-import model.bean.Comanda;
 import model.bean.Produto;
 import model.bean.PromocaoUm;
-import model.dao.ComandaDAO;
-import model.dao.ItemComandaDAO;
 import model.dao.ProdutoDAO;
 import model.dao.PromocaoUmDAO;
 
@@ -20,13 +17,25 @@ import model.dao.PromocaoUmDAO;
 
 public class Menu extends javax.swing.JFrame {
     public static Integer acaoEscolhida = null;
+    public static boolean flagDia = false;
     
     public Menu() {
         initComponents();
         Timer timer = new Timer(1000, new Menu.ClockListener());
         timer.start();
         this.setLocationRelativeTo(null);
-
+      
+        if(Login.caixaAtual != null){
+            pdv_comandas.setEnabled(true);
+        }else{
+            pdv_comandas.setEnabled(false);
+        }
+        
+        setPromocao();
+        //setFuncionario();      
+    }
+    
+    public void setFuncionario(){
         if (null != funcAtual.getCargo().getId())
             switch (funcAtual.getCargo().getId()) {
                 case 1:
@@ -39,29 +48,83 @@ public class Menu extends javax.swing.JFrame {
                     setCozinheiro();
                     break;
             }
-           
-        if(Login.caixaAtual != null){
-            pdv_comandas.setEnabled(true);
-        }else{
-            pdv_comandas.setEnabled(false);
-        }
+        
+        lblNome.setText(Login.funcAtual.getNome());
+        lblFuncao.setText(Login.funcAtual.getCargo().getNome());
+    }
+
+    public void setPromocao(){
+        Date d = new Date(); 
+        Calendar c = new GregorianCalendar(); 
+        c.setTime(d); 
+        int dia = c.get(c.DAY_OF_WEEK);
         
         ProdutoDAO pDao = new ProdutoDAO();
         PromocaoUmDAO promoDao = new PromocaoUmDAO();
         PromocaoUm promocaoUm = promoDao.read();
         if (promocaoUm.getStatus() == 1){
-            for (Produto prod:pDao.read()){
-                if (prod.getCategoria().getNome().equals("Suco")){
-                    prod.setPrecoComDesconto(prod.getPreco()*promocaoUm.getMultiplicador());
-                    pDao.updatePromocao(prod);
-                }              
+            switch(dia){
+                case 1:
+                    if (promocaoUm.getDom() == 1){
+                        flagDia = true;
+                    }else{
+                        flagDia = false;
+                    }
+                    break;
+                case 2:
+                    if (promocaoUm.getSeg() == 1){
+                        flagDia = true;
+                    }else{
+                        flagDia = false;
+                    }
+                    break;
+                case 3:
+                    if (promocaoUm.getTer() == 1){
+                        flagDia = true;
+                    }else{
+                        flagDia = false;
+                    }
+                    break;
+                case 4:
+                    if (promocaoUm.getQua() == 1){
+                        flagDia = true;
+                    }else{
+                        flagDia = false;
+                    }
+                    break;
+                case 5:
+                    if (promocaoUm.getQui() == 1){
+                        flagDia = true;
+                    }else{
+                        flagDia = false;
+                    }
+                    break;
+                case 6:
+                    if (promocaoUm.getSex() == 1){
+                        flagDia = true;
+                    }else{
+                        flagDia = false;
+                    }
+                    break;
+                case 7:
+                    if (promocaoUm.getSab() == 1){
+                        flagDia = true;
+                    }else{
+                        flagDia = false;
+                    }
+                    break;
             }
+            if (flagDia){
+                for (Produto prod:pDao.read()){
+                    if (prod.getCategoria().getNome().equals("Suco")){
+                        prod.setPrecoComDesconto(prod.getPreco()*promocaoUm.getMultiplicador());
+                        pDao.updatePromocao(prod);
+                    }              
+                }
+            }         
         }
-    
-        lblNome.setText(Login.funcAtual.getNome());
-        lblFuncao.setText(Login.funcAtual.getCargo().getNome());
     }
-
+    
     public void setGarcom(){
         // ID: 1
         pdv_caixa.setEnabled(false);
@@ -123,8 +186,9 @@ public class Menu extends javax.swing.JFrame {
         produtos = new javax.swing.JMenu();
         produtos_gerenciar = new javax.swing.JMenuItem();
         produtos_cadastrar = new javax.swing.JMenuItem();
-        produtos_pratos1 = new javax.swing.JMenuItem();
-        produtos_pratos = new javax.swing.JMenuItem();
+        produtos_gerenciarPratos = new javax.swing.JMenuItem();
+        produtos_cadastrarPratos = new javax.swing.JMenuItem();
+        produtos_cardapio = new javax.swing.JMenuItem();
         funcionarios = new javax.swing.JMenu();
         funcionarios_gerenciar = new javax.swing.JMenuItem();
         funcionarios_cadastrar = new javax.swing.JMenuItem();
@@ -271,25 +335,35 @@ public class Menu extends javax.swing.JFrame {
         });
         produtos.add(produtos_cadastrar);
 
-        produtos_pratos1.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
-        produtos_pratos1.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\novoproduto2.png")); // NOI18N
-        produtos_pratos1.setText("Gerenciar Pratos");
-        produtos_pratos1.addActionListener(new java.awt.event.ActionListener() {
+        produtos_gerenciarPratos.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        produtos_gerenciarPratos.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\menu (1).png")); // NOI18N
+        produtos_gerenciarPratos.setText("Gerenciar Pratos");
+        produtos_gerenciarPratos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                produtos_pratos1ActionPerformed(evt);
+                produtos_gerenciarPratosActionPerformed(evt);
             }
         });
-        produtos.add(produtos_pratos1);
+        produtos.add(produtos_gerenciarPratos);
 
-        produtos_pratos.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
-        produtos_pratos.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\novoproduto2.png")); // NOI18N
-        produtos_pratos.setText("Cadastrar Prato");
-        produtos_pratos.addActionListener(new java.awt.event.ActionListener() {
+        produtos_cadastrarPratos.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        produtos_cadastrarPratos.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\manage meal (1) (1).png")); // NOI18N
+        produtos_cadastrarPratos.setText("Cadastrar Prato");
+        produtos_cadastrarPratos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                produtos_pratosActionPerformed(evt);
+                produtos_cadastrarPratosActionPerformed(evt);
             }
         });
-        produtos.add(produtos_pratos);
+        produtos.add(produtos_cadastrarPratos);
+
+        produtos_cardapio.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        produtos_cardapio.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\cardapio.png")); // NOI18N
+        produtos_cardapio.setText("Cardápio");
+        produtos_cardapio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                produtos_cardapioActionPerformed(evt);
+            }
+        });
+        produtos.add(produtos_cardapio);
 
         jMenuBar1.add(produtos);
 
@@ -520,14 +594,19 @@ public class Menu extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_financeiro_gerenciar1ActionPerformed
 
-    private void produtos_pratosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_produtos_pratosActionPerformed
+    private void produtos_cadastrarPratosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_produtos_cadastrarPratosActionPerformed
         new CadastrarPrato().setVisible(true);
         dispose();
-    }//GEN-LAST:event_produtos_pratosActionPerformed
+    }//GEN-LAST:event_produtos_cadastrarPratosActionPerformed
 
-    private void produtos_pratos1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_produtos_pratos1ActionPerformed
+    private void produtos_gerenciarPratosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_produtos_gerenciarPratosActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_produtos_pratos1ActionPerformed
+    }//GEN-LAST:event_produtos_gerenciarPratosActionPerformed
+
+    private void produtos_cardapioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_produtos_cardapioActionPerformed
+        AdicionarPrato novoPrato = new AdicionarPrato(new javax.swing.JFrame(), true);
+        novoPrato.setVisible(true); 
+    }//GEN-LAST:event_produtos_cardapioActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -591,8 +670,9 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JMenuItem pdv_comandas;
     private javax.swing.JMenu produtos;
     private javax.swing.JMenuItem produtos_cadastrar;
+    private javax.swing.JMenuItem produtos_cadastrarPratos;
+    private javax.swing.JMenuItem produtos_cardapio;
     private javax.swing.JMenuItem produtos_gerenciar;
-    private javax.swing.JMenuItem produtos_pratos;
-    private javax.swing.JMenuItem produtos_pratos1;
+    private javax.swing.JMenuItem produtos_gerenciarPratos;
     // End of variables declaration//GEN-END:variables
 }
