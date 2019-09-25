@@ -2,7 +2,10 @@ package main;
 
 import java.awt.Font;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Comanda;
 import model.bean.Produto;
@@ -54,6 +57,13 @@ public class GerenciadorComandas extends javax.swing.JFrame {
             }
         }
         return ordenador;
+    }
+    
+    public static String getDataAtual(){
+        Calendar data = new GregorianCalendar();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dataFormatada = sdf.format(data.getTime());
+        return dataFormatada;
     }
     
     public static String tornarCompativel(String valor){

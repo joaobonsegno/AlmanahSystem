@@ -9,7 +9,7 @@ public class Cardapio {
     private int id, status;
     private String data;
     private ArrayList<Prato> pratos = new ArrayList<>();
-
+    
     public String dataAtual(){
         Calendar data = new GregorianCalendar();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -29,14 +29,6 @@ public class Cardapio {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String dataFormatada = sdf.format(data.getTime());
         this.data = dataFormatada;
-    }
-
-    public int getDiaSemana() {
-        return diaSemana;
-    }
-
-    public void setDiaSemana(int diaSemana) {
-        this.diaSemana = diaSemana;
     }
     
     public int getId() {
@@ -81,5 +73,16 @@ public class Cardapio {
     
     public void removerPrato(int indice){
         this.pratos.remove(indice);
+    }
+    
+    public void removerPrato(Prato prato){
+        int contador = 0;
+        for (Prato p : this.pratos){
+            if (p.getId() == prato.getId()){
+                this.removerPrato(contador);
+                break;
+            }
+            contador += 1;
+        }
     }
 }

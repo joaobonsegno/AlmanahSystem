@@ -1,27 +1,73 @@
 package main;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Cardapio;
 import model.bean.Prato;
 import model.bean.Produto;
+import model.dao.CardapioDAO;
+import model.dao.ItemCardapioDAO;
 import model.dao.PratoDAO;
 
 public class GerenciadorCardapios extends javax.swing.JFrame {
-    public static ArrayList<Prato> itensCardapio = new ArrayList<>();
+    public static ArrayList<Prato> pratosSelecionados = new ArrayList<>();
+    public static Cardapio cardapio;
     PratoDAO pDao;
-    public static Produto prodSelecionado;
+    CardapioDAO cDao = new CardapioDAO();
     
     public GerenciadorCardapios() {        
         initComponents();       
         this.setLocationRelativeTo(null);
-
-        
+        this.formatarTabela();
+        this.formatarCalendar();
+        btnRemover.setEnabled(false);
+        btnSalvar.setEnabled(false);
+        this.calendarioDoDia();
+        if (cardapio != null){
+            btnCriar.setEnabled(false);
+        }
     }
 
+    public void calendarioDoDia(){
+        ItemCardapioDAO itemCardapioDao = new ItemCardapioDAO();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dataFormatada = sdf.format(calendarData.getDate());
+        Cardapio c = cDao.readForData(dataFormatada);
+        try{
+            if (c.getId()>=1){              
+                btnCriar.setEnabled(false);
+                btnModificar.setEnabled(true);
+                itemCardapioDao.readForCardapio(c);
+            }else{
+                btnCriar.setEnabled(true);
+                btnModificar.setEnabled(false);
+                jtPratos.setEnabled(false);
+            }        
+        }catch(java.lang.NullPointerException ex){
+            System.out.println("Entrei na ex");           
+        }
+    }
+    
+    public void formatarCalendar(){
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date data;       
+            data = sdf.parse(GerenciadorComandas.getDataAtual());
+            calendarData.setDate(data);
+        } catch (ParseException ex) {
+            System.out.println("Erro: "+ex);
+        }
+    }
+    
     public void formatarTabela(){
         DefaultTableCellRenderer direita = new DefaultTableCellRenderer();
         DefaultTableCellRenderer centro = new DefaultTableCellRenderer();
@@ -29,110 +75,38 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
         centro.setHorizontalAlignment(SwingConstants.CENTER);
         direita.setHorizontalAlignment(SwingConstants.RIGHT);
         esquerda.setHorizontalAlignment(SwingConstants.LEFT);
-        jtCardapios.setRowHeight(27);
-        jtCardapios.getColumnModel().getColumn(0).setPreferredWidth(0); 
-        jtCardapios.getColumnModel().getColumn(1).setPreferredWidth(400);
+        jtPratos.setRowHeight(27);
+        jtPratos.getColumnModel().getColumn(0).setPreferredWidth(0); 
+        jtPratos.getColumnModel().getColumn(1).setPreferredWidth(550);
         
-        jtCardapios.getColumnModel().getColumn(0).setMinWidth(0);
-        jtCardapios.getColumnModel().getColumn(1).setMinWidth(400);
+        jtPratos.getColumnModel().getColumn(0).setMinWidth(0);
+        jtPratos.getColumnModel().getColumn(1).setMinWidth(550);
         
-        jtCardapios.getColumnModel().getColumn(0).setMaxWidth(0);
-        jtCardapios.getColumnModel().getColumn(1).setMaxWidth(400);
+        jtPratos.getColumnModel().getColumn(0).setMaxWidth(0);
+        jtPratos.getColumnModel().getColumn(1).setMaxWidth(550);
     }
     
     public void criarTabela(){
-        limparTabela();
-        ArrayList<Produto> ordenador = new ArrayList<>();
+        ArrayList<Prato> ordenador = new ArrayList<>();
         
-        for (Produto prod : listaProdutos){
-            ordenador.add(prod);
-        }
-        //ordenador = listaProdutos.sort(listaProdutos);
-        Collections.sort(ordenador);
-        
-        DefaultTableModel dtmBebidas = (DefaultTableModel) jtCardapios.getModel();
-        for (Produto p: ordenador){
-            if (p.getPreco() == 0.0){
-                dtmBebidas.addRow(
-                    new Object[]{
-                        p.getNome(),
-                        "X",
-                        p.getIdProduto()}
-                );
-            }else{
-                String valor = GerenciadorComandas.valorMonetario(p.getPreco());
-                dtmBebidas.addRow(
-                    new Object[]{
-                        p.getNome(),
-                        valor,
-                        p.getIdProduto()}
-                );
-            }
-        }
-    }
-    
-    public void criarTabelaNome(String nome){
-        ArrayList<Produto> ordenador = new ArrayList<>();
-        
-        for (Produto prod : pDao.readForNome(nome)){
-            ordenador.add(prod);
+        for (Prato prato : cardapio.getPratos()){
+            ordenador.add(prato);
         }
         Collections.sort(ordenador);
         
-        DefaultTableModel dtmBebidas = (DefaultTableModel) jtCardapios.getModel();
+        DefaultTableModel dtmBebidas = (DefaultTableModel) jtPratos.getModel();
         limparTabela();
-        for (Produto p: ordenador){
-            if (p.getPreco() == 0.0){
-                dtmBebidas.addRow(
-                    new Object[]{
-                        p.getNome(),
-                        "X",
-                        p.getIdProduto()}
-                );
-            }else{
-                String valor = GerenciadorComandas.valorMonetario(p.getPreco());
-                dtmBebidas.addRow(
-                    new Object[]{
-                        p.getNome(),
-                        valor,
-                        p.getIdProduto()}
-                );
-            }
-        }
-    }
-    
-    public void criarTabelaCategoria(String nome){
-        ArrayList<Produto> ordenador = new ArrayList<>();
-        
-        for (Produto prod : pDao.readForCategoria(nome)){
-            ordenador.add(prod);
-        }
-        Collections.sort(ordenador);
-        
-        DefaultTableModel dtmBebidas = (DefaultTableModel) jtCardapios.getModel();
-        limparTabela();
-        for (Produto p: ordenador){
-            if (p.getPreco() == 0.0){
-                dtmBebidas.addRow(
-                    new Object[]{
-                        p.getNome(),
-                        "X",
-                        p.getIdProduto()}
-                );
-            }else{
-                String valor = GerenciadorComandas.valorMonetario(p.getPreco());
-                dtmBebidas.addRow(
-                    new Object[]{
-                        p.getNome(),
-                        valor,
-                        p.getIdProduto()}
-                );
-            }
+        for (Prato p: ordenador){
+            dtmBebidas.addRow(
+                new Object[]{
+                    p.getId(),
+                    p.getNome()}
+            );           
         }
     }
     
     public void limparTabela(){
-        DefaultTableModel dtmBebidas = (DefaultTableModel) jtCardapios.getModel();
+        DefaultTableModel dtmBebidas = (DefaultTableModel) jtPratos.getModel();
         int i = dtmBebidas.getRowCount();
         
         for (int j = 0; j < i; j++){
@@ -148,18 +122,26 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
         linha1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
         btnLancador = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jtCardapios = new javax.swing.JTable();
+        jtPratos = new javax.swing.JTable();
         btnRemover = new javax.swing.JButton();
         lblStringNomeProduto1 = new javax.swing.JLabel();
-        calendarNasc = new com.toedter.calendar.JDateChooser();
+        calendarData = new com.toedter.calendar.JDateChooser();
         btnModificar = new javax.swing.JButton();
         btnSalvar = new javax.swing.JButton();
         btnCriar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gerenciador de Produtos");
-        setMinimumSize(new java.awt.Dimension(757, 668));
+        setMaximumSize(new java.awt.Dimension(567, 595));
+        setMinimumSize(new java.awt.Dimension(567, 595));
         setResizable(false);
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+                formWindowGainedFocus(evt);
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+            }
+        });
 
         btnStringProdutos.setBackground(new java.awt.Color(0, 102, 204));
         btnStringProdutos.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
@@ -178,9 +160,9 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
             }
         });
 
-        jtCardapios.setBorder(new javax.swing.border.MatteBorder(null));
-        jtCardapios.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        jtCardapios.setModel(new javax.swing.table.DefaultTableModel(
+        jtPratos.setBorder(new javax.swing.border.MatteBorder(null));
+        jtPratos.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        jtPratos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -196,15 +178,23 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jtCardapios);
-        if (jtCardapios.getColumnModel().getColumnCount() > 0) {
-            jtCardapios.getColumnModel().getColumn(0).setResizable(false);
-            jtCardapios.getColumnModel().getColumn(1).setResizable(false);
+        jtPratos.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtPratosFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtPratosFocusLost(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jtPratos);
+        if (jtPratos.getColumnModel().getColumnCount() > 0) {
+            jtPratos.getColumnModel().getColumn(0).setResizable(false);
+            jtPratos.getColumnModel().getColumn(1).setResizable(false);
         }
 
         btnRemover.setBackground(new java.awt.Color(204, 0, 0));
         btnRemover.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        btnRemover.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\delete (1).png")); // NOI18N
+        btnRemover.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\delete (2).png")); // NOI18N
         btnRemover.setText("Remover Prato");
         btnRemover.setBorder(new javax.swing.border.MatteBorder(null));
         btnRemover.setBorderPainted(false);
@@ -217,14 +207,24 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
         lblStringNomeProduto1.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
         lblStringNomeProduto1.setText("Dia:");
 
-        calendarNasc.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        calendarData.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        calendarData.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                calendarDataFocusGained(evt);
+            }
+        });
 
         btnModificar.setBackground(new java.awt.Color(204, 204, 0));
         btnModificar.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        btnModificar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\lapis.png")); // NOI18N
-        btnModificar.setText("Modificar Pratos");
+        btnModificar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\lapis1.png")); // NOI18N
+        btnModificar.setText("Adicionar Pratos");
         btnModificar.setBorder(new javax.swing.border.MatteBorder(null));
         btnModificar.setBorderPainted(false);
+        btnModificar.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                btnModificarFocusGained(evt);
+            }
+        });
         btnModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnModificarActionPerformed(evt);
@@ -233,12 +233,22 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
 
         btnSalvar.setBackground(new java.awt.Color(0, 153, 0));
         btnSalvar.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        btnSalvar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\confirm.png")); // NOI18N
-        btnSalvar.setText("  Salvar");
+        btnSalvar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\confirm1.png")); // NOI18N
+        btnSalvar.setText(" Salvar");
         btnSalvar.setBorder(new javax.swing.border.MatteBorder(null));
         btnSalvar.setBorderPainted(false);
+        btnSalvar.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                btnSalvarFocusGained(evt);
+            }
+        });
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
 
-        btnCriar.setBackground(new java.awt.Color(0, 153, 0));
+        btnCriar.setBackground(new java.awt.Color(51, 204, 0));
         btnCriar.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         btnCriar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\add (2) (1).png")); // NOI18N
         btnCriar.setText("Criar Cardápio");
@@ -267,7 +277,7 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(lblStringNomeProduto1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(calendarNasc, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(calendarData, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnCriar, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
@@ -295,22 +305,22 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
                 .addGap(55, 55, 55)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblStringNomeProduto1)
-                    .addComponent(calendarNasc, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(calendarData, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCriar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnRemover))
-                .addGap(18, 18, 18)
-                .addComponent(btnSalvar, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
-                .addGap(4, 4, 4))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnRemover, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
+                    .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(26, 26, 26)
+                .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(60, 60, 60)
                     .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(534, Short.MAX_VALUE)))
+                    .addContainerGap(541, Short.MAX_VALUE)))
         );
 
         pack();
@@ -322,30 +332,113 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLancadorActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
-        try{
-            Integer idSelecionado = (Integer)jtCardapios.getValueAt(jtCardapios.getSelectedRow(), 2); 
-            
-            for(Produto p:listaProdutos){
-                if(p.getIdProduto().equals(idSelecionado)){
-                    prodSelecionado = p;
-                    InativarProduto inativar = new InativarProduto(new javax.swing.JFrame(), true);
-                    inativar.setVisible(true); 
-                    dispose();
+      //  try{
+            if (jtPratos.getSelectedRowCount() > 1){
+                JOptionPane.showMessageDialog(null, "Selecione somente 1 (um) prato por vez para remover");
+            }else{
+                pDao = new PratoDAO();                
+                Integer idSelecionado = (Integer)jtPratos.getValueAt(jtPratos.getSelectedRow(), 0);             
+                for(Prato p:pDao.read()){
+                    if(p.getId() == idSelecionado){                       
+                        cardapio.removerPrato(p); 
+                        break;
+                    }
                 }
-            }
-           
-        }catch(java.util.ConcurrentModificationException ex){
-            System.out.println("Deu a exceção");
-        }
+                limparTabela();
+                criarTabela();
+                btnSalvar.setEnabled(true);
+            }           
+        /*}catch(java.util.ConcurrentModificationException ex){
+            System.err.println("Deu a exceção");
+        }*/
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        // TODO add your handling code here:
+        AdicionarPrato novoPrato = new AdicionarPrato(new javax.swing.JFrame(), true);
+        novoPrato.setVisible(true);
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnCriarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarActionPerformed
-        Cardapio cardapio = new Cardapio();
+        //Formatar a entrada do JCalendar
+        cardapio = new Cardapio();
+        cardapio.setDataAtual();
+        btnModificar.setEnabled(true);
+        btnCriar.setEnabled(false);
+        jtPratos.setEnabled(true);
     }//GEN-LAST:event_btnCriarActionPerformed
+
+    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+        // Faz as modificações necessárias na interface
+        if (AdicionarPrato.flagModificacao){
+            btnSalvar.setEnabled(true);
+        }else{
+            btnSalvar.setEnabled(false);
+        }
+        
+        // Inicia o TRY para caso seja a primeira instancia da tela e/ou nenhum prato tenha sido selecionado
+        try{
+            // Percorre todos os Pratos que foram selecinados na tela anterior
+            /*for (Prato pratoSelecionado : AdicionarPrato.pratosSelecionados){
+                boolean flagExistente = false; // Declara a flag que vai ser usada para verificar se o Prato já está colocado no Cardápio
+                // Verifica se a quantidade de Pratos do Cardápio é MAIOR que ZERO
+                if (cardapio.getPratos().size() > 0){
+                    // Percorre todos os Pratos do Cardápio, para verificar se o Prato já existe nele
+                    for (Prato pratoExistente : cardapio.getPratos()){
+                        // Caso o Prato exista, a FLAGEXISTENTE se torna TRUE
+                        if (pratoSelecionado.getId() == pratoExistente.getId()){
+                            flagExistente = true;
+                            break;
+                        }                  
+                    }
+                    // Verifica se a FLAGEXISTENTE continuou FALSA, como era no início. Se for, o Prato pode ser adicionado no Cardápio
+                    if (!flagExistente){
+                        cardapio.setPrato(pratoSelecionado);
+                    }
+                }else{
+                    // Caso a quantidade de Pratos seja IGUAL a ZERO, adiciona o primeiro Prato, sem necessidade de verificação
+                    cardapio.setPrato(pratoSelecionado);
+                }            
+            }*/
+            for (Prato p : cardapio.getPratos()){
+                System.out.println("Prato: "+p.getNome());
+            }
+            System.out.println("");
+            criarTabela();
+        }catch(java.lang.NullPointerException ex){
+            System.out.println("Erro: "+ex);
+        }
+        
+    }//GEN-LAST:event_formWindowGainedFocus
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        AdicionarPrato.flagModificacao = false;
+        btnSalvar.setEnabled(false);
+        
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void jtPratosFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtPratosFocusGained
+        btnRemover.setEnabled(true);
+        jtPratos.clearSelection();
+    }//GEN-LAST:event_jtPratosFocusGained
+
+    private void jtPratosFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtPratosFocusLost
+        
+    }//GEN-LAST:event_jtPratosFocusLost
+
+    private void btnModificarFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_btnModificarFocusGained
+        btnRemover.setEnabled(false);
+        jtPratos.clearSelection();
+    }//GEN-LAST:event_btnModificarFocusGained
+
+    private void btnSalvarFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_btnSalvarFocusGained
+        btnRemover.setEnabled(false);
+        jtPratos.clearSelection();
+    }//GEN-LAST:event_btnSalvarFocusGained
+
+    private void calendarDataFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_calendarDataFocusGained
+        btnRemover.setEnabled(false);
+        jtPratos.clearSelection();
+    }//GEN-LAST:event_calendarDataFocusGained
 
     /**
      * @param args the command line arguments
@@ -396,9 +489,9 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
     private javax.swing.JButton btnRemover;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JLabel btnStringProdutos;
-    private com.toedter.calendar.JDateChooser calendarNasc;
+    private com.toedter.calendar.JDateChooser calendarData;
     private javax.swing.JScrollPane jScrollPane1;
-    private static javax.swing.JTable jtCardapios;
+    private static javax.swing.JTable jtPratos;
     private javax.swing.JLabel lblStringNomeProduto1;
     private javax.swing.Box.Filler linha1;
     // End of variables declaration//GEN-END:variables

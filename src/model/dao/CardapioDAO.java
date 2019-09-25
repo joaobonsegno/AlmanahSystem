@@ -14,12 +14,12 @@ public class CardapioDAO {
         PreparedStatement stmt = null;
         
         try{
-            String sql = "INSERT INTO cardapio (status, data, diaSemana)VALUES(?,?,?)";
+            String sql = "INSERT INTO cardapio (status, data)VALUES(?,?)";
             stmt = con.prepareStatement(sql);
-            stmt.setInt(1, c.getId());
+            stmt.setInt(1, c.getStatus());
             stmt.setString(2, c.getData());
-            stmt.setInt(3, c.getDiaSemana());
-            
+//          stmt.setInt(3, c.getDiaSemana());
+
             stmt.executeUpdate();
             System.out.println("Salvo com sucesso!");
         }catch(SQLException ex){
@@ -67,23 +67,33 @@ public class CardapioDAO {
         }
     }
     
-    public void formatarData(){
+    public Cardapio readForData(String data){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        
-        CardapioDAO cDao = new CardapioDAO();
-        ItemComandaDAO iDao = new ItemComandaDAO();
-        
+        CategoriaDAO cDao = new CategoriaDAO();
+        Cardapio c = new Cardapio();
         try{
-            stmt = con.prepareStatement("SELECT  FROM cardapio");
-            rs = stmt.executeQuery();                        
+            stmt = con.prepareStatement("SELECT * FROM cardapio WHERE data LIKE ?");
+            stmt.setString(1, data);
+            
+            rs = stmt.executeQuery();
+            while (rs.next()){     
+                c.setId(rs.getInt("idCardapio"));
+                c.setData(rs.getString("data"));
+                c.setStatus(rs.getInt("status"));
+                /*for (CategoriaPrato c:Login.categoriasPratos){
+                    if (c.getId() == rs.getInt("idCategoriaPrato")){
+                        p.setCategoria(c);
+                    }
+                }*/
+            }
         }catch(SQLException ex){
-            System.err.println("Erro no READ MySQL: "+ex);
+            System.err.println("Erro no READ MySQL (CardapioDAO - readForData()): "+ex);
         }finally{
             ConnectionFactory.closeConnection(con, stmt, rs);
         }
-        return setCardapios(rs);
+        return c;
     }
     
     private ArrayList<Cardapio> setCardapios(ResultSet rs){
@@ -95,7 +105,7 @@ public class CardapioDAO {
                 c.setId(rs.getInt("idCardapio"));
                 c.setData(rs.getString("data"));
                 c.setStatus(rs.getInt("status"));
-                c.setDiaSemana(rs.getInt("diaSemana"));
+                //c.setDiaSemana(rs.getInt("diaSemana"));
                 cardapios.add(c);
             }
         }catch(SQLException ex){

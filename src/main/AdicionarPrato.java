@@ -18,7 +18,7 @@ import model.dao.PratoDAO;
 public class AdicionarPrato extends javax.swing.JDialog {    
     public ArrayList<Prato> listaPratos;
     public PratoDAO pDao = new PratoDAO();
-    public static ArrayList<Produto> pratosSelecionados = new ArrayList<>();
+    public static boolean flagModificacao = false;
     String entradas = "";
     
     public AdicionarPrato(java.awt.Frame parent, boolean modal) {
@@ -42,34 +42,33 @@ public class AdicionarPrato extends javax.swing.JDialog {
         for (Prato p: pDao.read()){
             listaPratos.add(p);
         }
+        btnAdicionar.setEnabled(false);
+        limparTabela();
         formatarTabela();
         criarComboBox();          
     }   
     
-    public void criarTabelaNome(String nome){
+    public void criarTabela(ArrayList<Prato> pratos){
         ArrayList<Prato> ordenador = new ArrayList<>();
         
-        for (Prato prato:pDao.readForNome(nome)){
-            ordenador.add(prato);
-        }       
-        //Collections.sort(ordenador);
-        
-        DefaultTableModel dtmBebidas = (DefaultTableModel) jtPratos.getModel();
-        limparTabela();
-        for (Prato prato: ordenador){
-            dtmBebidas.addRow(
-                new Object[]{
-                    prato.getId(),
-                    prato.getNome()}
-            );
-        }
-    }
-    
-    public void criarTabelaCategoria(String nome){
-        ArrayList<Prato> ordenador = new ArrayList<>();
-        
-        for (Prato prato : pDao.readForCategoria(nome)){
-            ordenador.add(prato);
+        // Percorre a lista de TODOS os Pratos da mesma CATEGORIA
+        for (Prato pratoCategoria : pratos){
+            boolean flagExistente = false;
+            if (GerenciadorCardapios.cardapio.getPratos().size() > 0){
+                // Percorre a lista de Pratos do Cardápio, para verificar se este Prato desta Categoria já está adicionado
+                for (Prato pratoExistente:GerenciadorCardapios.cardapio.getPratos()){
+                    if (pratoExistente.getId() == pratoCategoria.getId()){
+                        flagExistente = true;
+                        break;
+                    }
+                }
+                
+                if (!flagExistente){
+                    ordenador.add(pratoCategoria);
+                }
+            }else{
+                ordenador.add(pratoCategoria);
+            } 
         }
         Collections.sort(ordenador);
         
@@ -83,15 +82,15 @@ public class AdicionarPrato extends javax.swing.JDialog {
             );
         }
     }
-    
+
     /*public void setarSelecionado(){
         DefaultTableModel dtmBebidas = (DefaultTableModel) jtPratos.getModel();
         int quantidadeDeProdutos = dtmBebidas.getRowCount();
         
         for (int i = 0; i < quantidadeDeProdutos; i++){
             Integer id = (Integer)dtmBebidas.getValueAt(i, 1);
-            for (Produto p : materiasSelecionadas){
-                if (p.getIdProduto() == id){
+            for (Prato p : pratosSelecionados){
+                if (p.getId() == id){
                     //jtProdutos.setRowSelectionInterval(i, i);
                     jtPratos.addRowSelectionInterval(i, i);
                 }
@@ -254,21 +253,17 @@ public class AdicionarPrato extends javax.swing.JDialog {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGap(35, 35, 35)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(51, 51, 51)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lblStringNomeProduto2)
                             .addComponent(lblStringNomeProduto1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtNome)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(cbCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 118, Short.MAX_VALUE)))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtNome, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
+                            .addComponent(cbCategorias, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -335,26 +330,23 @@ public class AdicionarPrato extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        materiasSelecionadas.removeAll(materiasSelecionadas);
+        //materiasSelecionadas.removeAll(materiasSelecionadas);
         int quantidadeDeSelecionados = jtPratos.getSelectedRows().length;
-        if (quantidadeDeSelecionados > 9){
-            JOptionPane.showMessageDialog(null, "Falha no cadastro:\nSó é possível selecionar até 9 matérias-primas para um produto.");
-        }else{
-            for (int i = 0; i < quantidadeDeSelecionados; i++){
-            Integer idSelecionado = (Integer)jtPratos.getValueAt(jtPratos.getSelectedRows()[i], 1);
-                for (Produto p:listaProdutos){
-                    if (p.getIdProduto() == idSelecionado){
-                        materiasSelecionadas.add(p);
-                    }
+
+        for (int i = 0; i < quantidadeDeSelecionados; i++){
+            Integer idSelecionado = (Integer)jtPratos.getValueAt(jtPratos.getSelectedRows()[i], 0);
+            for (Prato p:listaPratos){
+                if (p.getId() == idSelecionado){
+                    GerenciadorCardapios.cardapio.setPrato(p);
+                    flagModificacao = true;
                 }
             }
-            dispose();
         }
-        */
+        limparTabela();
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void jtPratosFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtPratosFocusGained
-
+        btnAdicionar.setEnabled(true);
     }//GEN-LAST:event_jtPratosFocusGained
 
     private void cbCategoriasItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbCategoriasItemStateChanged
@@ -362,7 +354,7 @@ public class AdicionarPrato extends javax.swing.JDialog {
         //txtPesquisa.setText("");
         try{
             if (!escolhido.equals("")){
-                criarTabelaCategoria(escolhido);
+                criarTabela(pDao.readForCategoria(escolhido));
             }else{
                 limparTabela();
             }
@@ -376,10 +368,14 @@ public class AdicionarPrato extends javax.swing.JDialog {
     private void cbCategoriasFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbCategoriasFocusGained
         txtNome.setText("");
         entradas = "";
+        jtPratos.clearSelection();
+        btnAdicionar.setEnabled(false);
     }//GEN-LAST:event_cbCategoriasFocusGained
 
     private void txtNomeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNomeFocusGained
         cbCategorias.setSelectedIndex(0);
+        jtPratos.clearSelection();
+        btnAdicionar.setEnabled(false);
     }//GEN-LAST:event_txtNomeFocusGained
 
     private void txtNomeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeKeyReleased
@@ -403,7 +399,7 @@ public class AdicionarPrato extends javax.swing.JDialog {
         }   */        
         String e = txtNome.getText();
         if (e.length() >= 3){
-            criarTabelaNome(e);
+            criarTabela(pDao.readForNome(e));
         }else{
             limparTabela();
         }  

@@ -604,8 +604,8 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_produtos_gerenciarPratosActionPerformed
 
     private void produtos_cardapioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_produtos_cardapioActionPerformed
-        AdicionarPrato novoPrato = new AdicionarPrato(new javax.swing.JFrame(), true);
-        novoPrato.setVisible(true); 
+        new GerenciadorCardapios().setVisible(true);
+        dispose();
     }//GEN-LAST:event_produtos_cardapioActionPerformed
 
     public static void main(String args[]) {

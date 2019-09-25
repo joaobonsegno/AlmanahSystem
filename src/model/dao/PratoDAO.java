@@ -83,7 +83,6 @@ public class PratoDAO {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        CategoriaDAO cDao = new CategoriaDAO();
         Prato p = new Prato();
         try{
             stmt = con.prepareStatement("SELECT * FROM prato WHERE nome LIKE ?");

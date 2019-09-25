@@ -56,6 +56,33 @@ public class ItemCardapioDAO {
         }
     }
     
+    public void readForCardapio(Cardapio c){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        PratoDAO pratoDao = new PratoDAO();
+        
+        try{
+            stmt = con.prepareStatement("SELECT * FROM itemCardapio WHERE idCardapio = "+c.getId());
+            rs = stmt.executeQuery();
+            while (rs.next()){
+                Integer idCar = rs.getInt("idCardapio");
+                if(idCar == c.getId()){
+                    int idPrato = rs.getInt("idPrato");
+                    for(Prato p:pratoDao.read()){
+                        if(p.getId() == idPrato){
+                            c.setPrato(p);
+                        }
+                    }
+                }       
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL (ItemCardapioDAO): "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+    }
+    
     public void deleteItemCardapio(Cardapio c, Integer id){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
