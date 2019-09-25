@@ -223,6 +223,9 @@ public class AdicionarPrato extends javax.swing.JDialog {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtPratosFocusGained(evt);
             }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtPratosFocusLost(evt);
+            }
         });
         jScrollPane1.setViewportView(jtPratos);
         if (jtPratos.getColumnModel().getColumnCount() > 0) {
@@ -342,7 +345,14 @@ public class AdicionarPrato extends javax.swing.JDialog {
                 }
             }
         }
-        limparTabela();
+        //cbCategorias.setSelectedIndex(0);
+        String nome = txtNome.getText();
+        if (nome.equals("")){
+            String escolhido = (String)cbCategorias.getSelectedItem();
+            criarTabela(pDao.readForCategoria(escolhido));
+        }else{
+            criarTabela(pDao.readForNome(nome));
+        }       
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void jtPratosFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtPratosFocusGained
@@ -408,6 +418,10 @@ public class AdicionarPrato extends javax.swing.JDialog {
     private void txtNomeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeKeyTyped
         
     }//GEN-LAST:event_txtNomeKeyTyped
+
+    private void jtPratosFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtPratosFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtPratosFocusLost
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

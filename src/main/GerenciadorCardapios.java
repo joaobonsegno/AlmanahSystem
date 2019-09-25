@@ -344,7 +344,6 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
                         break;
                     }
                 }
-                limparTabela();
                 criarTabela();
                 btnSalvar.setEnabled(true);
             }           
@@ -374,40 +373,7 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
         }else{
             btnSalvar.setEnabled(false);
         }
-        
-        // Inicia o TRY para caso seja a primeira instancia da tela e/ou nenhum prato tenha sido selecionado
-        try{
-            // Percorre todos os Pratos que foram selecinados na tela anterior
-            /*for (Prato pratoSelecionado : AdicionarPrato.pratosSelecionados){
-                boolean flagExistente = false; // Declara a flag que vai ser usada para verificar se o Prato já está colocado no Cardápio
-                // Verifica se a quantidade de Pratos do Cardápio é MAIOR que ZERO
-                if (cardapio.getPratos().size() > 0){
-                    // Percorre todos os Pratos do Cardápio, para verificar se o Prato já existe nele
-                    for (Prato pratoExistente : cardapio.getPratos()){
-                        // Caso o Prato exista, a FLAGEXISTENTE se torna TRUE
-                        if (pratoSelecionado.getId() == pratoExistente.getId()){
-                            flagExistente = true;
-                            break;
-                        }                  
-                    }
-                    // Verifica se a FLAGEXISTENTE continuou FALSA, como era no início. Se for, o Prato pode ser adicionado no Cardápio
-                    if (!flagExistente){
-                        cardapio.setPrato(pratoSelecionado);
-                    }
-                }else{
-                    // Caso a quantidade de Pratos seja IGUAL a ZERO, adiciona o primeiro Prato, sem necessidade de verificação
-                    cardapio.setPrato(pratoSelecionado);
-                }            
-            }*/
-            for (Prato p : cardapio.getPratos()){
-                System.out.println("Prato: "+p.getNome());
-            }
-            System.out.println("");
-            criarTabela();
-        }catch(java.lang.NullPointerException ex){
-            System.out.println("Erro: "+ex);
-        }
-        
+        criarTabela();       
     }//GEN-LAST:event_formWindowGainedFocus
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
@@ -418,7 +384,7 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
 
     private void jtPratosFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtPratosFocusGained
         btnRemover.setEnabled(true);
-        jtPratos.clearSelection();
+        //jtPratos.clearSelection();
     }//GEN-LAST:event_jtPratosFocusGained
 
     private void jtPratosFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtPratosFocusLost
