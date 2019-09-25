@@ -92,7 +92,7 @@ public class ItemCardapioDAO {
             stmt = con.prepareStatement(sql);
             rs = stmt.executeQuery();
             while (rs.next()){
-                if(rs.getInt("idItemCardapio") == id){
+                if(rs.getInt("idPrato") == id){
                     idItem = rs.getInt("idItemCardapio");
                     delete(idItem);
                 }                
@@ -104,7 +104,7 @@ public class ItemCardapioDAO {
         }
     }
                 
-    public void delete(Integer idItem){
+    private void delete(Integer idItem){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         

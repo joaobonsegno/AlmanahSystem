@@ -13,6 +13,7 @@ import model.bean.Prato;
 import model.bean.Produto;
 import model.dao.CategoriaDAO;
 import model.dao.CategoriaPratoDAO;
+import model.dao.ItemCardapioDAO;
 import model.dao.PratoDAO;
 
 public class AdicionarPrato extends javax.swing.JDialog {    
@@ -334,6 +335,7 @@ public class AdicionarPrato extends javax.swing.JDialog {
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
         //materiasSelecionadas.removeAll(materiasSelecionadas);
+        ItemCardapioDAO itemCDao = new ItemCardapioDAO();
         int quantidadeDeSelecionados = jtPratos.getSelectedRows().length;
 
         for (int i = 0; i < quantidadeDeSelecionados; i++){
@@ -341,6 +343,7 @@ public class AdicionarPrato extends javax.swing.JDialog {
             for (Prato p:listaPratos){
                 if (p.getId() == idSelecionado){
                     GerenciadorCardapios.cardapio.setPrato(p);
+                    itemCDao.create(GerenciadorCardapios.cardapio, p);
                     flagModificacao = true;
                 }
             }
