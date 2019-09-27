@@ -14,11 +14,11 @@ public class CardapioDAO {
         PreparedStatement stmt = null;
         
         try{
-            String sql = "INSERT INTO cardapio (status, data)VALUES(?,?)";
+            String sql = "INSERT INTO cardapio (status, data, diaDaSemana)VALUES(?,?,?)";
             stmt = con.prepareStatement(sql);
             stmt.setInt(1, c.getStatus());
             stmt.setString(2, c.getData());
-//          stmt.setInt(3, c.getDiaSemana());
+            stmt.setString(3, c.getDiaDaSemana());
 
             stmt.executeUpdate();
             System.out.println("Salvo com sucesso!");
@@ -46,6 +46,35 @@ public class CardapioDAO {
             ConnectionFactory.closeConnection(con, stmt, rs);
         }
         return setCardapios(rs);
+    }
+    
+    public ArrayList<Cardapio> readLasts(Cardapio cardapio){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ArrayList<Cardapio> cardapios = new ArrayList<>();
+        
+        try{
+            stmt = con.prepareStatement("SELECT * FROM cardapio WHERE data NOT LIKE ? ORDER BY str_to_date(data, '%d/%m/%Y') DESC LIMIT 7");
+            stmt.setString(1, cardapio.getData());
+            rs = stmt.executeQuery();  
+            
+            while (rs.next()){
+                Cardapio c = new Cardapio();
+
+                c.setId(rs.getInt("idCardapio"));
+                c.setData(rs.getString("data"));
+                c.setStatus(rs.getInt("status"));
+                c.setDiaDaSemana(rs.getString("diaDaSemana"));
+                
+                cardapios.add(c);
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{           
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return cardapios;
     }
     
     public void updateStatus(Cardapio c){
@@ -96,6 +125,24 @@ public class CardapioDAO {
         return c;
     }
     
+    public void delete(Cardapio c){
+        ItemComandaDAO iDao = new ItemComandaDAO();
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        
+        try{
+            String sql = "DELETE FROM cardapio WHERE idCardapio = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, c.getId());
+            
+            stmt.executeUpdate();
+        }catch(SQLException ex){
+            //System.err.println("Erro SQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+    }
+    
     private ArrayList<Cardapio> setCardapios(ResultSet rs){
         ArrayList<Cardapio> cardapios = new ArrayList<>();
         try{
@@ -105,7 +152,8 @@ public class CardapioDAO {
                 c.setId(rs.getInt("idCardapio"));
                 c.setData(rs.getString("data"));
                 c.setStatus(rs.getInt("status"));
-                //c.setDiaSemana(rs.getInt("diaSemana"));
+                c.setDiaDaSemana(rs.getString("diaSemana"));
+                
                 cardapios.add(c);
             }
         }catch(SQLException ex){
@@ -113,8 +161,28 @@ public class CardapioDAO {
         }
         return cardapios;
     }
+    //
     
-    
+    /*public String formatarData(Cardapio c){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String retorno = "";
+        try{
+            stmt = con.prepareStatement("SELECT str_to_date("+c.getData()+", '%d/%m/%Y') AS \"dataFormatada\" FROM cardapio WHERE idCardapio = ?");
+            stmt.setInt(1, c.getId());
+            
+            rs = stmt.executeQuery();
+            while (rs.next()){     
+                retorno = rs.getString("dataFormatada");
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL (CardapioDAO - readForData()): "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return retorno ;
+    }*/
     /*
     public void updatePendente(Comanda c){
         Connection con = ConnectionFactory.getConnection();
@@ -135,24 +203,7 @@ public class CardapioDAO {
         }
     }
     
-    public void delete(Integer c){
-        ItemComandaDAO iDao = new ItemComandaDAO();
-        Connection con = ConnectionFactory.getConnection();
-        PreparedStatement stmt = null;
-        
-        try{
-            deletarItens(c);
-            String sql = "DELETE FROM comanda WHERE idComanda = ?";
-            stmt = con.prepareStatement(sql);
-            stmt.setInt(1, c);
-            
-            stmt.executeUpdate();
-        }catch(SQLException ex){
-            System.err.println("Erro SQL: "+ex);
-        }finally{
-            ConnectionFactory.closeConnection(con, stmt);
-        }
-    }
+    
     
     public void deletarItens(Integer c){
         ItemComandaDAO iDao = new ItemComandaDAO();

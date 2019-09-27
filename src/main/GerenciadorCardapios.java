@@ -3,17 +3,15 @@ package main;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Cardapio;
 import model.bean.Prato;
-import model.bean.Produto;
 import model.dao.CardapioDAO;
 import model.dao.ItemCardapioDAO;
 import model.dao.PratoDAO;
@@ -38,9 +36,29 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
         ItemCardapioDAO itemCardapioDao = new ItemCardapioDAO();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String dataFormatada = sdf.format(calendarData.getDate());
+        try{       
+        // Trexo para setar o dia da semana
+        String diaDaSemana = "";
+        int dia = 0;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(calendarData.getDate());
+        dia = cal.get(Calendar.DAY_OF_WEEK);
+        switch(dia){
+            case 1: diaDaSemana = "Domingo"; break;
+            case 2: diaDaSemana = "Segunda-Feira"; break;
+            case 3: diaDaSemana = "Terça-Feira"; break;
+            case 4: diaDaSemana = "Quarta-Feira"; break;
+            case 5: diaDaSemana = "Quinta-Feira"; break;
+            case 6: diaDaSemana = "Sexta-Feira"; break;
+            case 7: diaDaSemana = "Sábado"; break;
+        }
+        lblDiaSemana.setText(diaDaSemana);
+        
+        // --------------------------------------       
+        cDao.delete(cardapio);             
         cardapio = cDao.readForData(dataFormatada);
-        try{
-            if (cardapio.getId()>=1){              
+        
+            if (cardapio.getId()>=1){  
                 btnCriar.setEnabled(false);
                 btnAdicionar.setEnabled(true);
                 itemCardapioDao.readForCardapio(cardapio);
@@ -54,7 +72,21 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
                 limparTabela();
             }        
         }catch(java.lang.NullPointerException ex){
-            System.out.println("Entrei na ex");           
+            cardapio = cDao.readForData(dataFormatada); 
+            cDao.delete(cardapio);
+            if (cardapio.getId()>=1){  
+                btnCriar.setEnabled(false);
+                btnAdicionar.setEnabled(true);
+                itemCardapioDao.readForCardapio(cardapio);
+                lblImportar.setVisible(true);
+                this.criarTabela();
+            }else{
+                btnCriar.setEnabled(true);
+                btnAdicionar.setEnabled(false);
+                jtPratos.setEnabled(false);
+                lblImportar.setVisible(false);
+                limparTabela();
+            }
         }
     }
     
@@ -133,6 +165,7 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
         calendarData = new com.toedter.calendar.JDateChooser();
         btnCriar = new javax.swing.JButton();
         lblImportar = new javax.swing.JLabel();
+        lblDiaSemana = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gerenciador de Produtos");
@@ -211,6 +244,7 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jtPratos.getTableHeader().setReorderingAllowed(false);
         jtPratos.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtPratosFocusGained(evt);
@@ -295,6 +329,16 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
         lblImportar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\import (2).png")); // NOI18N
         lblImportar.setText(" Importar");
         lblImportar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblImportar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblImportarMouseClicked(evt);
+            }
+        });
+
+        lblDiaSemana.setBackground(new java.awt.Color(0, 102, 204));
+        lblDiaSemana.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblDiaSemana.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblDiaSemana.setText("Quarta-Feira");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -304,22 +348,27 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(lblStringNomeProduto1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(calendarData, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblAtualizar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                .addComponent(btnCriar, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblImportar)
-                .addGap(48, 48, 48))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lblDiaSemana, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblImportar)
+                        .addGap(48, 48, 48))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(calendarData, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblAtualizar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCriar, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblImportar)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblImportar)
+                    .addComponent(lblDiaSemana))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnCriar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -341,10 +390,12 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
                         .addComponent(btnStringGerenciadorCardapios))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(32, 32, 32)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(29, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(11, 11, 11)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(33, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, 543, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -358,7 +409,7 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(btnStringGerenciadorCardapios))
                     .addComponent(btnMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -412,6 +463,8 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
         //Formatar a entrada do JCalendar
         cardapio = new Cardapio();      
         cardapio.setData(dataFormatada);
+        cardapio.setDiaDaSemana(lblDiaSemana.getText());
+        lblImportar.setVisible(true);
         btnAdicionar.setEnabled(true);
         btnCriar.setEnabled(false);
         jtPratos.setEnabled(true);
@@ -453,6 +506,11 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
         calendarioDoDia();
         btnRemover.setEnabled(false);
     }//GEN-LAST:event_lblAtualizarMouseClicked
+
+    private void lblImportarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImportarMouseClicked
+        ImportarCardapio novoPrato = new ImportarCardapio(new javax.swing.JFrame(), true);
+        novoPrato.setVisible(true);
+    }//GEN-LAST:event_lblImportarMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -505,6 +563,7 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private static javax.swing.JTable jtPratos;
     private javax.swing.JLabel lblAtualizar;
+    private javax.swing.JLabel lblDiaSemana;
     private javax.swing.JLabel lblImportar;
     private javax.swing.JLabel lblStringNomeProduto1;
     private javax.swing.Box.Filler linha1;

@@ -7,7 +7,7 @@ import java.util.GregorianCalendar;
 
 public class Cardapio {
     private int id, status;
-    private String data;
+    private String data, diaDaSemana;
     private ArrayList<Prato> pratos = new ArrayList<>();
     
     public String dataAtual(){
@@ -15,6 +15,14 @@ public class Cardapio {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         String dataFormatada = sdf.format(data.getTime());
         return dataFormatada;
+    }
+
+    public String getDiaDaSemana() {
+        return diaDaSemana;
+    }
+
+    public void setDiaDaSemana(String diaDaSemana) {
+        this.diaDaSemana = diaDaSemana;
     }
     
     public String dataAtualSemHora(){

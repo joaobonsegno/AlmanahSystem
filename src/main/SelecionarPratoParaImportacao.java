@@ -2,27 +2,22 @@ package main;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import javafx.scene.control.SelectionModel;
-import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import model.bean.Categoria;
+import model.bean.Cardapio;
 import model.bean.CategoriaPrato;
 import model.bean.Prato;
-import model.bean.Produto;
-import model.dao.CategoriaDAO;
+import model.dao.CardapioDAO;
 import model.dao.CategoriaPratoDAO;
 import model.dao.ItemCardapioDAO;
 import model.dao.PratoDAO;
 
-public class AdicionarPrato extends javax.swing.JDialog {    
+public class SelecionarPratoParaImportacao extends javax.swing.JDialog {    
     public ArrayList<Prato> listaPratos;
     public PratoDAO pDao = new PratoDAO();
     public static boolean flagModificacao = false;
     String entradas = "";
     
-    public AdicionarPrato(java.awt.Frame parent, boolean modal) {
+    public SelecionarPratoParaImportacao(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);       
@@ -34,31 +29,33 @@ public class AdicionarPrato extends javax.swing.JDialog {
             listaPratos.add(p);
         }
         btnAdicionar.setEnabled(false);
-        limparTabela();
-        formatarTabela();
-        criarComboBox();          
+        formatarTabela(); 
+        criarTabela();
     }   
     
-    public void criarTabela(ArrayList<Prato> pratos){
+    public void criarTabela(){
         ArrayList<Prato> ordenador = new ArrayList<>();
-        
+        CardapioDAO cDao = new CardapioDAO();
+        ItemCardapioDAO item = new ItemCardapioDAO();
+        Cardapio c = cDao.readForData(ImportarCardapio.dataSelecionada);
+        item.readForCardapio(c);
         // Percorre a lista de TODOS os Pratos da mesma CATEGORIA
-        for (Prato pratoCategoria : pratos){
+        for (Prato prato : c.getPratos()){
             boolean flagExistente = false;
             if (GerenciadorCardapios.cardapio.getPratos().size() > 0){
                 // Percorre a lista de Pratos do Cardápio, para verificar se este Prato desta Categoria já está adicionado
                 for (Prato pratoExistente:GerenciadorCardapios.cardapio.getPratos()){
-                    if (pratoExistente.getId() == pratoCategoria.getId()){
+                    if (pratoExistente.getId() == prato.getId()){
                         flagExistente = true;
                         break;
                     }
                 }
                 
                 if (!flagExistente){
-                    ordenador.add(pratoCategoria);
+                    ordenador.add(prato);
                 }
             }else{
-                ordenador.add(pratoCategoria);
+                ordenador.add(prato);
             } 
         }
         Collections.sort(ordenador);
@@ -97,15 +94,6 @@ public class AdicionarPrato extends javax.swing.JDialog {
             dtmBebidas.removeRow(0);
         }       
     }
-    
-    public void criarComboBox(){
-        cbCategorias.removeAllItems();
-        cbCategorias.addItem("");
-        CategoriaPratoDAO catDao = new CategoriaPratoDAO();
-        for (CategoriaPrato c:catDao.read()){
-            cbCategorias.addItem(c.getNome());
-        }
-    }
 
     public void formatarTabela(){        
         jtPratos.setRowHeight(26);
@@ -128,23 +116,19 @@ public class AdicionarPrato extends javax.swing.JDialog {
         btnCancelar = new javax.swing.JButton();
         btnAdicionar = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        lblStringNomeProduto1 = new javax.swing.JLabel();
-        cbCategorias = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtPratos = new javax.swing.JTable();
-        lblStringNomeProduto2 = new javax.swing.JLabel();
-        txtNome = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Suprimento do Caixa");
-        setMaximumSize(new java.awt.Dimension(517, 458));
-        setMinimumSize(new java.awt.Dimension(517, 458));
+        setMaximumSize(new java.awt.Dimension(517, 378));
+        setMinimumSize(new java.awt.Dimension(517, 378));
         setResizable(false);
 
         txtStringSuprimento.setBackground(new java.awt.Color(0, 102, 204));
         txtStringSuprimento.setFont(new java.awt.Font("Century Gothic", 0, 19)); // NOI18N
         txtStringSuprimento.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        txtStringSuprimento.setText("Adição de Pratos");
+        txtStringSuprimento.setText("Seleção de Pratos");
 
         linha.setBackground(new java.awt.Color(0, 0, 0));
         linha.setOpaque(true);
@@ -168,27 +152,6 @@ public class AdicionarPrato extends javax.swing.JDialog {
         btnAdicionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAdicionarActionPerformed(evt);
-            }
-        });
-
-        lblStringNomeProduto1.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        lblStringNomeProduto1.setText("Exibir Somente:");
-
-        cbCategorias.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        cbCategorias.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cbCategorias.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cbCategoriasItemStateChanged(evt);
-            }
-        });
-        cbCategorias.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                cbCategoriasFocusGained(evt);
-            }
-        });
-        cbCategorias.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbCategoriasActionPerformed(evt);
             }
         });
 
@@ -225,55 +188,20 @@ public class AdicionarPrato extends javax.swing.JDialog {
             jtPratos.getColumnModel().getColumn(1).setResizable(false);
         }
 
-        lblStringNomeProduto2.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        lblStringNomeProduto2.setText("Nome do Prato:");
-
-        txtNome.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        txtNome.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtNomeFocusGained(evt);
-            }
-        });
-        txtNome.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtNomeKeyReleased(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNomeKeyTyped(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblStringNomeProduto2)
-                            .addComponent(lblStringNomeProduto1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtNome, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
-                            .addComponent(cbCategorias, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(27, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(33, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(22, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblStringNomeProduto2)
-                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblStringNomeProduto1)
-                    .addComponent(cbCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -292,9 +220,9 @@ public class AdicionarPrato extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(62, 62, 62)
+                .addGap(55, 55, 55)
                 .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(129, 129, 129))
+                .addGap(132, 132, 132))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(linha, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 517, Short.MAX_VALUE))
         );
@@ -304,23 +232,25 @@ public class AdicionarPrato extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(txtStringSuprimento)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addContainerGap(19, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(43, 43, 43)
                     .addComponent(linha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(414, Short.MAX_VALUE)))
+                    .addContainerGap(334, Short.MAX_VALUE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        ImportarCardapio novoPrato = new ImportarCardapio(new javax.swing.JFrame(), true);
+        novoPrato.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
@@ -335,83 +265,15 @@ public class AdicionarPrato extends javax.swing.JDialog {
                 if (p.getId() == idSelecionado){
                     GerenciadorCardapios.cardapio.setPrato(p);
                     itemCDao.create(GerenciadorCardapios.cardapio, p);
-                    flagModificacao = true;
                 }
             }
         }
-        //cbCategorias.setSelectedIndex(0);
-        String nome = txtNome.getText();
-        if (nome.equals("")){
-            String escolhido = (String)cbCategorias.getSelectedItem();
-            criarTabela(pDao.readForCategoria(escolhido));
-        }else{
-            criarTabela(pDao.readForNome(nome));
-        }       
+        dispose();
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void jtPratosFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtPratosFocusGained
         btnAdicionar.setEnabled(true);
     }//GEN-LAST:event_jtPratosFocusGained
-
-    private void cbCategoriasItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbCategoriasItemStateChanged
-        String escolhido = (String)cbCategorias.getSelectedItem();
-        //txtPesquisa.setText("");
-        try{
-            if (!escolhido.equals("")){
-                criarTabela(pDao.readForCategoria(escolhido));
-            }else{
-                limparTabela();
-            }
-        }catch(java.lang.NullPointerException ex){}
-    }//GEN-LAST:event_cbCategoriasItemStateChanged
-
-    private void cbCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCategoriasActionPerformed
-
-    }//GEN-LAST:event_cbCategoriasActionPerformed
-
-    private void cbCategoriasFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbCategoriasFocusGained
-        txtNome.setText("");
-        entradas = "";
-        jtPratos.clearSelection();
-        btnAdicionar.setEnabled(false);
-    }//GEN-LAST:event_cbCategoriasFocusGained
-
-    private void txtNomeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNomeFocusGained
-        cbCategorias.setSelectedIndex(0);
-        jtPratos.clearSelection();
-        btnAdicionar.setEnabled(false);
-    }//GEN-LAST:event_txtNomeFocusGained
-
-    private void txtNomeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeKeyReleased
-        /*Character entrada = evt.getKeyChar();
-        int codigoTecla = evt.getKeyCode();
-        
-        if (txtNome.getText().equals("")){
-            entradas = "";
-        }else if (codigoTecla == 8){
-            entradas = entradas.substring(0, entradas.length()-1);
-        }else if (codigoTecla == 16){
-            
-        }else{
-            entradas += entrada.toString();
-        }        
-        System.out.println("Entrada: "+entradas);      
-        if (entradas.length()>= 3){
-            criarTabelaNome(entradas);
-        }else{
-            limparTabela();
-        }   */        
-        String e = txtNome.getText();
-        if (e.length() >= 3){
-            criarTabela(pDao.readForNome(e));
-        }else{
-            limparTabela();
-        }  
-    }//GEN-LAST:event_txtNomeKeyReleased
-
-    private void txtNomeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeKeyTyped
-        
-    }//GEN-LAST:event_txtNomeKeyTyped
 
     private void jtPratosFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtPratosFocusLost
         // TODO add your handling code here:
@@ -431,14 +293,22 @@ public class AdicionarPrato extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AdicionarPrato.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SelecionarPratoParaImportacao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AdicionarPrato.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SelecionarPratoParaImportacao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AdicionarPrato.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SelecionarPratoParaImportacao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AdicionarPrato.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SelecionarPratoParaImportacao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -451,7 +321,7 @@ public class AdicionarPrato extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                AdicionarPrato dialog = new AdicionarPrato(new javax.swing.JFrame(), true);
+                SelecionarPratoParaImportacao dialog = new SelecionarPratoParaImportacao(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -466,14 +336,10 @@ public class AdicionarPrato extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdicionar;
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JComboBox<String> cbCategorias;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private static javax.swing.JTable jtPratos;
-    private javax.swing.JLabel lblStringNomeProduto1;
-    private javax.swing.JLabel lblStringNomeProduto2;
     private javax.swing.Box.Filler linha;
-    private javax.swing.JTextField txtNome;
     private javax.swing.JLabel txtStringSuprimento;
     // End of variables declaration//GEN-END:variables
 }
