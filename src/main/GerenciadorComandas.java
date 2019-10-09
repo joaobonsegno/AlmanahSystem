@@ -59,9 +59,16 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         return ordenador;
     }
     
-    public static String getDataAtual(){
+    public static String getDataAtualFormatoUSA(){
         Calendar data = new GregorianCalendar();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dataFormatada = sdf.format(data.getTime());
+        return dataFormatada;
+    }
+    
+    public static String getDataAtualComHoraFormatoBr(){
+        Calendar data = new GregorianCalendar();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         String dataFormatada = sdf.format(data.getTime());
         return dataFormatada;
     }
@@ -408,6 +415,11 @@ public class GerenciadorComandas extends javax.swing.JFrame {
                 "ID", "Total (R$)"
             }
         ));
+        jtComandas.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtComandasFocusGained(evt);
+            }
+        });
         jScrollPane1.setViewportView(jtComandas);
         if (jtComandas.getColumnModel().getColumnCount() > 0) {
             jtComandas.getColumnModel().getColumn(0).setResizable(false);
@@ -631,6 +643,10 @@ public class GerenciadorComandas extends javax.swing.JFrame {
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
         novaInstancia();
     }//GEN-LAST:event_formWindowGainedFocus
+
+    private void jtComandasFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtComandasFocusGained
+        lblErro.setVisible(false);
+    }//GEN-LAST:event_jtComandasFocusGained
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

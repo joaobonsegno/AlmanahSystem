@@ -31,8 +31,13 @@ public class Comanda {
         return idBanco;
     }
     
-    public void setForma(Forma f){
+    public void updateForma(Forma f){
+        formasDePagamento.get(formasDePagamento.size()-1).setId(f.getId());
+    }
+    
+    public void setForma(Forma f){       
         this.valorPendente -= f.getValor();
+      
         formasDePagamento.add(f);
     }
 

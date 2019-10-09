@@ -84,17 +84,17 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
        getRootPane().setDefaultButton(btnOk);
        jtProdutos.setRowHeight(22);
        this.setLocationRelativeTo(null);
-       jtProdutos.getColumnModel().getColumn(0).setPreferredWidth(80); 
+       jtProdutos.getColumnModel().getColumn(0).setPreferredWidth(0); 
        jtProdutos.getColumnModel().getColumn(1).setPreferredWidth(100);
-       jtProdutos.getColumnModel().getColumn(2).setPreferredWidth(430);
+       jtProdutos.getColumnModel().getColumn(2).setPreferredWidth(550);
         
-       jtProdutos.getColumnModel().getColumn(0).setMinWidth(80);
+       jtProdutos.getColumnModel().getColumn(0).setMinWidth(0);
        jtProdutos.getColumnModel().getColumn(1).setMinWidth(100);
-       jtProdutos.getColumnModel().getColumn(2).setMinWidth(430);
+       jtProdutos.getColumnModel().getColumn(2).setMinWidth(550);
         
-       jtProdutos.getColumnModel().getColumn(0).setMaxWidth(80);
+       jtProdutos.getColumnModel().getColumn(0).setMaxWidth(0);
        jtProdutos.getColumnModel().getColumn(1).setMaxWidth(100);
-       jtProdutos.getColumnModel().getColumn(2).setMaxWidth(430);
+       jtProdutos.getColumnModel().getColumn(2).setMaxWidth(550);
        criarTabela();
        
     }
@@ -155,6 +155,7 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jtProdutos.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jtProdutos);
         if (jtProdutos.getColumnModel().getColumnCount() > 0) {
             jtProdutos.getColumnModel().getColumn(0).setResizable(false);

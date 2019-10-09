@@ -82,8 +82,13 @@ public class EncerrarComanda extends javax.swing.JFrame {
         for(Comanda c:GerenciadorComandas.comandasAbertas){
             if(comandaSelecionada.getId() == c.getId()){
                 c.setValor(comandaSelecionada.getValor());
+                c.setValorPendente(comandaSelecionada.getValorPendente());
             }
         }
+        if (EncerrarComanda.comandaSelecionada.getValor() == 0){
+            new GerenciadorComandas().setVisible(true);
+            dispose();
+        } 
     }
     
     public void limparTabela(){

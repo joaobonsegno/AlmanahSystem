@@ -13,8 +13,6 @@ import model.dao.ProdutoDAO;
 import model.dao.PromocaoUmDAO;
 
 //Inserir horário
-
-
 public class Menu extends javax.swing.JFrame {
     public static Integer acaoEscolhida = null;
     public static boolean flagDia = false;
@@ -32,7 +30,7 @@ public class Menu extends javax.swing.JFrame {
         }
         
         setPromocao();
-        //setFuncionario();      
+        setFuncionario();      
     }
     
     public void setFuncionario(){

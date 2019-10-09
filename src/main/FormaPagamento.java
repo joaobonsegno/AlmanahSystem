@@ -106,6 +106,9 @@ public class FormaPagamento extends javax.swing.JDialog {
         //Faz as atualizações no banco
         FormaDAO formaDao = new FormaDAO();
         formaDao.create(forma);
+        forma.setId(formaDao.readLast().getId());
+        GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).updateForma(forma);
+        
     }
     
     @SuppressWarnings("unchecked")
@@ -622,6 +625,7 @@ public class FormaPagamento extends javax.swing.JDialog {
                         caixaDao.update(Login.caixaAtual);
                     }
                     forma.setVenda(venda);
+                    System.out.println("ID Forma: "+forma.getId());
                     formaDao.updateVenda(forma);
                 }
                 
@@ -687,7 +691,7 @@ public class FormaPagamento extends javax.swing.JDialog {
         int quantidadeDeSelecionados = jtPagamento.getSelectedRows().length;
         int indice = jtPagamento.getSelectedRow();
         if (quantidadeDeSelecionados > 1){
-            JOptionPane.showMessageDialog(null, "Selecione somente uma linha!");
+            JOptionPane.showMessageDialog(null, "Selecione somente uma forma de pagamento por vez!");
         }else{
             DefaultTableModel dtm = (DefaultTableModel) jtPagamento.getModel();
             Double v = Double.parseDouble(GerenciadorComandas.tornarCompativel((String)dtm.getValueAt(indice, 1)));

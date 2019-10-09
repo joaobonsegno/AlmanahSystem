@@ -6,8 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import main.Login;
 import model.bean.Caixa;
+import model.bean.Forma;
 import model.bean.Venda;
 
 public class VendaDAO {
@@ -60,6 +62,83 @@ public class VendaDAO {
             ConnectionFactory.closeConnection(con, stmt, rs);
         }
         return vendas;
+    }
+    
+    public ArrayList<Venda> relatorio(String dataMaior, String dataMenor){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ArrayList<Venda> vendas = new ArrayList<>();
+        
+        try{
+            String sql = "SELECT * FROM venda WHERE datediff(str_to_date('"+dataMaior+"','%d/%m/%Y'),str_to_date(data, '%d/%m/%Y')) <= "+this.diferencaDatas(dataMaior, dataMenor)
+                    +" ORDER BY str_to_date(data, '%d/%m/%Y');";
+            stmt = con.prepareStatement(sql);
+            rs = stmt.executeQuery();
+            while (rs.next()){
+                Venda v = new Venda();
+                
+                v.setIdBanco(rs.getInt("idVenda"));
+                v.setData(rs.getString("data"));
+                v.setTotal(rs.getDouble("total"));
+
+                vendas.add(v);
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return vendas;
+    }
+    
+    public ArrayList<Forma> getFormas(Venda venda){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ArrayList<Forma> formas = new ArrayList<>();
+        
+        try{
+            String sql = "SELECT * FROM formaPagamento WHERE idVenda = "+venda.getIdBanco();
+            stmt = con.prepareStatement(sql);
+            rs = stmt.executeQuery();
+            while (rs.next()){
+                Forma f = new Forma();
+                
+                f.setId(rs.getInt("idFormaPagamento"));
+                f.setValor(rs.getDouble("valor"));
+                f.setFormaPagamento(rs.getString("formaPagamento"));
+
+                formas.add(f);
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return formas;
+    }
+    
+    public int diferencaDatas(String dataMaior,String dataMenor){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        int diferenca = 0;
+        
+        try{
+            String sql = "SELECT datediff(str_to_date('"+dataMaior+"','%d/%m/%Y'),"
+            +                            "str_to_date('"+dataMenor+"','%d/%m/%Y')) AS \"dif\"";
+            stmt = con.prepareStatement(sql);
+            rs = stmt.executeQuery();
+            while (rs.next()){
+                diferenca = rs.getInt("dif");
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return diferenca;
     }
     
     /*public void update(Comanda c){

@@ -94,7 +94,7 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date data;       
-            data = sdf.parse(GerenciadorComandas.getDataAtual());
+            data = sdf.parse(GerenciadorComandas.getDataAtualFormatoUSA());
             calendarData.setDate(data);
         } catch (ParseException ex) {
             System.out.println("Erro: "+ex);

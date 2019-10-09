@@ -117,6 +117,28 @@ public class FormaDAO {
         return formas;
     }
     
+    public Forma readLast(){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null; 
+        Forma forma = new Forma();
+        
+        try{
+            stmt = con.prepareStatement("SELECT * FROM formaPagamento ORDER BY idFormaPagamento DESC LIMIT 1");
+            rs = stmt.executeQuery();
+            while (rs.next()){                     
+                forma.setId(rs.getInt("idFormaPagamento"));
+                forma.setValor(rs.getDouble("valor"));
+                forma.setFormaPagamento(rs.getString("formaPagamento"));
+            }         
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return forma;
+    }
+    
     public void updateVenda(Forma f){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -126,7 +148,7 @@ public class FormaDAO {
             stmt = con.prepareStatement(sql);
             stmt.setInt(1, f.getVenda().getIdBanco());
             stmt.setInt(2, f.getId());
-            
+            System.out.println("Passei aqui. ID Venda: "+f.getVenda().getIdBanco()+"\nID Forma: "+f.getId());
             stmt.executeUpdate();
             System.out.println("Atualizado com sucesso!");
         }catch(SQLException ex){
