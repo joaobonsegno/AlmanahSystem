@@ -1,10 +1,11 @@
 package main;
 
+import ArrumarString.Monetarios;
 import javax.swing.JOptionPane;
 import model.bean.Caixa;
-import model.bean.Log;
+import model.bean.LogCaixa;
 import model.dao.CaixaDAO;
-import model.dao.LogDAO;
+import model.dao.LogCaixaDAO;
 
 public class Suprimento extends javax.swing.JDialog {
         public static boolean flagSuprimento;
@@ -13,7 +14,9 @@ public class Suprimento extends javax.swing.JDialog {
         initComponents();
         this.setLocationRelativeTo(null);
         getRootPane().setDefaultButton(btnConfirmar);
-        LogDAO logDao = new LogDAO();
+        txtEntradaSuprimento.setDocument(new Monetarios(7,2));
+        
+        LogCaixaDAO logDao = new LogCaixaDAO();
         if (Login.caixaAtual != null){
             lblValor.setText(" R$ "+GerenciadorComandas.valorMonetario(Login.caixaAtual.getDinheiro()));
         }else{
@@ -26,7 +29,7 @@ public class Suprimento extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        txtStringSuprimento = new javax.swing.JLabel();
+        lblStringSuprimento = new javax.swing.JLabel();
         linha = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
         lblInsiraSuprimento = new javax.swing.JLabel();
         txtEntradaSuprimento = new javax.swing.JTextField();
@@ -42,10 +45,10 @@ public class Suprimento extends javax.swing.JDialog {
         setMinimumSize(new java.awt.Dimension(372, 234));
         setResizable(false);
 
-        txtStringSuprimento.setBackground(new java.awt.Color(0, 102, 204));
-        txtStringSuprimento.setFont(new java.awt.Font("Century Gothic", 0, 17)); // NOI18N
-        txtStringSuprimento.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        txtStringSuprimento.setText("Suprimento");
+        lblStringSuprimento.setBackground(new java.awt.Color(0, 102, 204));
+        lblStringSuprimento.setFont(new java.awt.Font("Century Gothic", 0, 17)); // NOI18N
+        lblStringSuprimento.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblStringSuprimento.setText("Suprimento");
 
         linha.setBackground(new java.awt.Color(0, 0, 0));
         linha.setOpaque(true);
@@ -119,7 +122,7 @@ public class Suprimento extends javax.swing.JDialog {
                         .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(76, 76, 76))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(txtStringSuprimento, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblStringSuprimento, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(125, 125, 125))))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(linha, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE))
@@ -128,7 +131,7 @@ public class Suprimento extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(txtStringSuprimento)
+                .addComponent(lblStringSuprimento)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblValor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -171,14 +174,15 @@ public class Suprimento extends javax.swing.JDialog {
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         try{
             CaixaDAO cDao = new CaixaDAO();
-            LogDAO logDao = new LogDAO();
-            Log l = new Log(1);
+            LogCaixaDAO logDao = new LogCaixaDAO();
+            LogCaixa l = new LogCaixa(1);
             l.setCategoria("Caixa");
             l.setData(l.dataAtual());
             l.setTipo("Crédito");
             
             String valor = txtEntradaSuprimento.getText();
-            valor = GerenciadorComandas.tornarCompativel(valor);
+            valor = valor.replace(".", "");
+            valor = valor.replace(",", ".");
             
             l.setDescricao(Login.funcAtual.getNome()+" inseriu R$ "+valor+" no caixa");
             l.setValor(Double.parseDouble(valor));
@@ -273,9 +277,9 @@ public class Suprimento extends javax.swing.JDialog {
     private javax.swing.JLabel lblInsiraSuprimento1;
     private javax.swing.JLabel lblInsiraSuprimento2;
     private javax.swing.JLabel lblInsiraSuprimento3;
+    private javax.swing.JLabel lblStringSuprimento;
     private javax.swing.JLabel lblValor;
     private javax.swing.Box.Filler linha;
     private javax.swing.JTextField txtEntradaSuprimento;
-    private javax.swing.JLabel txtStringSuprimento;
     // End of variables declaration//GEN-END:variables
 }

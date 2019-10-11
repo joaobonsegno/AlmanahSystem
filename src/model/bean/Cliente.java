@@ -1,20 +1,41 @@
 package model.bean;
 
+import model.dao.ClienteDAO;
+
 public class Cliente implements Comparable<Cliente>{
     Integer id, numero;
     String nome, cpf, dataNasc, telefone, celular, sexo;
     String logradouro, bairro, cidade, email, complemento, cep;
-    Double saldo;
+    Double saldo, saldoPendente;
     Estado estado;
     
-    @Override
-    public int compareTo(Cliente outro){
-        int compareInt = this.nome.compareTo(outro.getNome());
-        if (compareInt < 0) return -1; //this.nome é maior 
-        if (compareInt > 0) return 1; //outro.nome é maior
-        return 0; //os dois são iguais
+    
+    
+    public void aumentarSaldoPendente(Double valor){
+        ClienteDAO cDao = new ClienteDAO();
+        this.saldoPendente += valor;
+        cDao.updatePendente(this);
     }
     
+    public void reduzirSaldoPendente(Double valor){
+        ClienteDAO cDao = new ClienteDAO();
+        this.saldoPendente -= valor;
+        cDao.updatePendente(this);
+    }
+    
+    public void reduzirSaldo(Double valor){
+        ClienteDAO cDao = new ClienteDAO();
+        this.saldo -= valor;
+        cDao.updateSaldo(this);
+    }
+    
+    public void aumentarSaldo(Double valor){
+        ClienteDAO cDao = new ClienteDAO();
+        this.saldo += valor;
+        cDao.updateSaldo(this);
+    }
+    
+    // GETTERS E SETTERS PADRÃO
     public Integer getId() {
         return id;
     }
@@ -29,6 +50,14 @@ public class Cliente implements Comparable<Cliente>{
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Double getSaldoPendente() {
+        return saldoPendente;
+    }
+
+    public void setSaldoPendente(Double saldoPendente) {
+        this.saldoPendente = saldoPendente;
     }
 
     public Integer getNumero() {
@@ -160,6 +189,15 @@ public class Cliente implements Comparable<Cliente>{
         clienteAtual.setEstado(this.getEstado());
  
         return clienteAtual;
+    }
+    
+    // Implementa o método do Collections
+    @Override
+    public int compareTo(Cliente outro){
+        int compareInt = this.nome.compareTo(outro.getNome());
+        if (compareInt < 0) return -1; //this.nome é maior 
+        if (compareInt > 0) return 1; //outro.nome é maior
+        return 0; //os dois são iguais
     }
 }
 

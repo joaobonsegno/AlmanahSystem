@@ -1,5 +1,6 @@
 package main;
 
+import ArrumarString.Monetarios;
 import ArrumarString.SoNumeros;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -41,6 +42,8 @@ public class AlterarFuncionario extends javax.swing.JFrame {
        initComponents();
        this.setLocationRelativeTo(null);
        txtNumero.setDocument(new SoNumeros()); 
+       txtSalario.setDocument(new Monetarios(7,2));
+       
        for (Estado e : eDao.read()){
            listaEstados.add(e);
        }
@@ -539,8 +542,10 @@ public class AlterarFuncionario extends javax.swing.JFrame {
                     cadastro.setCpf(cpf);
                     cadastro.setEmail(txtEmail.getText());
                     cadastro.setSexo(sexo);
-                    Double salario = Double.parseDouble(GerenciadorComandas.tornarCompativel(txtSalario.getText()));
-                    cadastro.setSalario(salario);
+                    String salario = txtSalario.getText();
+                    salario = salario.replace(".","");
+                    salario = salario.replace(",",".");
+                    cadastro.setSalario(Double.parseDouble(salario));
                     cadastro.setCargo(cargo);
                     cadastro.setTelefone(txtTelefone.getText());
                     cadastro.setCelular(txtCelular.getText());

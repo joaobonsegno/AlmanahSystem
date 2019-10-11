@@ -17,16 +17,16 @@ public class GerenciadorClientes extends javax.swing.JFrame {
        jtClientes.setRowHeight(22);
        getRootPane().setDefaultButton(btnOk);
        this.setLocationRelativeTo(null);
-       jtClientes.getColumnModel().getColumn(0).setPreferredWidth(50); 
-       jtClientes.getColumnModel().getColumn(1).setPreferredWidth(430);
+       jtClientes.getColumnModel().getColumn(0).setPreferredWidth(0); 
+       jtClientes.getColumnModel().getColumn(1).setPreferredWidth(470);
        jtClientes.getColumnModel().getColumn(2).setPreferredWidth(150);
         
-       jtClientes.getColumnModel().getColumn(0).setMinWidth(50);
-       jtClientes.getColumnModel().getColumn(1).setMinWidth(430);
+       jtClientes.getColumnModel().getColumn(0).setMinWidth(0);
+       jtClientes.getColumnModel().getColumn(1).setMinWidth(470);
        jtClientes.getColumnModel().getColumn(2).setMinWidth(150);
         
-       jtClientes.getColumnModel().getColumn(0).setMaxWidth(50);
-       jtClientes.getColumnModel().getColumn(1).setMaxWidth(430);
+       jtClientes.getColumnModel().getColumn(0).setMaxWidth(0);
+       jtClientes.getColumnModel().getColumn(1).setMaxWidth(470);
        jtClientes.getColumnModel().getColumn(2).setMaxWidth(150);
 
        listaClientes.removeAll(listaClientes);
@@ -56,7 +56,7 @@ public class GerenciadorClientes extends javax.swing.JFrame {
         }
     }
     
-    public void criarTabelaNome(String nome){
+    /*public void criarTabelaNome(String nome){
         limparTabela();
         ArrayList<Cliente> ordenador = new ArrayList<>();
         
@@ -74,7 +74,7 @@ public class GerenciadorClientes extends javax.swing.JFrame {
                     c.getCpf()}
             );           
         }
-    }
+    }*/
     
     public void limparTabela(){
         DefaultTableModel dtmBebidas = (DefaultTableModel) jtClientes.getModel();
@@ -141,6 +141,7 @@ public class GerenciadorClientes extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jtClientes.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jtClientes);
         if (jtClientes.getColumnModel().getColumnCount() > 0) {
             jtClientes.getColumnModel().getColumn(0).setResizable(false);
@@ -287,7 +288,7 @@ public class GerenciadorClientes extends javax.swing.JFrame {
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
         
-        criarTabelaNome(txtPesquisa.getText());     
+        //criarTabelaNome(txtPesquisa.getText());     
     }//GEN-LAST:event_btnOkActionPerformed
 
     /**

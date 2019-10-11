@@ -6,11 +6,18 @@ public class Forma {
     private String formaPagamento;
     private Venda venda;
     private Comanda comanda;
+    private Cliente cliente;
 
     public Forma(Double v, String f, Comanda c){
         this.valor = v;
         this.formaPagamento = f;
         this.comanda = c;       
+    }
+    
+    public Forma(Double v, String f, Cliente c){
+        this.valor = v;
+        this.formaPagamento = f;
+        this.cliente = c;       
     }
     
     public Forma(){}
@@ -29,6 +36,14 @@ public class Forma {
 
     public void setValor(Double valor) {
         this.valor = valor;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     public String getFormaPagamento() {

@@ -1,5 +1,6 @@
 package main;
 
+import ArrumarString.Monetarios;
 import ArrumarString.SoNumeros;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,7 +47,8 @@ public class CadastrarFuncionario extends javax.swing.JFrame {
        initComponents();
        this.setLocationRelativeTo(null);
        txtNumero.setDocument(new SoNumeros()); 
-
+       txtSalario.setDocument(new Monetarios(7,2));
+       
        for (Estado e : eDao.read()){
            listaEstados.add(e);
        }
@@ -504,6 +506,7 @@ public class CadastrarFuncionario extends javax.swing.JFrame {
         if (flag == 0){
             if(!(nome.equals("")|cpf.equals("")|sexo.equals("")|funcao.equals(""))){
                 try{
+                    
                     Estado estado = new Estado();
                     for(Estado e:listaEstados){
                         if(e.getNome().equals(uf)){
@@ -526,8 +529,10 @@ public class CadastrarFuncionario extends javax.swing.JFrame {
                     f.setCpf(cpf);
                     f.setEmail(txtEmail.getText());
                     f.setSexo(sexo);
-                    Double salario = Double.parseDouble(GerenciadorComandas.tornarCompativel(txtSalario.getText()));
-                    f.setSalario(salario);
+                    String salario = txtSalario.getText();
+                    salario = salario.replace(".","");
+                    salario = salario.replace(",",".");
+                    f.setSalario(Double.parseDouble(salario));
                     f.setCargo(cargo);
                     f.setTelefone(txtTelefone.getText());
                     f.setCelular(txtCelular.getText());

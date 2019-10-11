@@ -432,6 +432,7 @@ public class CadastrarCliente extends javax.swing.JFrame {
                     
                     c.setDataNasc(dataFormatada);
                     c.setSaldo(0.0);
+                    c.setSaldoPendente(0.0);
                     c.setEstado(estado);
 
                     cDao.create(c);

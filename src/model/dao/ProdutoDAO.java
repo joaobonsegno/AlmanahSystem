@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import main.Login;
 import model.bean.Categoria;
 import model.bean.Produto;
+import relatorio.RelatorioProduto;
 
 public class ProdutoDAO {
     public void create(Produto p){
@@ -253,4 +254,46 @@ public class ProdutoDAO {
             ConnectionFactory.closeConnection(con, stmt);
         }
     }
+    
+    //Métodos para relatórios
+    public ArrayList<RelatorioProduto> relatorio(String dataMaior, String dataMenor, Integer limite){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ArrayList<RelatorioProduto> produtos = new ArrayList<>();
+        
+        try{
+            String sql = "SELECT p.idProduto AS 'id', "
+                    +    "p.nome AS 'nome', "
+                    +    "p.preco AS 'preco', "
+                    +    "SUM(i.quantidade) AS 'qtdVendas', "
+                    +    "SUM(i.quantidade)*p.preco AS 'total' "
+                    +    "FROM produto p "
+                    +    "INNER JOIN item_venda i ON 	p.idProduto = i.idProduto "
+                    +    "INNER JOIN venda v 	  ON  v.idVenda = i.idVenda "
+                    +    "WHERE str_to_date(v.data, '%d/%m/%Y') >= str_to_date('"+dataMenor+"','%d/%m/%Y') "
+                    +    "AND   str_to_date(v.data, '%d/%m/%Y') <= str_to_date('"+dataMaior+"','%d/%m/%Y') "
+                    +    "GROUP BY p.idProduto "
+                    +    "ORDER BY qtdVendas DESC LIMIT "+limite;
+            stmt = con.prepareStatement(sql);
+            rs = stmt.executeQuery();
+            while (rs.next()){
+                RelatorioProduto p = new RelatorioProduto();
+                
+                p.setId(rs.getInt("id"));
+                p.setPreco(rs.getDouble("preco"));
+                p.setTotal(rs.getDouble("total"));
+                p.setQtdVendas(rs.getInt("qtdVendas"));
+                p.setNome(rs.getString("nome"));
+
+                produtos.add(p);
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return produtos;
+    }
+     
 }

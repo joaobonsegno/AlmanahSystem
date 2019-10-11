@@ -7,11 +7,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import main.Login;
-import model.bean.Categoria;
+import model.bean.Cliente;
 import model.bean.Comanda;
 import model.bean.Forma;
-import model.bean.Produto;
 
 public class FormaDAO {
     public void create(Forma f){
@@ -26,7 +24,26 @@ public class FormaDAO {
             stmt.setString(2, f.getFormaPagamento());
             stmt.setInt(3, f.getComanda().getIdBanco());  
             stmt.executeUpdate();
-            System.out.println("Salvo com sucesso!");
+        }catch(SQLException ex){
+            System.err.println("Erro SQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+    }
+    
+    public void create(Forma f, Cliente c){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        
+        try{
+            String sql = "INSERT INTO formaPagamento (valor, formaPagamento, idComanda, idCliente)VALUES(?,?,?,?)";
+            stmt = con.prepareStatement(sql);
+            
+            stmt.setDouble(1, f.getValor());  
+            stmt.setString(2, f.getFormaPagamento());
+            stmt.setInt(3, f.getComanda().getIdBanco());  
+            stmt.setInt(4, c.getId());
+            stmt.executeUpdate();
         }catch(SQLException ex){
             System.err.println("Erro SQL: "+ex);
         }finally{
@@ -41,6 +58,7 @@ public class FormaDAO {
         ArrayList<Forma> formas = new ArrayList<>();
         //VendaDAO vDao = new VendaDAO();
         ComandaDAO cDao = new ComandaDAO();   
+        ClienteDAO cliDao = new ClienteDAO();
         
         try{
             stmt = con.prepareStatement("SELECT * FROM formaPagamento");
@@ -50,14 +68,22 @@ public class FormaDAO {
                 
                 f.setValor(rs.getDouble("valor"));
                 f.setFormaPagamento(rs.getString("formaPagamento"));
-                //Integer idVenda = (rs.getInt("idVenda"));
+                Integer idCliente = (rs.getInt("idCliente"));
                 Integer idComanda = (rs.getInt("idComanda"));
                 
                 for (Comanda c:cDao.read()){
                     if (c.getId() == idComanda){
                         f.setComanda(c);
+                        break;
                     }
                 }
+                
+                for (Cliente c:cliDao.read()){
+                    if (c.getId() == idCliente){
+                        f.setCliente(c);
+                        break;
+                    }
+                } 
                 
                 formas.add(f);
                 
@@ -103,10 +129,36 @@ public class FormaDAO {
                 forma.setId(rs.getInt("idFormaPagamento"));
                 forma.setValor(rs.getDouble("valor"));
                 forma.setFormaPagamento(rs.getString("formaPagamento"));
+                forma.setComanda(comanda);
                 
-                if (comanda.getIdBanco() == rs.getInt("idComanda")){
-                    forma.setComanda(comanda);
-                }
+                ClienteDAO cDao = new ClienteDAO();
+                forma.setCliente(cDao.readForId(rs.getInt("idCliente")));
+                formas.add(forma);
+            }         
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return formas;
+    }
+    
+    public ArrayList<Forma> readForCliente(Cliente cliente){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ArrayList<Forma> formas = new ArrayList<>();  
+        
+        try{
+            stmt = con.prepareStatement("SELECT * FROM formaPagamento WHERE idCliente = ?");
+            stmt.setInt(1, cliente.getId());
+            rs = stmt.executeQuery();
+            while (rs.next()){     
+                Forma forma = new Forma();
+                forma.setId(rs.getInt("idFormaPagamento"));
+                forma.setValor(rs.getDouble("valor"));
+                forma.setFormaPagamento(rs.getString("formaPagamento"));
+                forma.setCliente(cliente);
                 formas.add(forma);
             }         
         }catch(SQLException ex){
@@ -142,13 +194,13 @@ public class FormaDAO {
     public void updateVenda(Forma f){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
-        
+        Integer var = null;
         try{
-            String sql = "UPDATE formaPagamento SET idVenda = ? WHERE idFormaPagamento = ?";
+            String sql = "UPDATE formaPagamento SET idVenda = ?, idComanda=? WHERE idFormaPagamento = ?";
             stmt = con.prepareStatement(sql);
             stmt.setInt(1, f.getVenda().getIdBanco());
-            stmt.setInt(2, f.getId());
-            System.out.println("Passei aqui. ID Venda: "+f.getVenda().getIdBanco()+"\nID Forma: "+f.getId());
+            stmt.setNull(2, var == null ? 0 : var);
+            stmt.setInt(3, f.getId());
             stmt.executeUpdate();
             System.out.println("Atualizado com sucesso!");
         }catch(SQLException ex){

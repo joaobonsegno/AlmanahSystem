@@ -30,7 +30,7 @@ public class Menu extends javax.swing.JFrame {
         }
         
         setPromocao();
-        setFuncionario();      
+        //setFuncionario();      
     }
     
     public void setFuncionario(){
@@ -191,12 +191,13 @@ public class Menu extends javax.swing.JFrame {
         funcionarios_gerenciar = new javax.swing.JMenuItem();
         funcionarios_cadastrar = new javax.swing.JMenuItem();
         clientes = new javax.swing.JMenu();
-        funcionarios_gerenciar1 = new javax.swing.JMenuItem();
-        funcionarios_cadastrar1 = new javax.swing.JMenuItem();
+        clientes_gerenciar = new javax.swing.JMenuItem();
+        clientes_cadastrar = new javax.swing.JMenuItem();
+        clientes_carteira = new javax.swing.JMenuItem();
         financeiro = new javax.swing.JMenu();
         financeiro_promocoes = new javax.swing.JMenuItem();
-        financeiro_gerenciar = new javax.swing.JMenuItem();
-        financeiro_gerenciar1 = new javax.swing.JMenuItem();
+        financeiro_despesas = new javax.swing.JMenuItem();
+        financeiro_relatorios = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Menu");
@@ -395,25 +396,35 @@ public class Menu extends javax.swing.JFrame {
         clientes.setText(" Clientes");
         clientes.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
 
-        funcionarios_gerenciar1.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
-        funcionarios_gerenciar1.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\produtos (2).png")); // NOI18N
-        funcionarios_gerenciar1.setText("Gerenciar");
-        funcionarios_gerenciar1.addActionListener(new java.awt.event.ActionListener() {
+        clientes_gerenciar.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        clientes_gerenciar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\produtos (2).png")); // NOI18N
+        clientes_gerenciar.setText("Gerenciar");
+        clientes_gerenciar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                funcionarios_gerenciar1ActionPerformed(evt);
+                clientes_gerenciarActionPerformed(evt);
             }
         });
-        clientes.add(funcionarios_gerenciar1);
+        clientes.add(clientes_gerenciar);
 
-        funcionarios_cadastrar1.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
-        funcionarios_cadastrar1.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\add pessoa (2).png")); // NOI18N
-        funcionarios_cadastrar1.setText("Cadastrar");
-        funcionarios_cadastrar1.addActionListener(new java.awt.event.ActionListener() {
+        clientes_cadastrar.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        clientes_cadastrar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\add pessoa (2).png")); // NOI18N
+        clientes_cadastrar.setText("Cadastrar");
+        clientes_cadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                funcionarios_cadastrar1ActionPerformed(evt);
+                clientes_cadastrarActionPerformed(evt);
             }
         });
-        clientes.add(funcionarios_cadastrar1);
+        clientes.add(clientes_cadastrar);
+
+        clientes_carteira.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        clientes_carteira.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\wallet (1) (1).png")); // NOI18N
+        clientes_carteira.setText("Carteira");
+        clientes_carteira.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clientes_carteiraActionPerformed(evt);
+            }
+        });
+        clientes.add(clientes_carteira);
 
         jMenuBar1.add(clientes);
 
@@ -431,25 +442,25 @@ public class Menu extends javax.swing.JFrame {
         });
         financeiro.add(financeiro_promocoes);
 
-        financeiro_gerenciar.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
-        financeiro_gerenciar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\big-money-bag (2).png")); // NOI18N
-        financeiro_gerenciar.setText("Despesas");
-        financeiro_gerenciar.addActionListener(new java.awt.event.ActionListener() {
+        financeiro_despesas.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        financeiro_despesas.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\big-money-bag (2).png")); // NOI18N
+        financeiro_despesas.setText("Despesas");
+        financeiro_despesas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                financeiro_gerenciarActionPerformed(evt);
+                financeiro_despesasActionPerformed(evt);
             }
         });
-        financeiro.add(financeiro_gerenciar);
+        financeiro.add(financeiro_despesas);
 
-        financeiro_gerenciar1.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
-        financeiro_gerenciar1.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\relatorio (1).png")); // NOI18N
-        financeiro_gerenciar1.setText("Relatórios");
-        financeiro_gerenciar1.addActionListener(new java.awt.event.ActionListener() {
+        financeiro_relatorios.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        financeiro_relatorios.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\relatorio (1).png")); // NOI18N
+        financeiro_relatorios.setText("Relatórios");
+        financeiro_relatorios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                financeiro_gerenciar1ActionPerformed(evt);
+                financeiro_relatoriosActionPerformed(evt);
             }
         });
-        financeiro.add(financeiro_gerenciar1);
+        financeiro.add(financeiro_relatorios);
 
         jMenuBar1.add(financeiro);
 
@@ -567,30 +578,30 @@ public class Menu extends javax.swing.JFrame {
                 
     }//GEN-LAST:event_estoque_movimentacaoActionPerformed
 
-    private void financeiro_gerenciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_financeiro_gerenciarActionPerformed
+    private void financeiro_despesasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_financeiro_despesasActionPerformed
         new CadastrarDespesa(new javax.swing.JFrame(), true).setVisible(true);
         dispose();
-    }//GEN-LAST:event_financeiro_gerenciarActionPerformed
+    }//GEN-LAST:event_financeiro_despesasActionPerformed
 
     private void financeiro_promocoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_financeiro_promocoesActionPerformed
         new Promocoes().setVisible(true);
         dispose();
     }//GEN-LAST:event_financeiro_promocoesActionPerformed
 
-    private void funcionarios_gerenciar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_funcionarios_gerenciar1ActionPerformed
+    private void clientes_gerenciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clientes_gerenciarActionPerformed
         new GerenciadorClientes().setVisible(true);
         dispose();
-    }//GEN-LAST:event_funcionarios_gerenciar1ActionPerformed
+    }//GEN-LAST:event_clientes_gerenciarActionPerformed
 
-    private void funcionarios_cadastrar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_funcionarios_cadastrar1ActionPerformed
+    private void clientes_cadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clientes_cadastrarActionPerformed
         new CadastrarCliente().setVisible(true);
         dispose();
-    }//GEN-LAST:event_funcionarios_cadastrar1ActionPerformed
+    }//GEN-LAST:event_clientes_cadastrarActionPerformed
 
-    private void financeiro_gerenciar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_financeiro_gerenciar1ActionPerformed
+    private void financeiro_relatoriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_financeiro_relatoriosActionPerformed
         new GerenciadorRelatorios().setVisible(true);
         dispose();
-    }//GEN-LAST:event_financeiro_gerenciar1ActionPerformed
+    }//GEN-LAST:event_financeiro_relatoriosActionPerformed
 
     private void produtos_cadastrarPratosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_produtos_cadastrarPratosActionPerformed
         new CadastrarPrato().setVisible(true);
@@ -605,6 +616,11 @@ public class Menu extends javax.swing.JFrame {
         new GerenciadorCardapios().setVisible(true);
         dispose();
     }//GEN-LAST:event_produtos_cardapioActionPerformed
+
+    private void clientes_carteiraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clientes_carteiraActionPerformed
+        new GerenciadorCarteira().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_clientes_carteiraActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -642,18 +658,19 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton btnLancador1;
     private javax.swing.JButton btnSair;
     private javax.swing.JMenu clientes;
+    private javax.swing.JMenuItem clientes_cadastrar;
+    private javax.swing.JMenuItem clientes_carteira;
+    private javax.swing.JMenuItem clientes_gerenciar;
     private javax.swing.JMenu estoque;
     private javax.swing.JMenuItem estoque_gerenciar;
     private javax.swing.JMenuItem estoque_movimentacao;
     private javax.swing.JMenu financeiro;
-    private javax.swing.JMenuItem financeiro_gerenciar;
-    private javax.swing.JMenuItem financeiro_gerenciar1;
+    private javax.swing.JMenuItem financeiro_despesas;
     private javax.swing.JMenuItem financeiro_promocoes;
+    private javax.swing.JMenuItem financeiro_relatorios;
     private javax.swing.JMenu funcionarios;
     private javax.swing.JMenuItem funcionarios_cadastrar;
-    private javax.swing.JMenuItem funcionarios_cadastrar1;
     private javax.swing.JMenuItem funcionarios_gerenciar;
-    private javax.swing.JMenuItem funcionarios_gerenciar1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JLabel lblFuncao;
     private javax.swing.JLabel lblHora;

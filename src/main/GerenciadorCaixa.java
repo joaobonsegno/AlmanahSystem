@@ -1,17 +1,13 @@
 package main;
 
-import ArrumarString.SoNumeros;
 import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
-import model.bean.Log;
+import model.bean.LogCaixa;
 import model.bean.Produto;
 import model.dao.CaixaDAO;
-import model.dao.ItemComandaDAO;
-import model.dao.LogDAO;
-import model.dao.ProdutoDAO;
+import model.dao.LogCaixaDAO;
 
 public class GerenciadorCaixa extends javax.swing.JFrame {
     ArrayList<Produto> listaProdutos = new ArrayList<>();
@@ -34,14 +30,7 @@ public class GerenciadorCaixa extends javax.swing.JFrame {
         jtCaixa.getColumnModel().getColumn(2).setMaxWidth(80);
         jtCaixa.getColumnModel().getColumn(3).setMaxWidth(80);
         //lblComanda.setText(comString);
-
-        ProdutoDAO pDao = new ProdutoDAO();
-        for (Produto p: pDao.read()){
-            if(p.getCategoria().getNome().equals("Bebida")){
-                listaProdutos.add(p);
-            }
-        }
-        criarTabela();
+        this.criarTabela();
         
         if (Login.caixaAtual != null){
             btnAbrirCaixa.setBackground(Color.yellow);
@@ -54,7 +43,7 @@ public class GerenciadorCaixa extends javax.swing.JFrame {
             lblData.setText(Login.caixaAtual.getDataAbertura());
             lblValor.setText(" R$ "+GerenciadorComandas.valorMonetario(Login.caixaAtual.getDinheiro()));
         }else{
-            LogDAO logDao = new LogDAO();
+            LogCaixaDAO logDao = new LogCaixaDAO();
             btnSuprimento.setEnabled(false);
             btnSangria.setEnabled(false);
             lblData.setText("");
@@ -69,9 +58,9 @@ public class GerenciadorCaixa extends javax.swing.JFrame {
     }
     
     public void criarTabela(){  
-        LogDAO logDao = new LogDAO();
+        LogCaixaDAO logDao = new LogCaixaDAO();
         DefaultTableModel dtmBebidas = (DefaultTableModel) jtCaixa.getModel();
-        for (Log l: logDao.read()){
+        for (LogCaixa l: logDao.read()){
             if(l.getStatus() == 1){
                 String valor = GerenciadorComandas.valorMonetario(l.getValor());
                 String valor2 = GerenciadorComandas.valorMonetario(l.getSaldo());
@@ -89,7 +78,7 @@ public class GerenciadorCaixa extends javax.swing.JFrame {
     public void fecharCaixa(){
         CaixaDAO caixaDao = new CaixaDAO();
         caixaDao = new CaixaDAO();
-        LogDAO logDao = new LogDAO();
+        LogCaixaDAO logDao = new LogCaixaDAO();
         Login.caixaAtual.setStatus(0);
         String horario = Login.caixaAtual.dataAtual();
         Login.caixaAtual.setDataFechamento(horario);

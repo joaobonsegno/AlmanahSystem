@@ -76,7 +76,7 @@ public class VendaDAO {
             String sql = "SELECT * FROM venda "
                     +    "WHERE str_to_date(data, '%d/%m/%Y') >= str_to_date('"+dataMenor+"','%d/%m/%Y') "
                     +    "AND   str_to_date(data, '%d/%m/%Y') <= str_to_date('"+dataMaior+"','%d/%m/%Y') "
-                    +    " ORDER BY str_to_date(data, '%d/%m/%Y')";
+                    +    "ORDER BY str_to_date(data, '%d/%m/%Y')";
             stmt = con.prepareStatement(sql);
             rs = stmt.executeQuery();
             while (rs.next()){
@@ -123,7 +123,7 @@ public class VendaDAO {
         return formas;
     }
     
-    public int diferencaDatas(String dataMaior,String dataMenor){
+    public static int diferencaDatas(String dataMaior,String dataMenor){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;

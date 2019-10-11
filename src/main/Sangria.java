@@ -1,10 +1,9 @@
 package main;
 
 import javax.swing.JOptionPane;
-import model.bean.Caixa;
-import model.bean.Log;
+import model.bean.LogCaixa;
 import model.dao.CaixaDAO;
-import model.dao.LogDAO;
+import model.dao.LogCaixaDAO;
 
 public class Sangria extends javax.swing.JDialog {
         public static boolean flagSuprimento;
@@ -13,7 +12,7 @@ public class Sangria extends javax.swing.JDialog {
         initComponents();
         this.setLocationRelativeTo(null);
         getRootPane().setDefaultButton(btnConfirmar);
-        LogDAO logDao = new LogDAO();
+        LogCaixaDAO logDao = new LogCaixaDAO();
         if (Login.caixaAtual != null){
             lblValor.setText(" R$ "+GerenciadorComandas.valorMonetario(Login.caixaAtual.getDinheiro()));
         }else{
@@ -171,8 +170,8 @@ public class Sangria extends javax.swing.JDialog {
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         try{
             CaixaDAO cDao = new CaixaDAO();
-            LogDAO logDao = new LogDAO();
-            Log l = new Log(1);
+            LogCaixaDAO logDao = new LogCaixaDAO();
+            LogCaixa l = new LogCaixa(1);
             l.setCategoria("Caixa");
             l.setData(l.dataAtual());
             l.setTipo("Débito");

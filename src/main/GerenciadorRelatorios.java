@@ -10,39 +10,29 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Phrase;
 
-import connection.ConnectionFactory;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 import model.bean.Categoria;
 import model.bean.Forma;
-import model.bean.Funcionario;
 import model.bean.Produto;
 import model.bean.Venda;
 import model.dao.CategoriaDAO;
-import model.dao.FuncionarioDAO;
 import model.dao.ProdutoDAO;
 import model.dao.VendaDAO;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.view.JasperViewer;
 
 public class GerenciadorRelatorios extends javax.swing.JFrame {
 
     public static ArrayList<Produto> listaProdutos = new ArrayList<>();
     ProdutoDAO pDao;
     public static Produto prodSelecionado;
-
+    public static String dMaior;
+    public static String dMenor;
     public GerenciadorRelatorios() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -59,52 +49,12 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
     public void criarComboBox() {
         cbCategorias.removeAllItems();
         cbCategorias.addItem("");
-        CategoriaDAO catDao = new CategoriaDAO();
-        for (Categoria c : catDao.read()) {
-            cbCategorias.addItem(c.getNome());
-        }
+        cbCategorias.addItem("Vendas");
+        cbCategorias.addItem("Produtos");
+        //cbCategorias.addItem("");
     }
 
-    // ----------------------- MÉTODOS PARA CRIAR RELATÓRIOS -----------------------
-    public static PdfPTable criarCabecalho() throws DocumentException {
-        PdfPTable table = new PdfPTable(new float[]{1f, 4f, 6f});
-        PdfPCell celulaNome = new PdfPCell(new Phrase("No"));
-        celulaNome.setHorizontalAlignment(Element.ALIGN_CENTER);
-
-        PdfPCell celulaData = new PdfPCell(new Phrase("Valor (R$)"));
-        celulaData.setHorizontalAlignment(Element.ALIGN_CENTER);
-
-        PdfPCell celulaSexo = new PdfPCell(new Phrase("Data"));
-        celulaSexo.setHorizontalAlignment(Element.ALIGN_CENTER);
-
-        table.addCell(celulaNome);
-        table.addCell(celulaData);
-        table.addCell(celulaSexo);
-
-        return table;
-    }
-
-    public static void preencherDados(Document document, PdfPTable table, ArrayList<Venda> lista) throws DocumentException {
-        Integer contador = 1;
-        String c = "";
-        if (document.isOpen()) {
-            for (Venda venda : lista) {
-                c = contador.toString();
-                PdfPCell celula1 = new PdfPCell(new Phrase(c));
-                PdfPCell celula2 = new PdfPCell(new Phrase(GerenciadorComandas.valorMonetario(venda.getTotal())));
-                PdfPCell celula3 = new PdfPCell(new Phrase(venda.getData()));
-                celula1.setHorizontalAlignment(Element.ALIGN_CENTER);
-                celula2.setHorizontalAlignment(Element.ALIGN_CENTER);
-                celula3.setHorizontalAlignment(Element.ALIGN_CENTER);
-                
-                table.addCell(celula1);
-                table.addCell(celula2);
-                table.addCell(celula3);
-                contador += 1;
-            }           
-            document.add(table);
-        }
-    }
+    
 
     // -----------------------------------------------------------------------------
     @SuppressWarnings("unchecked")
@@ -124,8 +74,8 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gerenciador de Produtos");
-        setMaximumSize(new java.awt.Dimension(1046, 668));
-        setMinimumSize(new java.awt.Dimension(1046, 668));
+        setMaximumSize(new java.awt.Dimension(575, 361));
+        setMinimumSize(new java.awt.Dimension(575, 361));
         setResizable(false);
 
         btnStringProdutos.setBackground(new java.awt.Color(0, 102, 204));
@@ -237,14 +187,14 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(dataMenor, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dataMaior, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(80, 80, 80)
-                .addComponent(btnOk1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addGap(34, 34, 34)
+                .addComponent(btnOk1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(60, 60, 60)
                     .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(300, Short.MAX_VALUE)))
+                    .addContainerGap(264, Short.MAX_VALUE)))
         );
 
         pack();
@@ -264,100 +214,38 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
     }//GEN-LAST:event_cbCategoriasItemStateChanged
 
     private void btnOk1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOk1ActionPerformed
-        try{
-            Double credito = 0.0; Double debito = 0.0; Double voucher = 0.0; Double dinheiro = 0.0;            
-            VendaDAO v = new VendaDAO();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            String dMaior = sdf.format(dataMaior.getDate());
-            String dMenor = sdf.format(dataMenor.getDate());
-            ArrayList<Venda> lista = new ArrayList<>();
-
-            //System.out.println("DIf: "+v.diferencaDatas(dMaior, dMenor)+"\n");
-            if (v.diferencaDatas(dMaior, dMenor) >= 0) {
-                Paragraph pTitulo = new Paragraph(new Phrase(20F, "Restaurante Almanah\n", FontFactory.getFont(FontFactory.HELVETICA, 20F)));
-                pTitulo.setAlignment(Element.ALIGN_CENTER);
-
-                Paragraph pSubtitulo = new Paragraph(new Phrase(20F, "Relatório de Vendas\n", FontFactory.getFont(FontFactory.HELVETICA, 16F)));
-                pSubtitulo.setAlignment(Element.ALIGN_CENTER);
-                
-                Paragraph pSubtituloDatas = new Paragraph(new Phrase(20F, "Data Inicial: "+dMenor+"  Data Final: "+dMaior+"\n\n", FontFactory.getFont(FontFactory.HELVETICA, 12F)));
-                pSubtituloDatas.setAlignment(Element.ALIGN_CENTER);
-                
-                Paragraph pData = new Paragraph(new Phrase(20F, "Data de Emissão: "+GerenciadorComandas.getDataAtualComHoraFormatoBr()+"\n\n", FontFactory.getFont(FontFactory.HELVETICA, 11F)));
-                pData.setAlignment(Element.ALIGN_RIGHT);
-                Document documento = new Document();
-                try {
-                    PdfWriter pdf = PdfWriter.getInstance(documento, new FileOutputStream("C:\\Projetos Netbeans\\AlmanahSystem\\arquivos\\Documento.pdf"));
-                    
-                    //Adiciona ao documento as estruturas de cabeçalho
-                    documento.open();
-                    documento.add(pTitulo);
-                    documento.add(pSubtitulo);
-                    documento.add(pSubtituloDatas);
-                    documento.add(pData);
-                    
-                    //Cria a tabela e adiciona seu conteúdo
-                    PdfPTable table = this.criarCabecalho();                    
-                    for (Venda ve : v.relatorio(dMaior, dMenor)) {
-                        lista.add(ve);
-                        for (Forma f : v.getFormas(ve)){
-                            if (f.getFormaPagamento().equals("Débito")){
-                                debito += f.getValor();
-                            }else if (f.getFormaPagamento().equals("Crédito")){
-                                credito += f.getValor();  break;
-                            }else if (f.getFormaPagamento().equals("Voucher")){
-                                voucher += f.getValor();
-                            }else{
-                                dinheiro += f.getValor();
-                            }                           
-                        }
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        dMaior = sdf.format(dataMaior.getDate());
+        dMenor = sdf.format(dataMenor.getDate());
+        Integer selecionado = (Integer) cbCategorias.getSelectedIndex();
+        VendaDAO v = new VendaDAO();
+        switch (selecionado) {
+            case 0:
+                JOptionPane.showMessageDialog(null, "Selecione o tipo de relatório desejado");
+                break;
+            case 1:
+                try{
+                    if (v.diferencaDatas(GerenciadorRelatorios.dMaior, GerenciadorRelatorios.dMenor) >= 0) {
+                        new RelatorioVendas().setVisible(true);
+                        dispose();
+                    }else {
+                        JOptionPane.showMessageDialog(null, "A data inicial deve ser maior ou igual à data final");
                     }
-                    this.preencherDados(documento, table, lista);
-                    
-                    //Cria o rodapé, com totais das vendas
-                    System.out.println("Débito: "+debito);
-                    System.out.println("Crédito: "+credito);
-                    System.out.println("Voucher: "+voucher);
-                    System.out.println("Dinheiro: "+dinheiro);
-                    
-                    documento.add(new Paragraph("\n\n"));
-                    Paragraph pDinheiro = new Paragraph(new Phrase(20F, "Dinheiro: R$ "+GerenciadorComandas.valorMonetario(dinheiro)+"\n", FontFactory.getFont(FontFactory.HELVETICA, 12F)));
-                    pDinheiro.setAlignment(Element.ALIGN_RIGHT);
-                    Paragraph pDebito = new Paragraph(new Phrase(20F, "Débito: R$ "+GerenciadorComandas.valorMonetario(debito)+"\n", FontFactory.getFont(FontFactory.HELVETICA, 12F)));
-                    pDebito.setAlignment(Element.ALIGN_RIGHT);
-                    Paragraph pCredito = new Paragraph(new Phrase(20F, "Crédito: R$ "+GerenciadorComandas.valorMonetario(credito)+"\n", FontFactory.getFont(FontFactory.HELVETICA, 12F)));
-                    pCredito.setAlignment(Element.ALIGN_RIGHT);
-                    Paragraph pVoucher = new Paragraph(new Phrase(20F, "Voucher: R$ "+GerenciadorComandas.valorMonetario(voucher)+"\n", FontFactory.getFont(FontFactory.HELVETICA, 12F)));
-                    pVoucher.setAlignment(Element.ALIGN_RIGHT);
-                    Paragraph pLinha = new Paragraph(new Phrase(20F, "______________\n\n", FontFactory.getFont(FontFactory.HELVETICA, 12F)));
-                    pLinha.setAlignment(Element.ALIGN_RIGHT);
-                    
-                    documento.add(pDinheiro);
-                    documento.add(pDebito);
-                    documento.add(pCredito);
-                    documento.add(pVoucher);
-                    documento.add(pLinha);
-                    Double total = 0.0; total += dinheiro; total += debito; total += credito; total += voucher; 
-                    Paragraph pTotal = new Paragraph(new Phrase(20F, "Total:  R$ "+GerenciadorComandas.valorMonetario(total), FontFactory.getFont(FontFactory.HELVETICA, 14F)));
-                    pTotal.setAlignment(Element.ALIGN_RIGHT);
-                    documento.add(pTotal);
-                } catch (FileNotFoundException | DocumentException ex) {
-                    System.out.println("Erro: " + ex);
-                } finally {
-                    documento.close();
-                }
-                try {
-                    Desktop.getDesktop().open(new File("C:\\Projetos Netbeans\\AlmanahSystem\\arquivos\\Documento.pdf"));
-                } catch (IOException ex) {
-                    System.out.println("Erro: " + ex);
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Erro: data inicial deve ser maior ou igual à data final");
-            }
-        }catch(java.lang.NullPointerException ex){
-            JOptionPane.showMessageDialog(null, "Erro: informe as datas inicial e final");
+                }catch (java.lang.NullPointerException ex) {
+                    JOptionPane.showMessageDialog(null, "Informe as datas inicial e final");
+                } break;         
+            case 2:
+                try{
+                    if (v.diferencaDatas(GerenciadorRelatorios.dMaior, GerenciadorRelatorios.dMenor) >= 0) {
+                        new RelatorioProdutos().setVisible(true);
+                        dispose();
+                    }else {
+                        JOptionPane.showMessageDialog(null, "A data inicial deve ser maior ou igual à data final");
+                    }
+                }catch (java.lang.NullPointerException ex) {
+                    JOptionPane.showMessageDialog(null, "Informe as datas inicial e final");
+                } break;
         }
-        
 
         /*
         // ----------------------------- Com iReport -------------------------------
