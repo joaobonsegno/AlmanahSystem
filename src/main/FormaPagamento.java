@@ -98,7 +98,7 @@ public class FormaPagamento extends javax.swing.JDialog {
         
         //Chama o método que atualiza o valor pendente e atualiza no banco
         //EncerrarComanda.comandaSelecionada.reduzirValorPendente();
-        GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).reduzirValorPendente();
+        //GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).reduzirValorPendente();
         //---------------------------------------------------
 
         lblValorPendente.setText("R$ "+GerenciadorComandas.valorMonetario(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getValorPendente())); // Seta o valor pendente novo no label
@@ -492,6 +492,7 @@ public class FormaPagamento extends javax.swing.JDialog {
         btnRemover.setText("  Remover");
         btnRemover.setBorder(new javax.swing.border.MatteBorder(null));
         btnRemover.setBorderPainted(false);
+        btnRemover.setEnabled(false);
         btnRemover.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRemoverActionPerformed(evt);

@@ -210,6 +210,24 @@ public class FormaDAO {
         }
     }
     
+    public void updateComanda(Forma f){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        Integer var = null;
+        try{
+            String sql = "UPDATE formaPagamento SET idComanda = ? WHERE idFormaPagamento = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, f.getComanda().getIdBanco());
+            stmt.setInt(2, f.getId());
+            stmt.executeUpdate();
+            System.out.println("Atualizado com sucesso!");
+        }catch(SQLException ex){
+            System.err.println("Erro ao atualizar: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+    }
+    
     /*public void update(Produto p){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;

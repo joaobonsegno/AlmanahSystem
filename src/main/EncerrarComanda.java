@@ -50,7 +50,7 @@ public class EncerrarComanda extends javax.swing.JFrame {
             dtmBebidas.addRow(
                     new Object[]{
                         "X",
-                        "X",
+                        "1",
                         "Refeição Geral",
                         valor,
                         valor2}
@@ -121,7 +121,7 @@ public class EncerrarComanda extends javax.swing.JFrame {
         jtItens.getColumnModel().getColumn(2).setMaxWidth(412); // NOME
         jtItens.getColumnModel().getColumn(3).setMaxWidth(100); // UNITARIO
         jtItens.getColumnModel().getColumn(4).setMaxWidth(120);
-
+      
         String comString = Integer.toString(GerenciadorComandas.idSelecionado);
         comandaSelecionada = new Comanda();
         for(Comanda c:GerenciadorComandas.comandasAbertas){
@@ -140,6 +140,7 @@ public class EncerrarComanda extends javax.swing.JFrame {
         }
         criarTabela();
         getRootPane().setDefaultButton(btnConfirmar);
+        btnRemover.setEnabled(false);
         /*JFormattedTextField tf = ((JSpinner.DefaultEditor) SpinnerQtd.getEditor()).getTextField();
         tf.setEditable(false);
         SpinnerQtd.setModel(nm);*/
@@ -161,11 +162,19 @@ public class EncerrarComanda extends javax.swing.JFrame {
         lblStringValorTotal = new javax.swing.JLabel();
         lblValorTotal = new javax.swing.JLabel();
         btnRemover = new javax.swing.JButton();
+        btnRemover1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Encerramento de Comanda");
         setMinimumSize(new java.awt.Dimension(873, 593));
         setResizable(false);
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+                formWindowGainedFocus(evt);
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+            }
+        });
 
         btnStringGerenciador.setBackground(new java.awt.Color(0, 102, 204));
         btnStringGerenciador.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
@@ -194,6 +203,11 @@ public class EncerrarComanda extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        jtItens.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtItensFocusGained(evt);
             }
         });
         jScrollPane1.setViewportView(jtItens);
@@ -253,9 +267,27 @@ public class EncerrarComanda extends javax.swing.JFrame {
         btnRemover.setText("  Remover");
         btnRemover.setBorder(new javax.swing.border.MatteBorder(null));
         btnRemover.setBorderPainted(false);
+        btnRemover.setEnabled(false);
         btnRemover.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRemoverActionPerformed(evt);
+            }
+        });
+
+        btnRemover1.setBackground(new java.awt.Color(0, 153, 204));
+        btnRemover1.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        btnRemover1.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\turno.png")); // NOI18N
+        btnRemover1.setText("  Unir Comandas");
+        btnRemover1.setBorder(new javax.swing.border.MatteBorder(null));
+        btnRemover1.setBorderPainted(false);
+        btnRemover1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                btnRemover1FocusGained(evt);
+            }
+        });
+        btnRemover1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemover1ActionPerformed(evt);
             }
         });
 
@@ -265,25 +297,26 @@ public class EncerrarComanda extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(lblStringComanda)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(107, 107, 107)
-                                .addComponent(btnStringGerenciador, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(36, 36, 36)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 798, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                            .addGap(362, 362, 362)
-                            .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addContainerGap()
+                            .addComponent(lblStringComanda)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(lblComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(107, 107, 107)
+                            .addComponent(btnStringGerenciador, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(36, 36, 36)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(lblStringValorTotal)
-                                .addComponent(lblValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(btnRemover1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(133, 133, 133)
+                                    .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lblStringValorTotal)
+                                        .addComponent(lblValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 798, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(244, 244, 244)
                         .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -315,7 +348,9 @@ public class EncerrarComanda extends javax.swing.JFrame {
                         .addComponent(lblStringValorTotal)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnRemover1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -352,6 +387,36 @@ public class EncerrarComanda extends javax.swing.JFrame {
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
         removerItem();
     }//GEN-LAST:event_btnRemoverActionPerformed
+
+    private void btnRemover1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemover1ActionPerformed
+        UnirComandas forma = new UnirComandas(new javax.swing.JFrame(), true);
+        forma.setVisible(true); 
+    }//GEN-LAST:event_btnRemover1ActionPerformed
+
+    private void jtItensFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtItensFocusGained
+        btnRemover.setEnabled(true);
+    }//GEN-LAST:event_jtItensFocusGained
+
+    private void btnRemover1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_btnRemover1FocusGained
+        btnRemover.setEnabled(false);
+        jtItens.clearSelection();
+    }//GEN-LAST:event_btnRemover1FocusGained
+
+    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+        btnRemover.setEnabled(false);
+        jtItens.clearSelection();
+        
+        this.limparTabela();
+        this.criarTabela();
+        int contador = 0;
+        for (Comanda c : GerenciadorComandas.comandasAbertas){
+            if (c.getId() == GerenciadorComandas.idSelecionado){
+                GerenciadorComandas.indiceSelecionado = contador;
+            }
+            contador += 1;
+        }
+        lblValorTotal.setText("R$ "+GerenciadorComandas.valorMonetario(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getValor()));
+    }//GEN-LAST:event_formWindowGainedFocus
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -396,6 +461,7 @@ public class EncerrarComanda extends javax.swing.JFrame {
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnConfirmar;
     private javax.swing.JButton btnRemover;
+    private javax.swing.JButton btnRemover1;
     private javax.swing.JLabel btnStringGerenciador;
     private javax.swing.JScrollPane jScrollPane1;
     private static javax.swing.JTable jtItens;

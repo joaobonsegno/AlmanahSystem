@@ -20,6 +20,17 @@ public class Forma {
         this.cliente = c;       
     }
     
+    public Forma clonarComanda(Forma f, Comanda id) {
+        f.setId(this.id);
+        f.setValor(this.valor);
+        f.setFormaPagamento(this.formaPagamento);
+        f.setVenda(this.venda);
+        f.setComanda(id);
+        f.setCliente(this.cliente);
+        return f;
+    }
+    
+    // GETTERS E SETTERS PADRÃO
     public Forma(){}
     
     public int getId() {

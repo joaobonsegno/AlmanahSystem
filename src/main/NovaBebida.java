@@ -410,7 +410,7 @@ public class NovaBebida extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
    
-    public int produtoExiste(Integer idSelecionado){
+    public int getIndiceProduto(Integer idSelecionado){
         boolean flag = true;
         int contador = -1;
         for (Produto p:GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1).getItens()){
@@ -442,7 +442,7 @@ public class NovaBebida extends javax.swing.JFrame {
                     if(Integer.parseInt(prod.getQtdEstoque()) < qtdInt){
                         JOptionPane.showMessageDialog(null, "Quantidade do produto em estoque é insuficiente.");
                     }else{
-                        int indiceDoProduto = produtoExiste(idSelecionado);
+                        int indiceDoProduto = getIndiceProduto(idSelecionado);
                         if (indiceDoProduto != -1){
                             Integer quantidade = Integer.parseInt(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1).getQntEspecifica(indiceDoProduto));
                             quantidade += qtdInt;
@@ -469,17 +469,16 @@ public class NovaBebida extends javax.swing.JFrame {
                         logDao.create(l);
                     }
                 }else{
-                    int indiceDoProduto = produtoExiste(idSelecionado);
+                    int indiceDoProduto = getIndiceProduto(idSelecionado);
                     if (indiceDoProduto != -1){
                         Integer quantidade = Integer.parseInt(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1).getQntEspecifica(indiceDoProduto));
                         quantidade += qtdInt;
                         qtd = Integer.toString(quantidade);
-                        GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1).removerProduto(indiceDoProduto);
-                        GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1).setItens(prod, qtd);
+                        GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1).setItensComVerificacao(prod, qtd);
                         item.update(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1), prod, quantidade);
                         flag = false;
                     }else{
-                        GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1).setItens(prod, qtd);
+                        GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1).setItensComVerificacao(prod, qtd);
                         item.create(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1), prod, qtdInt);
                         flag = false;
                     }

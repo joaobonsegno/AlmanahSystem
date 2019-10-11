@@ -468,6 +468,7 @@ public class FormaPagamentoCarteira extends javax.swing.JDialog {
         btnRemover.setText("  Remover");
         btnRemover.setBorder(new javax.swing.border.MatteBorder(null));
         btnRemover.setBorderPainted(false);
+        btnRemover.setEnabled(false);
         btnRemover.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRemoverActionPerformed(evt);
