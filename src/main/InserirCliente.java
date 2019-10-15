@@ -44,8 +44,8 @@ public class InserirCliente extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Informar Cliente");
-        setMaximumSize(new java.awt.Dimension(494, 243));
-        setMinimumSize(new java.awt.Dimension(494, 243));
+        setMaximumSize(new java.awt.Dimension(528, 252));
+        setMinimumSize(new java.awt.Dimension(528, 252));
         setResizable(false);
 
         lbl1.setBackground(new java.awt.Color(0, 102, 204));
@@ -213,6 +213,7 @@ public class InserirCliente extends javax.swing.JDialog {
             
             // Instanciando a CARTEIRA - o LOG das rotinas de Cateira de clientes
             carteira = new Carteira(GerenciadorComandas.getDataAtualComHoraFormatoBr(), FormaPagamento.valorCobrado, cliente, Login.funcAtual);
+            
             CarteiraDAO carteiraDao = new CarteiraDAO();
             carteiraDao.create(carteira);  
             carteira.setId(carteiraDao.readLast().getId());
@@ -243,13 +244,19 @@ public class InserirCliente extends javax.swing.JDialog {
         if (this.isDigit(cString)){
             ClienteDAO cDao = new ClienteDAO();
             cliente = cDao.readForCpfExato(e);
-            lblNome.setText(cliente.getNome());
-            try{
-                lblDivida.setText("R$ "+GerenciadorComandas.valorMonetario(cliente.getSaldo()));
-            }catch(java.lang.NullPointerException ex){
-                lblDivida.setText("R$ 0,00");
+            if (cliente.getSaldo() != null){
+                lblNome.setText(cliente.getNome());
+                try{
+                    lblDivida.setText("R$ "+GerenciadorComandas.valorMonetario(cliente.getSaldo()));
+                }catch(java.lang.NullPointerException ex){
+                    lblDivida.setText("R$ 0,00");
+                }
+                btnConfirmar.setEnabled(true);
+            }else{
+                lblNome.setText("CLIENTE NÃO ENCONTRADO");
+                lblDivida.setText(" ");
             }
-            btnConfirmar.setEnabled(true);
+            
         }else{
             lblNome.setText("");
             lblDivida.setText("");

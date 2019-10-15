@@ -25,7 +25,6 @@ public class CarteiraDAO {
             stmt.setString(2, c.getData());
             stmt.setInt(3, c.getFuncionario().getIdFuncionario());
             stmt.setInt(4, c.getCliente().getId());
-            
             stmt.executeUpdate();
         }catch(SQLException ex){
             System.err.println("Erro SQL (CREATE do CarteiraDAO): "+ex);

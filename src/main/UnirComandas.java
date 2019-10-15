@@ -261,8 +261,11 @@ public class UnirComandas extends javax.swing.JDialog {
                     contador = 0;
                     // Percorre a lista de PRODUTOS da comanda selecionada, para colocá-los na comanda unificada
                     for (Produto p : c.getItens()){
-                        comandaUnificada.setItensComVerificacao(p, c.getQnt().get(contador));
-                        itemCDao.create(comandaUnificada, p, contador);
+                        if (comandaUnificada.setItensComVerificacao(p, c.getQnt().get(contador))){
+                            itemCDao.update(comandaUnificada, p, Integer.parseInt(comandaUnificada.getQnt().get(comandaUnificada.getQnt().size()-1)));
+                        }else{
+                            itemCDao.create(comandaUnificada, p, Integer.parseInt(comandaUnificada.getQnt().get(comandaUnificada.getQnt().size()-1)));
+                        }                       
                         indicesASeremRemovidos.add(contador);                        
                         contador += 1;
                     }
@@ -295,8 +298,10 @@ public class UnirComandas extends javax.swing.JDialog {
             indice += 1;
         }
         
+        int contador = 0;
         for (int rem : indices){            
-            GerenciadorComandas.comandasAbertas.remove(rem);
+            GerenciadorComandas.comandasAbertas.remove(rem-contador);
+            contador += 1;
         }
         
         dispose();

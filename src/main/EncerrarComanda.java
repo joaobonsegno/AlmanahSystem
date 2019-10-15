@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Comanda;
 import model.bean.Produto;
@@ -10,13 +11,12 @@ import model.dao.PromocaoUmDAO;
 
 public class EncerrarComanda extends javax.swing.JFrame {
     ArrayList<Produto> listaProdutos = new ArrayList<>();
-    public static Comanda comandaSelecionada;
     public static boolean flagValor;
     ProdutoDAO pDao;
     
     public void criarTabela(){
-        Comanda comanda = new Comanda();
-        comanda = comandaSelecionada.clonarComanda(comanda);
+
+        Comanda comanda = GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado);
         PromocaoUmDAO promoDao = new PromocaoUmDAO();
         PromocaoUm promocaoUm = promoDao.read();
         
@@ -64,31 +64,47 @@ public class EncerrarComanda extends javax.swing.JFrame {
     }
     
     public void removerItem(){
-        DefaultTableModel dtmBebidas = (DefaultTableModel) jtItens.getModel();
-        Integer i = jtItens.getSelectedRow();
-        Integer qtdPratos = comandaSelecionada.getPratos().size();
-        Integer qtdProdutos = comandaSelecionada.getItens().size();
-        if (i != -1){  
-            dtmBebidas.removeRow(i);
-            if (i > qtdProdutos-1){
-                Integer j = i;
-                j -= qtdProdutos;
-                comandaSelecionada.removerPrato(j);
+        Comanda comanda = GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado);
+        
+        // Verifica a quantidade de linhas selecionadas. USUÁRIO SÓ PODE REMOVER 1 LINHA (ITEM) POR VEZ
+        if (jtItens.getSelectedRowCount() > 1){
+            JOptionPane.showMessageDialog(null, "Selecione somente 1 (um) item por vez para remover");
+        }else{           
+            DefaultTableModel dtmBebidas = (DefaultTableModel) jtItens.getModel();
+            Integer i = jtItens.getSelectedRow();
+            
+            // Pega da tabela a coluna VALOR do item selecionado, para verificar se o valor pendente da comanda é MENOR do que o valor do item sendo removido
+            Double valorItem = (Double)dtmBebidas.getValueAt(i, 4);
+            if (comanda.getValorPendente() < valorItem){
+                JOptionPane.showMessageDialog(null, "Não foi possível remover o item, pois:\n- O valor pendente da comanda é menor do que o valor do item que está sendo removido");
             }else{
-                comandaSelecionada.removerItem(i);
+                
+                // Caso o valor seja MAIOR, o processo de remoção pode prosseguir
+                Integer qtdProdutos = comanda.getItens().size();
+                if (i != -1){  
+                    dtmBebidas.removeRow(i);
+                    if (i > qtdProdutos-1){
+                        Integer j = i;
+                        j -= qtdProdutos;
+                        comanda.removerPrato(j);
+                    }else{
+                        comanda.removerItem(i);
+                    }
+                }
+                lblValorTotal.setText("R$ "+GerenciadorComandas.valorMonetario(comanda.getValor()));
+                for(Comanda c:GerenciadorComandas.comandasAbertas){
+                    if(comanda.getId() == c.getId()){
+                        c.setValor(comanda.getValor());
+                        c.setValorPendente(comanda.getValorPendente());
+                    }
+                }
+                if (comanda.getValor() == 0){
+                    new GerenciadorComandas().setVisible(true);
+                    dispose();
+                }
             }
-        }
-        lblValorTotal.setText("R$ "+GerenciadorComandas.valorMonetario(EncerrarComanda.comandaSelecionada.getValor()));
-        for(Comanda c:GerenciadorComandas.comandasAbertas){
-            if(comandaSelecionada.getId() == c.getId()){
-                c.setValor(comandaSelecionada.getValor());
-                c.setValorPendente(comandaSelecionada.getValorPendente());
-            }
-        }
-        if (EncerrarComanda.comandaSelecionada.getValor() == 0){
-            new GerenciadorComandas().setVisible(true);
-            dispose();
-        } 
+             
+        }      
     }
     
     public void limparTabela(){
@@ -123,14 +139,8 @@ public class EncerrarComanda extends javax.swing.JFrame {
         jtItens.getColumnModel().getColumn(4).setMaxWidth(120);
       
         String comString = Integer.toString(GerenciadorComandas.idSelecionado);
-        comandaSelecionada = new Comanda();
-        for(Comanda c:GerenciadorComandas.comandasAbertas){
-            if(c.getId() == GerenciadorComandas.idSelecionado){
-                comandaSelecionada = c.clonarComanda(comandaSelecionada);
-            }
-        }
         lblComanda.setText(comString);
-        lblValorTotal.setText("R$ "+GerenciadorComandas.valorMonetario(EncerrarComanda.comandaSelecionada.getValor()));
+        lblValorTotal.setText("R$ "+GerenciadorComandas.valorMonetario(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getValor()));
 
         this.setLocationRelativeTo(null);
         pDao = new ProdutoDAO();

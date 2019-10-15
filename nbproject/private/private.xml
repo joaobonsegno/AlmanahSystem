@@ -4,16 +4,17 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/main/FormaPagamento.java</file>
-            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/main/GerenciadorRelatorios.java</file>
+            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/main/GerenciadorCarteira.java</file>
             <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/main/UnirComandas.java</file>
-            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/main/NovaBebida.java</file>
-            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/model/bean/Forma.java</file>
-            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/model/dao/ComandaDAO.java</file>
-            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/main/Menu.java</file>
+            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/model/dao/FormaCarteiraDAO.java</file>
+            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/model/dao/ClienteDAO.java</file>
+            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/main/CadastrarCliente.java</file>
             <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/model/bean/Comanda.java</file>
-            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/main/GerenciadorEstoque.java</file>
-            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/main/GerenciadorComandas.java</file>
-            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/model/dao/FormaDAO.java</file>
+            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/main/FormaPagamentoCarteira.java</file>
+            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/main/InserirCliente.java</file>
+            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/main/GerenciadorCaixa.java</file>
+            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/main/Menu.java</file>
+            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/model/dao/ItemComandaDAO.java</file>
             <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/main/EncerrarComanda.java</file>
         </group>
     </open-files>

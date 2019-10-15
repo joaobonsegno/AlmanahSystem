@@ -47,7 +47,6 @@ public class FormaPagamento extends javax.swing.JDialog {
             adicionarLinha(f, GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado));
         }
         btnRemover.setEnabled(false);
-        EncerrarComanda.comandaSelecionada.setFormasDePagamento(formas);
         GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).setFormasDePagamento(formas);
        // panelDinheiro();
     }
@@ -87,42 +86,45 @@ public class FormaPagamento extends javax.swing.JDialog {
     }
     
     public void adicionarFormaDePagamento(String formaDePagamento){
-        boolean isCarteira = false;
-        limparSelecao(); // Limpa a seleção da JTable (visual only) 
-        formaPagamento = formaDePagamento; // Seta a forma de pagamento
-        Forma forma = new Forma(valorCobrado, formaPagamento, GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado)); // Instancia a nova forma de pagamento
-            
-        //Seta a forma de pagamento nova na comanda
-        //EncerrarComanda.comandaSelecionada.setForma(forma);
-        GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).setForma(forma);
-        
-        //Chama o método que atualiza o valor pendente e atualiza no banco
-        //EncerrarComanda.comandaSelecionada.reduzirValorPendente();
-        //GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).reduzirValorPendente();
-        //---------------------------------------------------
-
-        lblValorPendente.setText("R$ "+GerenciadorComandas.valorMonetario(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getValorPendente())); // Seta o valor pendente novo no label
-        adicionarLinha(forma, GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado)); // Adiciona à tabela a nova forma de pagamento
-        txtValorASerCobrado.setText("0,00"); // Reseta o campo de entrada de valor recebido
-       
-        //Faz as atualizações no banco
-        FormaDAO formaDao = new FormaDAO();
-        if (formaPagamento.equals("Carteira")){           
-            formaDao.create(forma, InserirCliente.cliente);
-            isCarteira = true;           
+        if (GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getValorPendente() < valorCobrado){
+            JOptionPane.showMessageDialog(null, "Insira um valor menor ou igual a R$"+GerenciadorComandas.valorMonetario(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getValorPendente()));
         }else{
-            formaDao.create(forma);
-        }
-        
-        //Atualiza a CARTEIRA com a ID da forma que acabou de ser criado no banco
-        forma.setId(formaDao.readLast().getId());
-        if (isCarteira){
-            CarteiraDAO carteiraDao = new CarteiraDAO();
-            carteiraDao.updateForma(InserirCliente.carteira, forma);
-        }
-        
-        GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).updateForma(forma);
-        
+            boolean isCarteira = false;
+            limparSelecao(); // Limpa a seleção da JTable (visual only) 
+            formaPagamento = formaDePagamento; // Seta a forma de pagamento
+            Forma forma = new Forma(valorCobrado, formaPagamento, GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado)); // Instancia a nova forma de pagamento
+
+            //Seta a forma de pagamento nova na comanda
+            //EncerrarComanda.comandaSelecionada.setForma(forma);
+            GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).setForma(forma);
+
+            //Chama o método que atualiza o valor pendente e atualiza no banco
+            //EncerrarComanda.comandaSelecionada.reduzirValorPendente();
+            //GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).reduzirValorPendente();
+            //---------------------------------------------------
+
+            lblValorPendente.setText("R$ "+GerenciadorComandas.valorMonetario(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getValorPendente())); // Seta o valor pendente novo no label
+            adicionarLinha(forma, GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado)); // Adiciona à tabela a nova forma de pagamento
+            txtValorASerCobrado.setText("0,00"); // Reseta o campo de entrada de valor recebido
+
+            //Faz as atualizações no banco
+            FormaDAO formaDao = new FormaDAO();
+            if (formaPagamento.equals("Carteira")){           
+                formaDao.create(forma, InserirCliente.cliente);
+                isCarteira = true;           
+            }else{
+                formaDao.create(forma);
+            }
+
+            //Atualiza a CARTEIRA com a ID da forma que acabou de ser criado no banco
+            forma.setId(formaDao.readLast().getId());
+            if (isCarteira){
+                CarteiraDAO carteiraDao = new CarteiraDAO();
+                carteiraDao.updateForma(InserirCliente.carteira, forma);
+            }
+
+            GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).updateForma(forma);
+        }     
     }
     
     @SuppressWarnings("unchecked")

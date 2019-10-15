@@ -116,7 +116,7 @@ public class GerenciadorCarteira extends javax.swing.JFrame {
         btnStringProdutos.setBackground(new java.awt.Color(0, 102, 204));
         btnStringProdutos.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
         btnStringProdutos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btnStringProdutos.setText("Gerenciador de Carteira");
+        btnStringProdutos.setText("Gerenciador de Carteiras");
 
         linha1.setBackground(new java.awt.Color(0, 0, 0));
         linha1.setOpaque(true);

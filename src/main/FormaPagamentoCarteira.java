@@ -101,21 +101,27 @@ public class FormaPagamentoCarteira extends javax.swing.JDialog {
     }
     
     public void adicionarFormaDePagamento(String formaDePagamento){
-        limparSelecao(); // Limpa a seleção da JTable (visual only) 
-        formaPagamento = formaDePagamento; // Seta a forma de pagamento
-        FormaCarteira forma = new FormaCarteira(valorCobrado, formaPagamento, cliente); // Instancia a nova forma de pagamento
-        
-        //Chama o método que atualiza o valor pendente e atualiza no banco
-        cliente.reduzirSaldoPendente(valorCobrado);
-        //---------------------------------------------------
+        if (cliente.getSaldoPendente() < valorCobrado){
+            JOptionPane.showMessageDialog(null, "Insira um valor menor ou igual a R$"+GerenciadorComandas.valorMonetario(cliente.getSaldoPendente()));
+        }else{
+            limparSelecao(); // Limpa a seleção da JTable (visual only) 
+            formaPagamento = formaDePagamento; // Seta a forma de pagamento
+            FormaCarteira forma = new FormaCarteira(valorCobrado, formaPagamento, cliente); // Instancia a nova forma de pagamento
 
-        lblValorPendente.setText("R$ "+GerenciadorComandas.valorMonetario(cliente.getSaldoPendente())); // Seta o valor pendente novo no label
-        adicionarLinha(forma, cliente); // Adiciona à tabela a nova forma de pagamento
-        txtValorASerCobrado.setText("0,00"); // Reseta o campo de entrada de valor recebido
-       
-        //Faz as atualizações no banco
-        FormaCarteiraDAO formaDao = new FormaCarteiraDAO();
-        formaDao.create(forma, cliente);           
+            //Chama o método que atualiza o valor pendente e atualiza no banco
+            cliente.reduzirSaldoPendente(valorCobrado);
+            //---------------------------------------------------
+
+            lblValorPendente.setText("R$ "+GerenciadorComandas.valorMonetario(cliente.getSaldoPendente())); // Seta o valor pendente novo no label
+            txtValorASerCobrado.setText("0,00"); // Reseta o campo de entrada de valor recebido
+
+            //Faz as atualizações no banco
+            FormaCarteiraDAO formaDao = new FormaCarteiraDAO();
+            formaDao.create(forma, cliente);
+            forma.setId(formaDao.readLast().getId());
+            formas.add(forma);
+            adicionarLinha(forma, cliente); // Adiciona à tabela a nova forma de pagamento           
+        }       
     }
     
     @SuppressWarnings("unchecked")
@@ -695,12 +701,14 @@ public class FormaPagamentoCarteira extends javax.swing.JDialog {
         }else{
             DefaultTableModel dtm = (DefaultTableModel) jtPagamento.getModel();            
             Integer id = (Integer)dtm.getValueAt(indice, 2);
+            
             dtm.removeRow(indice);
             FormaCarteira f = formas.get(indice);
             // Deleta a forma do banco da comanda
             FormaCarteiraDAO formaDao = new FormaCarteiraDAO();
             formaDao.delete(id);
             cliente.aumentarSaldoPendente(f.getValor());
+            formas.remove(indice);
            
             // Atualizar o valor da comanda
             lblValorPendente.setText("R$ "+GerenciadorComandas.valorMonetario(cliente.getSaldoPendente()));

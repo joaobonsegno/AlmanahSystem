@@ -30,7 +30,7 @@ public class Menu extends javax.swing.JFrame {
         }
         
         setPromocao();
-        //setFuncionario();      
+        setFuncionario();      
     }
     
     public void setFuncionario(){
@@ -139,6 +139,7 @@ public class Menu extends javax.swing.JFrame {
         estoque.setVisible(false);
         produtos.setVisible(false);
         funcionarios.setVisible(false);
+        estoque.setVisible(true);
         //clientes.setVisible(false);
         financeiro.setVisible(false);
     }

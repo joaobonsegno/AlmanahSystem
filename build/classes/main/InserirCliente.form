@@ -5,10 +5,10 @@
     <Property name="defaultCloseOperation" type="int" value="0"/>
     <Property name="title" type="java.lang.String" value="Informar Cliente"/>
     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[494, 243]"/>
+      <Dimension value="[528, 252]"/>
     </Property>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[494, 243]"/>
+      <Dimension value="[528, 252]"/>
     </Property>
     <Property name="resizable" type="boolean" value="false"/>
   </Properties>

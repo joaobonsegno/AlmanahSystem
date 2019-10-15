@@ -34,6 +34,9 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         getRootPane().setDefaultButton(btnNovaComanda);
         jtComandas.getTableHeader().setFont(new Font("Century Gothic", 1, 14));
+        if (Login.funcAtual.getCargo().getId() == 1){
+            btnEncerrar.setEnabled(false);
+        }
     }
 
     public void limparTabela(){

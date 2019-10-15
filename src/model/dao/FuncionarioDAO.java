@@ -41,7 +41,7 @@ public class FuncionarioDAO {
             stmt.setInt(17, f.getEstado().getId());
             stmt.setInt(18, f.getCargo().getId());
             stmt.executeUpdate();
-            System.out.println("Salvo com sucesso!");
+            //System.out.println("Salvo com sucesso!");
         }catch(SQLException ex){
             System.err.println("Erro SQL: "+ex);
         }finally{

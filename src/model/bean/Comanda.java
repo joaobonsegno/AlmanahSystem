@@ -33,7 +33,7 @@ public class Comanda {
         return idBanco;
     }
 
-    public void setItensComVerificacao(Produto item, String qtd) {
+    public boolean setItensComVerificacao(Produto item, String qtd) {
         PromocaoUmDAO promoUmDao = new PromocaoUmDAO();
         PromocaoUm promoUm = promoUmDao.read();
         ComandaDAO comandaDao = new ComandaDAO();
@@ -53,7 +53,11 @@ public class Comanda {
             Integer quantidade = Integer.parseInt(this.qnt.get(contador));
             quantidade += Integer.parseInt(qtd);
             this.qnt.remove(contador);
-            this.qnt.add(contador, Integer.toString(quantidade));
+            this.itens.remove(contador);
+            this.qnt.add(Integer.toString(quantidade));
+            this.itens.add(item);
+            
+            // Soma ao total da comanda unificada somente a multiplicação da quantidade de itens que já havia na comanda velha
             if (promoUm.getStatus() == 1) {
                 if (item.getCategoria().getNome().equals("Suco")) {
                     total = item.getPrecoComDesconto() * qtdInt;
@@ -63,6 +67,8 @@ public class Comanda {
             } else {
                 total = item.getPreco() * qtdInt;
             }
+            
+            
         } else {
             this.itens.add(item);
             this.qnt.add(qtd);
@@ -79,6 +85,7 @@ public class Comanda {
         }
         atualizarValor(total);
         comandaDao.update(this);
+        return flagExiste;
     }
 
     public void updateForma(Forma f) {

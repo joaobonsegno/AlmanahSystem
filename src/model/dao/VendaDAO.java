@@ -71,8 +71,6 @@ public class VendaDAO {
         ArrayList<Venda> vendas = new ArrayList<>();
         
         try{
-            /*String sql = "SELECT * FROM venda WHERE datediff(str_to_date('"+dataMaior+"','%d/%m/%Y'),str_to_date(data, '%d/%m/%Y')) <= "+this.diferencaDatas(dataMaior, dataMenor)
-                    +" ORDER BY str_to_date(data, '%d/%m/%Y');";*/
             String sql = "SELECT * FROM venda "
                     +    "WHERE str_to_date(data, '%d/%m/%Y') >= str_to_date('"+dataMenor+"','%d/%m/%Y') "
                     +    "AND   str_to_date(data, '%d/%m/%Y') <= str_to_date('"+dataMaior+"','%d/%m/%Y') "
