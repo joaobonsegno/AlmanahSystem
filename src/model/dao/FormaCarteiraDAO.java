@@ -155,10 +155,11 @@ public class FormaCarteiraDAO {
         PreparedStatement stmt = null;
         Integer var = null;
         try{
-            String sql = "UPDATE formaPagamentoCarteira SET idVenda = ? WHERE idFormaPagamentoCarteira = ?";
+            String sql = "UPDATE formaPagamentoCarteira SET idVenda = ?, idCliente = ? WHERE idFormaPagamentoCarteira = ?";
             stmt = con.prepareStatement(sql);
             stmt.setInt(1, f.getVenda().getId());
-            stmt.setInt(2, f.getId());
+            stmt.setNull(2, var == null ? 0 : var);
+            stmt.setInt(3, f.getId());
             stmt.executeUpdate();
             System.out.println("Atualizado com sucesso!");
         }catch(SQLException ex){

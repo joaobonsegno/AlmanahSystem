@@ -125,6 +125,24 @@ public class CarteiraDAO {
         }
     }
     
+    public void deleteForCliente(Cliente c){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        
+        try{
+            String sql = "DELETE FROM carteira WHERE idCliente = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, c.getId());
+            
+            stmt.executeUpdate();
+            //System.out.println("Excluído com sucesso!");
+        }catch(SQLException ex){
+            System.err.println("Erro SQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+    }
+    
     /*public Cliente readForCpf(String cpf){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;

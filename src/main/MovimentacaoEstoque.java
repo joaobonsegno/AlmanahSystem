@@ -12,6 +12,31 @@ public class MovimentacaoEstoque extends javax.swing.JFrame {
     LogDAO logDao;
     public static Produto prodSelecionado;
     
+
+     
+    public MovimentacaoEstoque() {
+       initComponents();       
+       getRootPane().setDefaultButton(btnBuscar);
+       this.setLocationRelativeTo(null);
+       this.formatarTabela();
+       criarTabela();
+    }
+    
+    public void formatarTabela(){
+        jtLogs.setRowHeight(26);
+       jtLogs.getColumnModel().getColumn(0).setPreferredWidth(80); 
+       jtLogs.getColumnModel().getColumn(1).setPreferredWidth(620);
+       jtLogs.getColumnModel().getColumn(2).setPreferredWidth(220);
+        
+       jtLogs.getColumnModel().getColumn(0).setMinWidth(80);
+       jtLogs.getColumnModel().getColumn(1).setMinWidth(620);
+       jtLogs.getColumnModel().getColumn(2).setMinWidth(220);
+        
+       jtLogs.getColumnModel().getColumn(0).setMaxWidth(80);
+       jtLogs.getColumnModel().getColumn(1).setMaxWidth(620);
+       jtLogs.getColumnModel().getColumn(2).setMaxWidth(220);
+    }
+    
     public void criarTabela(){
         DefaultTableModel dtmLogs = (DefaultTableModel) jtLogs.getModel();
         logDao = new LogDAO();
@@ -51,27 +76,6 @@ public class MovimentacaoEstoque extends javax.swing.JFrame {
             dtmLogs.removeRow(0);
         }       
     }
-    
-    
-    public MovimentacaoEstoque() {
-       initComponents();
-       jtLogs.setRowHeight(22);
-       getRootPane().setDefaultButton(btnBuscar);
-       this.setLocationRelativeTo(null);
-       jtLogs.getColumnModel().getColumn(0).setPreferredWidth(80); 
-       jtLogs.getColumnModel().getColumn(1).setPreferredWidth(620);
-       jtLogs.getColumnModel().getColumn(2).setPreferredWidth(220);
-        
-       jtLogs.getColumnModel().getColumn(0).setMinWidth(80);
-       jtLogs.getColumnModel().getColumn(1).setMinWidth(620);
-       jtLogs.getColumnModel().getColumn(2).setMinWidth(220);
-        
-       jtLogs.getColumnModel().getColumn(0).setMaxWidth(80);
-       jtLogs.getColumnModel().getColumn(1).setMaxWidth(620);
-       jtLogs.getColumnModel().getColumn(2).setMaxWidth(220);
-       criarTabela();
-    }
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

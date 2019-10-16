@@ -1,14 +1,13 @@
 package main;
 
 import ArrumarString.Monetarios;
-import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Cliente;
 import model.bean.Comanda;
 import model.bean.Forma;
-import model.bean.Log;
+import model.bean.LogCaixa;
 import model.bean.Produto;
 import model.bean.Venda;
 import model.dao.CaixaDAO;
@@ -18,7 +17,7 @@ import model.dao.ComandaDAO;
 import model.dao.FormaDAO;
 import model.dao.ItemComandaDAO;
 import model.dao.ItemVendaDAO;
-import model.dao.LogDAO;
+import model.dao.LogCaixaDAO;
 import model.dao.VendaDAO;
 
 public class FormaPagamento extends javax.swing.JDialog {
@@ -608,11 +607,20 @@ public class FormaPagamento extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDebitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDebitoActionPerformed
-        String valor = txtValorASerCobrado.getText();
-        valor = valor.replace(".", "");
-        valor = valor.replace(",", ".");
-        valorCobrado = Double.parseDouble(valor);
-        adicionarFormaDePagamento("Débito");         
+        try{
+            String valor = txtValorASerCobrado.getText();
+            if (valor.equals("0,00")){
+                JOptionPane.showMessageDialog(null, "Insira o valor antes de selecionar a forma de pagamento");
+            }else{
+                valor = valor.replace(".", "");
+                valor = valor.replace(",", ".");
+                valorCobrado = Double.parseDouble(valor);
+                adicionarFormaDePagamento("Débito");
+            }            
+        }catch(java.lang.NumberFormatException ex){
+            JOptionPane.showMessageDialog(null, "Insira o valor antes de selecionar a forma de pagamento");
+        }
+                
     }//GEN-LAST:event_btnDebitoActionPerformed
 
     private void btnDinheiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDinheiroActionPerformed
@@ -621,19 +629,35 @@ public class FormaPagamento extends javax.swing.JDialog {
     }//GEN-LAST:event_btnDinheiroActionPerformed
 
     private void btnVoucherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoucherActionPerformed
-        String valor = txtValorASerCobrado.getText();
-        valor = valor.replace(".", "");
-        valor = valor.replace(",", ".");
-        valorCobrado = Double.parseDouble(valor);
-        adicionarFormaDePagamento("Voucher");
+        try{
+            String valor = txtValorASerCobrado.getText();
+            if (valor.equals("0,00")){
+                JOptionPane.showMessageDialog(null, "Insira o valor antes de selecionar a forma de pagamento");
+            }else{
+                valor = valor.replace(".", "");
+                valor = valor.replace(",", ".");
+                valorCobrado = Double.parseDouble(valor);
+                adicionarFormaDePagamento("Voucher");
+            }            
+        }catch(java.lang.NumberFormatException ex){
+            JOptionPane.showMessageDialog(null, "Insira o valor antes de selecionar a forma de pagamento");
+        }
     }//GEN-LAST:event_btnVoucherActionPerformed
 
     private void btnCreditoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreditoActionPerformed
-        String valor = txtValorASerCobrado.getText();
-        valor = valor.replace(".", "");
-        valor = valor.replace(",", ".");
-        valorCobrado = Double.parseDouble(valor);
-        adicionarFormaDePagamento("Crédito");
+        try{
+            String valor = txtValorASerCobrado.getText();
+            if (valor.equals("0,00")){
+                JOptionPane.showMessageDialog(null, "Insira o valor antes de selecionar a forma de pagamento");
+            }else{
+                valor = valor.replace(".", "");
+                valor = valor.replace(",", ".");
+                valorCobrado = Double.parseDouble(valor);
+                adicionarFormaDePagamento("Crédito");
+            }            
+        }catch(java.lang.NumberFormatException ex){
+            JOptionPane.showMessageDialog(null, "Insira o valor antes de selecionar a forma de pagamento");
+        }
     }//GEN-LAST:event_btnCreditoActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
@@ -644,13 +668,13 @@ public class FormaPagamento extends javax.swing.JDialog {
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         // Instancia os objetos necessários para o encerramento da venda
-        Log l = new Log(1);              
+        LogCaixa l = new LogCaixa(1);              
         Venda venda = new Venda();       
         ArrayList<Produto> itens = new ArrayList<>();
         ArrayList<String> qtd = new ArrayList<>();
         
         // Instancia todos os objetos de DAO
-        LogDAO logDao = new LogDAO();
+        LogCaixaDAO logDao = new LogCaixaDAO();
         VendaDAO vendaDao = new VendaDAO();
         FormaDAO formaDao = new FormaDAO();
         ComandaDAO comandaDao = new ComandaDAO();
@@ -658,10 +682,16 @@ public class FormaPagamento extends javax.swing.JDialog {
         ItemComandaDAO iDao = new ItemComandaDAO();
 
         for(Comanda c:GerenciadorComandas.comandasAbertas){
-            if(GerenciadorComandas.idSelecionado == c.getId()){              
+            if(GerenciadorComandas.idSelecionado == c.getId()){  
                 String data = venda.dataAtual();
                 venda.setAtributos(data, c.getValor());
-                vendaDao.create(venda);
+                // Verifica se a comanda tem um cliente associado. Se houver, passa o cliente para a venda
+                if (c.getCliente() != null){
+                    venda.setCliente(c.getCliente());
+                    vendaDao.createComCliente(venda);
+                }else{
+                    vendaDao.create(venda);
+                } 
                 
                 // Após a criação da nova venda no banco, puxa o ID que foi criado e coloca dentro do objeto VENDA que está sendo trabalhado
                 int i = vendaDao.read().size()-1;
@@ -794,11 +824,19 @@ public class FormaPagamento extends javax.swing.JDialog {
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        String valor = txtValorASerCobrado.getText();
-        valor = valor.replace(".", "");
-        valor = valor.replace(",", ".");
-        valorCobrado = Double.parseDouble(valor);
-        adicionarFormaDePagamento("Dinheiro");
+        try{
+            String valor = txtValorASerCobrado.getText();
+            if (valor.equals("0,00")){
+                JOptionPane.showMessageDialog(null, "Insira o valor antes de selecionar a forma de pagamento");
+            }else{
+                valor = valor.replace(".", "");
+                valor = valor.replace(",", ".");
+                valorCobrado = Double.parseDouble(valor);
+                adicionarFormaDePagamento("Dinheiro");
+            }            
+        }catch(java.lang.NumberFormatException ex){
+            JOptionPane.showMessageDialog(null, "Insira o valor antes de selecionar a forma de pagamento");
+        }
     }//GEN-LAST:event_btnAdicionarActionPerformed
     private void jtPagamentoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtPagamentoFocusLost
         
@@ -832,12 +870,21 @@ public class FormaPagamento extends javax.swing.JDialog {
     }//GEN-LAST:event_txtEntregueActionPerformed
 
     private void btnCarteiraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCarteiraActionPerformed
-        String valor = txtValorASerCobrado.getText();
-        valor = valor.replace(".", "");
-        valor = valor.replace(",", ".");
-        valorCobrado = Double.parseDouble(valor);
-        InserirCliente cliente = new InserirCliente(new javax.swing.JFrame(), true);
-        cliente.setVisible(true);
+        try{
+            String valor = txtValorASerCobrado.getText();
+            if (valor.equals("0,00")){
+                JOptionPane.showMessageDialog(null, "Insira o valor antes de selecionar a forma de pagamento");
+            }else{
+                valor = valor.replace(".", "");
+                valor = valor.replace(",", ".");
+                valorCobrado = Double.parseDouble(valor);
+                InserirCliente cliente = new InserirCliente(new javax.swing.JFrame(), true);
+                cliente.setVisible(true);
+            }         
+        }catch(java.lang.NumberFormatException ex){
+            JOptionPane.showMessageDialog(null, "Insira o valor antes de selecionar a forma de pagamento");
+        }
+        
     }//GEN-LAST:event_btnCarteiraActionPerformed
 
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus

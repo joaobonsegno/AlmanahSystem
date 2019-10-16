@@ -51,6 +51,7 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
         cbCategorias.addItem("");
         cbCategorias.addItem("Vendas");
         cbCategorias.addItem("Produtos");
+        cbCategorias.addItem("Fluxo de Caixa");
         //cbCategorias.addItem("");
     }
 
@@ -141,7 +142,7 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(37, 37, 37)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(btnOk1, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -149,7 +150,8 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(lblStringNomeProduto1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cbCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(cbCategorias, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(87, 87, 87))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(20, 20, 20)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -238,6 +240,17 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
                 try{
                     if (v.diferencaDatas(GerenciadorRelatorios.dMaior, GerenciadorRelatorios.dMenor) >= 0) {
                         new RelatorioProdutos().setVisible(true);
+                        dispose();
+                    }else {
+                        JOptionPane.showMessageDialog(null, "A data inicial deve ser maior ou igual à data final");
+                    }
+                }catch (java.lang.NullPointerException ex) {
+                    JOptionPane.showMessageDialog(null, "Informe as datas inicial e final");
+                } break;
+            case 3:
+                try{
+                    if (v.diferencaDatas(GerenciadorRelatorios.dMaior, GerenciadorRelatorios.dMenor) >= 0) {
+                        new RelatorioFluxoDeCaixa().setVisible(true);
                         dispose();
                     }else {
                         JOptionPane.showMessageDialog(null, "A data inicial deve ser maior ou igual à data final");

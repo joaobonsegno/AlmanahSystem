@@ -180,10 +180,6 @@ public class DarEntrada extends javax.swing.JDialog {
         Log l = new Log();
         l.setCategoria("Estoque");
         l.setData(l.dataAtual());
-        l.setSaldo(0.0);
-        l.setStatus(0);
-        l.setTipo("");
-        l.setValor(0.0);
         
         String qtdAtualS = prod.getQtdEstoque();
         String qtdAdicionadaS = txtEntrada.getText();

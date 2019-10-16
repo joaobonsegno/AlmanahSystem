@@ -1,28 +1,19 @@
 package main;
 
 import ArrumarString.Monetarios;
-import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Cliente;
-import model.bean.Comanda;
-import model.bean.Forma;
 import model.bean.FormaCarteira;
-import model.bean.Log;
-import model.bean.Produto;
-import model.bean.Venda;
+import model.bean.LogCaixa;
 import model.bean.VendaCarteira;
 import model.dao.CaixaDAO;
+import model.dao.CarteiraDAO;
 import model.dao.ClienteDAO;
-import model.dao.ComandaDAO;
 import model.dao.FormaCarteiraDAO;
-import model.dao.FormaDAO;
-import model.dao.ItemComandaDAO;
-import model.dao.ItemVendaDAO;
-import model.dao.LogDAO;
+import model.dao.LogCaixaDAO;
 import model.dao.VendaCarteiraDAO;
-import model.dao.VendaDAO;
 
 public class FormaPagamentoCarteira extends javax.swing.JDialog {
     Integer formaPag;
@@ -620,21 +611,23 @@ public class FormaPagamentoCarteira extends javax.swing.JDialog {
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         // Instancia os objetos necessários para o encerramento da venda
-        Log l = new Log(1);              
+        LogCaixa l = new LogCaixa(1);              
         VendaCarteira venda = new VendaCarteira();       
         
         // Instancia todos os objetos de DAO
-        LogDAO logDao = new LogDAO();
+        LogCaixaDAO logDao = new LogCaixaDAO();
         VendaCarteiraDAO vendaDao = new VendaCarteiraDAO();
         FormaCarteiraDAO formaDao = new FormaCarteiraDAO();
         CaixaDAO caixaDao = new CaixaDAO();
         ClienteDAO cDao = new ClienteDAO();
+        CarteiraDAO cartDao = new CarteiraDAO();
              
         String data = venda.dataAtual();
         venda.setAtributos(data, cliente.getSaldo());
         venda.setCaixa(Login.caixaAtual);
         venda.setCliente(cliente);
         vendaDao.create(venda);
+        cartDao.deleteForCliente(cliente);
 
         // Após a criação da nova venda no banco, puxa o ID que foi criado e coloca dentro do objeto VENDA que está sendo trabalhado
         venda.setId(vendaDao.readLast().getId());

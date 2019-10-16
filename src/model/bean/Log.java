@@ -5,15 +5,10 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Log {
-    private Integer id, status;
-    private String descricao, categoria, data, tipo;
-    private Double saldo, valor;
+    private Integer id;
+    private String descricao, categoria, data;
     
     public Log(){}
-    
-    public Log(Integer status){
-        this.status = status;
-    }
     
     public Integer getId() {
         return id;
@@ -45,38 +40,6 @@ public class Log {
 
     public void setData(String data) {
         this.data = data;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public Double getSaldo() {
-        return saldo;
-    }
-
-    public void setSaldo(Double saldo) {
-        this.saldo = saldo;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public Double getValor() {
-        return valor;
-    }
-
-    public void setValor(Double valor) {
-        this.valor = valor;
     }
     
     public String dataAtual(){

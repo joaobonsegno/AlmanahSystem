@@ -33,6 +33,27 @@ public class VendaDAO {
         }
     }
     
+    public void createComCliente(Venda v){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        
+        try{
+            String sql = "INSERT INTO venda (data, total, idCaixa, idCliente)VALUES(?,?,?,?)";
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, v.getData());
+            stmt.setDouble(2, v.getTotal());
+            stmt.setInt(3, Login.caixaAtual.getIdCaixa());
+            stmt.setInt(4, v.getCliente().getId());
+            
+            stmt.executeUpdate();
+            System.out.println("Salvo com sucesso!");
+        }catch(SQLException ex){
+            System.err.println("Erro no CREATE da Venda: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+    }
+    
     public ArrayList<Venda> read(){
         CaixaDAO caixaDao = new CaixaDAO();
         Connection con = ConnectionFactory.getConnection();

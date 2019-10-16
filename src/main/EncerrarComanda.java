@@ -10,9 +10,33 @@ import model.dao.ProdutoDAO;
 import model.dao.PromocaoUmDAO;
 
 public class EncerrarComanda extends javax.swing.JFrame {
-    ArrayList<Produto> listaProdutos = new ArrayList<>();
     public static boolean flagValor;
-    ProdutoDAO pDao;
+ 
+    public EncerrarComanda() {
+        initComponents(); 
+        this.setLocationRelativeTo(null);
+        
+        
+        //Seta as informações da tela
+        String comString = Integer.toString(GerenciadorComandas.idSelecionado);
+        lblComanda.setText(comString);
+        lblValorTotal.setText("R$ "+GerenciadorComandas.valorMonetario(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getValor()));
+
+        //Cria a tabela
+        this.formatarTabela();
+        this.criarTabela();
+        
+        //Seta a formatação da tela
+        if (GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getCliente() != null){
+            lblNome.setVisible(true);
+            lblNome.setText(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getCliente().getNome());
+        }else{
+            lblNome.setVisible(false);
+        }
+        btnRemover.setEnabled(false);
+        
+
+    }
     
     public void criarTabela(){
 
@@ -35,10 +59,10 @@ public class EncerrarComanda extends javax.swing.JFrame {
                 dtmBebidas.addRow(
                         new Object[]{
                             p.getIdProduto(),
-                            qnt.get(i),
                             p.getNome(),
-                            valor,
-                            valor2}
+                            qnt.get(i),                           
+                            "R$  "+valor,
+                            "R$  "+valor2}
                     );
                 i+=1;
                       
@@ -50,17 +74,12 @@ public class EncerrarComanda extends javax.swing.JFrame {
             dtmBebidas.addRow(
                     new Object[]{
                         "X",
-                        "1",
                         "Refeição Geral",
-                        valor,
-                        valor2}
+                        "1",                        
+                        "R$  "+valor,
+                        "R$  "+valor2}
                 );
         }
-    }
-    
-    public Integer pegarItemSelecionado(){
-        Integer i = jtItens.getSelectedRow();
-        return i;
     }
     
     public void removerItem(){
@@ -116,44 +135,25 @@ public class EncerrarComanda extends javax.swing.JFrame {
         }       
     }
     
-    public EncerrarComanda() {
-        initComponents();
-        //btnRemover.setEnabled(false);
+    public void formatarTabela(){
         jtItens.setRowHeight(40);
         jtItens.getColumnModel().getColumn(0).setPreferredWidth(80); //ID
-        jtItens.getColumnModel().getColumn(1).setPreferredWidth(80); //QTD
-        jtItens.getColumnModel().getColumn(2).setPreferredWidth(412); // NOME
-        jtItens.getColumnModel().getColumn(3).setPreferredWidth(100); // UNITARIO
-        jtItens.getColumnModel().getColumn(4).setPreferredWidth(120); // TOTAL
+        jtItens.getColumnModel().getColumn(1).setPreferredWidth(420); //NOME
+        jtItens.getColumnModel().getColumn(2).setPreferredWidth(80); // QTD
+        jtItens.getColumnModel().getColumn(3).setPreferredWidth(120); // UNITARIO
+        jtItens.getColumnModel().getColumn(4).setPreferredWidth(140); // TOTAL
         
         jtItens.getColumnModel().getColumn(0).setMinWidth(80); //ID
-        jtItens.getColumnModel().getColumn(1).setMinWidth(80); //QTD
-        jtItens.getColumnModel().getColumn(2).setMinWidth(412); // NOME
-        jtItens.getColumnModel().getColumn(3).setMinWidth(100); // UNITARIO
-        jtItens.getColumnModel().getColumn(4).setMinWidth(120);
+        jtItens.getColumnModel().getColumn(1).setMinWidth(420); //NOME
+        jtItens.getColumnModel().getColumn(2).setMinWidth(80); // QTD
+        jtItens.getColumnModel().getColumn(3).setMinWidth(120); // UNITARIO
+        jtItens.getColumnModel().getColumn(4).setMinWidth(140); // TOTAL
         
         jtItens.getColumnModel().getColumn(0).setMaxWidth(80); //ID
-        jtItens.getColumnModel().getColumn(1).setMaxWidth(80); //QTD
-        jtItens.getColumnModel().getColumn(2).setMaxWidth(412); // NOME
-        jtItens.getColumnModel().getColumn(3).setMaxWidth(100); // UNITARIO
-        jtItens.getColumnModel().getColumn(4).setMaxWidth(120);
-      
-        String comString = Integer.toString(GerenciadorComandas.idSelecionado);
-        lblComanda.setText(comString);
-        lblValorTotal.setText("R$ "+GerenciadorComandas.valorMonetario(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getValor()));
-
-        this.setLocationRelativeTo(null);
-        pDao = new ProdutoDAO();
-        
-        for (Produto p: pDao.read()){
-            listaProdutos.add(p);
-        }
-        criarTabela();
-        getRootPane().setDefaultButton(btnConfirmar);
-        btnRemover.setEnabled(false);
-        /*JFormattedTextField tf = ((JSpinner.DefaultEditor) SpinnerQtd.getEditor()).getTextField();
-        tf.setEditable(false);
-        SpinnerQtd.setModel(nm);*/
+        jtItens.getColumnModel().getColumn(1).setMaxWidth(420); //NOME
+        jtItens.getColumnModel().getColumn(2).setMaxWidth(80); // QTD
+        jtItens.getColumnModel().getColumn(3).setMaxWidth(120); // UNITARIO
+        jtItens.getColumnModel().getColumn(4).setMaxWidth(140); // TOTAL
     }
 
     @SuppressWarnings("unchecked")
@@ -163,20 +163,25 @@ public class EncerrarComanda extends javax.swing.JFrame {
         btnStringGerenciador = new javax.swing.JLabel();
         linha1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
         linha2 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jtItens = new javax.swing.JTable();
-        btnConfirmar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         lblStringComanda = new javax.swing.JLabel();
         lblComanda = new javax.swing.JLabel();
-        lblStringValorTotal = new javax.swing.JLabel();
-        lblValorTotal = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        btnUnirComandas1 = new javax.swing.JButton();
+        btnUnirComandas = new javax.swing.JButton();
+        lblNome = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtItens = new javax.swing.JTable();
         btnRemover = new javax.swing.JButton();
-        btnRemover1 = new javax.swing.JButton();
+        lblValorTotal = new javax.swing.JLabel();
+        lblStringValorTotal = new javax.swing.JLabel();
+        btnConfirmar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Encerramento de Comanda");
-        setMinimumSize(new java.awt.Dimension(873, 593));
+        setMaximumSize(new java.awt.Dimension(874, 634));
+        setMinimumSize(new java.awt.Dimension(874, 634));
         setResizable(false);
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
             public void windowGainedFocus(java.awt.event.WindowEvent evt) {
@@ -197,51 +202,6 @@ public class EncerrarComanda extends javax.swing.JFrame {
         linha2.setBackground(new java.awt.Color(0, 0, 0));
         linha2.setOpaque(true);
 
-        jtItens.setBorder(new javax.swing.border.MatteBorder(null));
-        jtItens.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        jtItens.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "ID", "Qtd", "Nome", "Unitário", "Total"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jtItens.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jtItensFocusGained(evt);
-            }
-        });
-        jScrollPane1.setViewportView(jtItens);
-        if (jtItens.getColumnModel().getColumnCount() > 0) {
-            jtItens.getColumnModel().getColumn(0).setResizable(false);
-            jtItens.getColumnModel().getColumn(1).setResizable(false);
-            jtItens.getColumnModel().getColumn(2).setResizable(false);
-            jtItens.getColumnModel().getColumn(3).setResizable(false);
-            jtItens.getColumnModel().getColumn(4).setResizable(false);
-        }
-
-        btnConfirmar.setBackground(new java.awt.Color(0, 153, 0));
-        btnConfirmar.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        btnConfirmar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\continuar.png")); // NOI18N
-        btnConfirmar.setText("  Continuar");
-        btnConfirmar.setBorder(new javax.swing.border.MatteBorder(null));
-        btnConfirmar.setBorderPainted(false);
-        btnConfirmar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnConfirmarActionPerformed(evt);
-            }
-        });
-
-        btnCancelar.setBackground(new java.awt.Color(204, 0, 0));
         btnCancelar.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         btnCancelar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\voltar (2).png")); // NOI18N
         btnCancelar.setText("  Voltar");
@@ -263,15 +223,103 @@ public class EncerrarComanda extends javax.swing.JFrame {
         lblComanda.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblComanda.setText("X");
 
-        lblStringValorTotal.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        lblStringValorTotal.setText("Valor Total");
+        btnUnirComandas1.setBackground(new java.awt.Color(204, 204, 0));
+        btnUnirComandas1.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        btnUnirComandas1.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\link (1).png")); // NOI18N
+        btnUnirComandas1.setText(" Associar Cliente");
+        btnUnirComandas1.setBorder(new javax.swing.border.MatteBorder(null));
+        btnUnirComandas1.setBorderPainted(false);
+        btnUnirComandas1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                btnUnirComandas1FocusGained(evt);
+            }
+        });
+        btnUnirComandas1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUnirComandas1ActionPerformed(evt);
+            }
+        });
 
-        lblValorTotal.setFont(new java.awt.Font("Century Gothic", 0, 22)); // NOI18N
-        lblValorTotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblValorTotal.setText("R$ 0,00");
-        lblValorTotal.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(0, 0, 0)));
+        btnUnirComandas.setBackground(new java.awt.Color(0, 153, 204));
+        btnUnirComandas.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        btnUnirComandas.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\turno.png")); // NOI18N
+        btnUnirComandas.setText("  Unir Comandas");
+        btnUnirComandas.setBorder(new javax.swing.border.MatteBorder(null));
+        btnUnirComandas.setBorderPainted(false);
+        btnUnirComandas.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                btnUnirComandasFocusGained(evt);
+            }
+        });
+        btnUnirComandas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUnirComandasActionPerformed(evt);
+            }
+        });
 
-        btnRemover.setBackground(new java.awt.Color(153, 153, 0));
+        lblNome.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
+        lblNome.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblNome.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnUnirComandas, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnUnirComandas1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnUnirComandas1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnUnirComandas, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        jtItens.setBorder(new javax.swing.border.MatteBorder(null));
+        jtItens.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        jtItens.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Nome", "Qtd", "Unitário", "Total"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jtItens.getTableHeader().setReorderingAllowed(false);
+        jtItens.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtItensFocusGained(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jtItens);
+        if (jtItens.getColumnModel().getColumnCount() > 0) {
+            jtItens.getColumnModel().getColumn(0).setResizable(false);
+            jtItens.getColumnModel().getColumn(1).setResizable(false);
+            jtItens.getColumnModel().getColumn(2).setResizable(false);
+            jtItens.getColumnModel().getColumn(3).setResizable(false);
+            jtItens.getColumnModel().getColumn(4).setResizable(false);
+        }
+
+        btnRemover.setBackground(new java.awt.Color(204, 0, 51));
         btnRemover.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         btnRemover.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\delete.png")); // NOI18N
         btnRemover.setText("  Remover");
@@ -284,98 +332,115 @@ public class EncerrarComanda extends javax.swing.JFrame {
             }
         });
 
-        btnRemover1.setBackground(new java.awt.Color(0, 153, 204));
-        btnRemover1.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        btnRemover1.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\turno.png")); // NOI18N
-        btnRemover1.setText("  Unir Comandas");
-        btnRemover1.setBorder(new javax.swing.border.MatteBorder(null));
-        btnRemover1.setBorderPainted(false);
-        btnRemover1.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                btnRemover1FocusGained(evt);
-            }
-        });
-        btnRemover1.addActionListener(new java.awt.event.ActionListener() {
+        lblValorTotal.setFont(new java.awt.Font("Century Gothic", 0, 30)); // NOI18N
+        lblValorTotal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblValorTotal.setText("R$ 0,00");
+        lblValorTotal.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(0, 0, 0)));
+
+        lblStringValorTotal.setFont(new java.awt.Font("Century Gothic", 0, 25)); // NOI18N
+        lblStringValorTotal.setText("Valor Total");
+
+        btnConfirmar.setBackground(new java.awt.Color(0, 153, 0));
+        btnConfirmar.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        btnConfirmar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\continuar.png")); // NOI18N
+        btnConfirmar.setText("  Pagamento");
+        btnConfirmar.setBorder(new javax.swing.border.MatteBorder(null));
+        btnConfirmar.setBorderPainted(false);
+        btnConfirmar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemover1ActionPerformed(evt);
+                btnConfirmarActionPerformed(evt);
             }
         });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lblValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(lblStringValorTotal)
+                        .addGap(220, 220, 220)))
+                .addGap(4, 4, 4))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 848, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lblStringValorTotal)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(lblStringComanda)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(lblComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(107, 107, 107)
-                            .addComponent(btnStringGerenciador, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(36, 36, 36)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(btnRemover1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(133, 133, 133)
-                                    .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(lblStringValorTotal)
-                                        .addComponent(lblValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 798, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(244, 244, 244)
-                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(99, 99, 99)
-                        .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(41, Short.MAX_VALUE))
+                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(147, 147, 147)
+                .addComponent(btnStringGerenciador, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(110, 110, 110)
+                .addComponent(lblStringComanda)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, 875, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(linha1, javax.swing.GroupLayout.DEFAULT_SIZE, 874, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addComponent(linha2, javax.swing.GroupLayout.PREFERRED_SIZE, 874, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 1, Short.MAX_VALUE)))
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblStringComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnStringGerenciador))
-                .addGap(40, 40, 40)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblStringValorTotal)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnRemover1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(35, Short.MAX_VALUE))
+                    .addComponent(btnStringGerenciador)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(22, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(67, 67, 67)
                     .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(575, Short.MAX_VALUE)))
+                    .addContainerGap(566, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(linha2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(631, Short.MAX_VALUE)))
+                    .addContainerGap(620, Short.MAX_VALUE)))
         );
 
         pack();
@@ -398,21 +463,28 @@ public class EncerrarComanda extends javax.swing.JFrame {
         removerItem();
     }//GEN-LAST:event_btnRemoverActionPerformed
 
-    private void btnRemover1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemover1ActionPerformed
+    private void btnUnirComandasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnirComandasActionPerformed
         UnirComandas forma = new UnirComandas(new javax.swing.JFrame(), true);
         forma.setVisible(true); 
-    }//GEN-LAST:event_btnRemover1ActionPerformed
+    }//GEN-LAST:event_btnUnirComandasActionPerformed
 
     private void jtItensFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtItensFocusGained
         btnRemover.setEnabled(true);
     }//GEN-LAST:event_jtItensFocusGained
 
-    private void btnRemover1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_btnRemover1FocusGained
+    private void btnUnirComandasFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_btnUnirComandasFocusGained
         btnRemover.setEnabled(false);
         jtItens.clearSelection();
-    }//GEN-LAST:event_btnRemover1FocusGained
+    }//GEN-LAST:event_btnUnirComandasFocusGained
 
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+        if (GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getCliente() != null){
+            lblNome.setVisible(true);
+            lblNome.setText(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getCliente().getNome());
+        }else{
+            lblNome.setVisible(false);
+        }
+        
         btnRemover.setEnabled(false);
         jtItens.clearSelection();
         
@@ -427,6 +499,15 @@ public class EncerrarComanda extends javax.swing.JFrame {
         }
         lblValorTotal.setText("R$ "+GerenciadorComandas.valorMonetario(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getValor()));
     }//GEN-LAST:event_formWindowGainedFocus
+
+    private void btnUnirComandas1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_btnUnirComandas1FocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnUnirComandas1FocusGained
+
+    private void btnUnirComandas1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnirComandas1ActionPerformed
+        AssociarCliente forma = new AssociarCliente(new javax.swing.JFrame(), true);
+        forma.setVisible(true);
+    }//GEN-LAST:event_btnUnirComandas1ActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -471,11 +552,15 @@ public class EncerrarComanda extends javax.swing.JFrame {
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnConfirmar;
     private javax.swing.JButton btnRemover;
-    private javax.swing.JButton btnRemover1;
     private javax.swing.JLabel btnStringGerenciador;
+    private javax.swing.JButton btnUnirComandas;
+    private javax.swing.JButton btnUnirComandas1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private static javax.swing.JTable jtItens;
     public static javax.swing.JLabel lblComanda;
+    private javax.swing.JLabel lblNome;
     public static javax.swing.JLabel lblStringComanda;
     private javax.swing.JLabel lblStringValorTotal;
     private javax.swing.JLabel lblValorTotal;

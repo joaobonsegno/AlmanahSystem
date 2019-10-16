@@ -30,7 +30,6 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
         
         for (Produto prod : pDao.read()){
             ordenador.add(prod);
-            System.out.println("Produto: "+prod.getIdProduto());
         }
         Collections.sort(ordenador);
         

@@ -395,10 +395,6 @@ public class NovaSobremesa extends javax.swing.JFrame {
                         l.setCategoria("Estoque");
                         l.setData(l.dataAtual());
                         l.setDescricao("João retirou "+qtd+" de \""+prod.getNome()+"\" do estoque");
-                        l.setSaldo(0.0);
-                        l.setStatus(0);
-                        l.setTipo("");
-                        l.setValor(0.0);
                         logDao.create(l);
                     }
                 }else{
@@ -426,7 +422,7 @@ public class NovaSobremesa extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        new GerenciadorComandas().setVisible(true);
+        
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 

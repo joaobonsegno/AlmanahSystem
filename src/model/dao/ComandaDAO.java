@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import model.bean.Cliente;
 import model.bean.Comanda;
 
 public class ComandaDAO {
@@ -37,6 +38,7 @@ public class ComandaDAO {
         ArrayList<Comanda> comandas = new ArrayList<>();
         ComandaDAO cDao = new ComandaDAO();
         ItemComandaDAO iDao = new ItemComandaDAO();
+        ClienteDAO clienteDao = new ClienteDAO();
         
         try{
             stmt = con.prepareStatement("SELECT * FROM comanda");
@@ -50,6 +52,12 @@ public class ComandaDAO {
                 c.setStatus(rs.getInt("status"));
                 c.setId(rs.getInt("idSistema"));
 
+                for (Cliente cliente : clienteDao.read()){
+                    if (cliente.getId() == rs.getInt("idCliente")){
+                        c.setCliente(cliente);
+                    }
+                }
+                
                 comandas.add(c);
             }
         }catch(SQLException ex){
@@ -133,6 +141,25 @@ public class ComandaDAO {
             stmt.executeUpdate();
         }catch(SQLException ex){
             System.err.println("Erro SQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+    }
+    
+    public void updateCliente(Comanda c){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        
+        try{
+            String sql = "UPDATE comanda SET idCliente = ? WHERE idComanda = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setDouble(1, c.getCliente().getId());
+            stmt.setInt(2, c.getIdBanco());
+            
+            stmt.executeUpdate();
+            //System.out.println("Atualizado com sucesso!");
+        }catch(SQLException ex){
+            System.err.println("Erro ao atualizar: "+ex);
         }finally{
             ConnectionFactory.closeConnection(con, stmt);
         }

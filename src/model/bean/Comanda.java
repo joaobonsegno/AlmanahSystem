@@ -18,6 +18,7 @@ public class Comanda {
     private FormaDAO fDao;
     private ItemComandaDAO itemDao;
     private ComandaDAO cDao;
+    private Cliente cliente;
 
     public Comanda(Integer id) {
         this.id = id;
@@ -307,5 +308,13 @@ public class Comanda {
 
     public void setValorPendente(Double valorPendente) {
         this.valorPendente = valorPendente;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 }

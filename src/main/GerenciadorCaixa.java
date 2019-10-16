@@ -37,7 +37,7 @@ public class GerenciadorCaixa extends javax.swing.JFrame {
             btnAbrirCaixa.setText(" Fechar Caixa");
             lblStatus.setText("Aberto");
             //lblStatus.setForeground(Color.getHSBColor(112,43,93));
-            lblStatus.setForeground(Color.green);
+            lblStatus.setForeground(new java.awt.Color(51, 204, 0));
             btnSuprimento.setEnabled(true);
             btnSangria.setEnabled(true);
             lblData.setText(Login.caixaAtual.getDataAbertura());

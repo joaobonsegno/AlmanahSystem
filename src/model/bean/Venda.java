@@ -10,6 +10,7 @@ public class Venda {
     private Double total;
     private String data;
     private Caixa caixa;
+    private Cliente cliente;
     private ArrayList<Produto> itens = new ArrayList<>();
     private ArrayList<String> qnt = new ArrayList<>();
     private ArrayList<Double> pratos = new ArrayList<>();
@@ -83,5 +84,13 @@ public class Venda {
 
     public void setCaixa(Caixa caixa) {
         this.caixa = caixa;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 }
