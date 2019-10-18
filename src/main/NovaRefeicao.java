@@ -211,7 +211,7 @@ public class NovaRefeicao extends javax.swing.JDialog {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();   
-        new GerenciadorComandas().setVisible(true);
+        
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void cbBuffetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbBuffetMouseClicked
@@ -234,9 +234,9 @@ public class NovaRefeicao extends javax.swing.JDialog {
         //try{
             String valor = txtEntradaPreco.getText();
             valor = valor.replace("." , "");
+            valor = valor.replace(",", ".");
             ItemComandaDAO item = new ItemComandaDAO();
             if (cbPeso.isSelected()){
-                valor = GerenciadorComandas.tornarCompativel(valor);
                 //preco = GerenciadorComandas.arredondarValor(preco);
                 Double precoPrato = Double.parseDouble(valor);
                 GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1).setPratos(precoPrato);
@@ -246,15 +246,7 @@ public class NovaRefeicao extends javax.swing.JDialog {
                 GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1).setPratos(24.90);
                 item.create(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1), 24.90);
             }
-            //new GerenciadorComandas().setVisible(true);
             dispose();
-        /*catch(java.lang.NumberFormatException ex){
-            System.out.println(ex);
-            if(txtEntradaPreco.getText().equals("")){
-                JOptionPane.showMessageDialog(null, "Insira o valor do prato!");
-            }else{
-                JOptionPane.showMessageDialog(null, "Valor inválido!");
-            }*/
 
     }//GEN-LAST:event_btnConfirmarActionPerformed
 

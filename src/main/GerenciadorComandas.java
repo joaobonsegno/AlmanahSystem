@@ -76,6 +76,13 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         return dataFormatada;
     }
     
+    public static String getDataAtualSemHoraFormatoBr(){
+        Calendar data = new GregorianCalendar();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String dataFormatada = sdf.format(data.getTime());
+        return dataFormatada;
+    }
+    
     public static String tornarCompativel(String valor){
         boolean flag = true;
         valor = new StringBuilder(valor).reverse().toString();
@@ -623,7 +630,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
             }    
         }catch(java.lang.NumberFormatException|java.lang.NullPointerException ex){
             lblErro.setVisible(true);
-        }
+        }catch(java.util.ConcurrentModificationException ex){}
     }//GEN-LAST:event_btnEncerrarActionPerformed
 
     private void btnRefeicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefeicaoActionPerformed

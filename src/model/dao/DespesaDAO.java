@@ -38,12 +38,12 @@ public class DespesaDAO {
         ArrayList<Despesa> despesas = new ArrayList<>();
         
         try{
-            stmt = con.prepareStatement("SELECT * FROM promocao");
+            stmt = con.prepareStatement("SELECT * FROM despesa");
             rs = stmt.executeQuery();
             while (rs.next()){
                 Despesa d = new Despesa();
                 
-                d.setId(rs.getInt("idPromocao"));
+                d.setId(rs.getInt("idDespesa"));
                 d.setDescricao(rs.getString("descricao"));
                 d.setValor(rs.getDouble("valor"));
                 d.setData(rs.getString("data"));

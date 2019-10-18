@@ -93,7 +93,11 @@ public class EncerrarComanda extends javax.swing.JFrame {
             Integer i = jtItens.getSelectedRow();
             
             // Pega da tabela a coluna VALOR do item selecionado, para verificar se o valor pendente da comanda é MENOR do que o valor do item sendo removido
-            Double valorItem = (Double)dtmBebidas.getValueAt(i, 4);
+            String valorBruto = (String)dtmBebidas.getValueAt(i, 4);
+            valorBruto = valorBruto.replace(",", ".");
+            valorBruto = valorBruto.replace("R$", "");
+            valorBruto = valorBruto.replace(" ", "");
+            Double valorItem = Double.parseDouble(valorBruto);
             if (comanda.getValorPendente() < valorItem){
                 JOptionPane.showMessageDialog(null, "Não foi possível remover o item, pois:\n- O valor pendente da comanda é menor do que o valor do item que está sendo removido");
             }else{
@@ -111,18 +115,12 @@ public class EncerrarComanda extends javax.swing.JFrame {
                     }
                 }
                 lblValorTotal.setText("R$ "+GerenciadorComandas.valorMonetario(comanda.getValor()));
-                for(Comanda c:GerenciadorComandas.comandasAbertas){
-                    if(comanda.getId() == c.getId()){
-                        c.setValor(comanda.getValor());
-                        c.setValorPendente(comanda.getValorPendente());
-                    }
-                }
+
                 if (comanda.getValor() == 0){
                     new GerenciadorComandas().setVisible(true);
                     dispose();
                 }
             }
-             
         }      
     }
     

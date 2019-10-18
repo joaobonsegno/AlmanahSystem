@@ -3,14 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/relatorio/RelatorioFluxo.java</file>
-            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/model/dao/FormaCarteiraDAO.java</file>
+            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/main/RelatorioVendas.java</file>
+            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/main/GerenciadorDespesa.java</file>
+            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/main/UnirComandas.java</file>
             <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/main/Menu.java</file>
-            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/main/RelatorioFluxoDeCaixa.java</file>
-            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/model/dao/RelatorioFluxoDAO.java</file>
-            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/main/FormaPagamentoCarteira.java</file>
-            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/model/dao/CarteiraDAO.java</file>
-            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/model/dao/FormaDAO.java</file>
+            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/model/dao/AgendaDespesaDAO.java</file>
+            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/main/AssociarCliente.java</file>
+            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/main/GerenciadorCardapios.java</file>
+            <file>file:/C:/Projetos%20Netbeans/AlmanahSystem/src/main/CriarDespesa.java</file>
         </group>
     </open-files>
 </project-private>

@@ -198,6 +198,7 @@ public class Menu extends javax.swing.JFrame {
         financeiro = new javax.swing.JMenu();
         financeiro_promocoes = new javax.swing.JMenuItem();
         financeiro_despesas = new javax.swing.JMenuItem();
+        financeiro_despesas1 = new javax.swing.JMenuItem();
         financeiro_relatorios = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -453,6 +454,16 @@ public class Menu extends javax.swing.JFrame {
         });
         financeiro.add(financeiro_despesas);
 
+        financeiro_despesas1.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        financeiro_despesas1.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\calendar (2).png")); // NOI18N
+        financeiro_despesas1.setText("Agendar Despesa");
+        financeiro_despesas1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                financeiro_despesas1ActionPerformed(evt);
+            }
+        });
+        financeiro.add(financeiro_despesas1);
+
         financeiro_relatorios.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
         financeiro_relatorios.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\relatorio (1).png")); // NOI18N
         financeiro_relatorios.setText("Relatórios");
@@ -623,6 +634,11 @@ public class Menu extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_clientes_carteiraActionPerformed
 
+    private void financeiro_despesas1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_financeiro_despesas1ActionPerformed
+        new GerenciadorDespesa().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_financeiro_despesas1ActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -667,6 +683,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JMenuItem estoque_movimentacao;
     private javax.swing.JMenu financeiro;
     private javax.swing.JMenuItem financeiro_despesas;
+    private javax.swing.JMenuItem financeiro_despesas1;
     private javax.swing.JMenuItem financeiro_promocoes;
     private javax.swing.JMenuItem financeiro_relatorios;
     private javax.swing.JMenu funcionarios;

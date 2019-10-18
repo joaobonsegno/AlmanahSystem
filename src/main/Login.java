@@ -18,7 +18,18 @@ import model.dao.FuncionarioDAO;
 import model.dao.ItemComandaDAO;
 import model.dao.LogDAO;
 import model.dao.ProdutoDAO;
-
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import javax.swing.JOptionPane;
+import model.bean.AgendaDespesa;
+import model.bean.Despesa;
+import model.dao.AgendaDespesaDAO;
+import model.dao.DespesaDAO;
 
 public class Login extends javax.swing.JFrame {
     public static Boolean flagNovaComanda = false;
@@ -40,7 +51,7 @@ public class Login extends javax.swing.JFrame {
         LogDAO logDao = new LogDAO();
         ProdutoDAO pDao = new ProdutoDAO();
         
-        for (Produto p: pDao.read()){
+        /*for (Produto p: pDao.read()){
             listaProdutos.add(p);
         }
         
@@ -50,6 +61,40 @@ public class Login extends javax.swing.JFrame {
         
         for (CategoriaPrato c:cpDao.read()){
             categoriasPratos.add(c);
+        }*/
+        
+        Calendar calendario = Calendar.getInstance();
+        SimpleDateFormat formatoBr = new SimpleDateFormat("dd/MM/yyyy");
+        Date dataDespesa, dataAtual;
+        AgendaDespesaDAO agendaDao = new AgendaDespesaDAO();   
+        DespesaDAO despesaDao = new DespesaDAO();
+        try{
+            for (AgendaDespesa a : agendaDao.readForStatus()){     
+                dataAtual = formatoBr.parse(GerenciadorComandas.getDataAtualSemHoraFormatoBr());
+                dataDespesa = formatoBr.parse(a.getData());
+                int resultado = dataDespesa.compareTo(dataAtual);
+                if (resultado == -1 || resultado == 0){
+                    // Instancia a despesa e seta seus atributos, para depois atualizar no banco
+                    Despesa d = new Despesa();
+                    d.setValor(a.getValor());
+                    d.setData(GerenciadorComandas.getDataAtualComHoraFormatoBr());
+                    d.setDescricao(a.getDescricao());
+                    despesaDao.create(d);
+
+                    // Atualiza o status e a data da agenda que acabou de virar despesa                    
+                    calendario.setTime(dataDespesa);
+                    calendario.set(Calendar.MONTH, calendario.get(Calendar.MONTH)+1);
+                    a.setData(formatoBr.format(calendario.getTime()));
+                    a.setStatus(0);
+                    agendaDao.updateStatusEData(a);
+                }
+            }
+        }catch(ParseException ex){
+            System.err.println("Erro (AGENDA DESPESA NA TELA DE LOGIN): "+ex);
+        }
+        
+        if (agendaDao.readForStatus().isEmpty()){
+            agendaDao.updateStatusMassivo();
         }
         
         for (Caixa c:caixaDao.read()){
@@ -70,6 +115,20 @@ public class Login extends javax.swing.JFrame {
         }
         getRootPane().setDefaultButton(btnLogin);
     }
+    
+    public static String md5(String senha){
+        String sen = "";
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        BigInteger hash = new BigInteger(1, md.digest(senha.getBytes()));
+        sen = hash.toString(16);			
+        return sen;
+    }
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

@@ -1,17 +1,8 @@
 package main;
 
-import ArrumarString.Monetarios;
-import ArrumarString.SoNumeros;
-import javax.swing.JOptionPane;
-import model.bean.Caixa;
-import model.bean.Carteira;
 import model.bean.Cliente;
-import model.bean.Log;
-import model.dao.CaixaDAO;
-import model.dao.CarteiraDAO;
 import model.dao.ClienteDAO;
 import model.dao.ComandaDAO;
-import model.dao.LogDAO;
 
 public class AssociarCliente extends javax.swing.JDialog {
     public static Cliente cliente;

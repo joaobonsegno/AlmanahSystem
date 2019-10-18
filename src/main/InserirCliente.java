@@ -23,8 +23,10 @@ public class InserirCliente extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
         getRootPane().setDefaultButton(btnConfirmar); 
         btnConfirmar.setEnabled(false);
+        ClienteDAO cliDao = new ClienteDAO();
         if (GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getCliente() != null){
-            cliente = GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getCliente();            
+            System.out.println("ESTOU PEGANDO CLIENTE DO BANCO");
+            cliente = cliDao.readForId(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getCliente().getId());            
             txtCpf.setText(cliente.getCpf());           
             lblNome.setText(cliente.getNome());
             try{
@@ -220,7 +222,6 @@ public class InserirCliente extends javax.swing.JDialog {
             cliente.aumentarSaldoPendente(FormaPagamento.valorCobrado);
             ClienteDAO cDao = new ClienteDAO();
             cDao.updateSaldo(cliente);
-            
             
             // Tornando flagCliente TRUE para a tela de FormasDePagamento chamar o método de nova FORMA
             flagCliente = true;

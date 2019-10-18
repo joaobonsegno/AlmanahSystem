@@ -109,7 +109,8 @@ public class FormaPagamento extends javax.swing.JDialog {
             //Faz as atualizações no banco
             FormaDAO formaDao = new FormaDAO();
             if (formaPagamento.equals("Carteira")){           
-                formaDao.create(forma, InserirCliente.cliente);
+                forma.setCliente(InserirCliente.cliente);
+                formaDao.create(forma, forma.getCliente());
                 isCarteira = true;           
             }else{
                 formaDao.create(forma);
@@ -666,6 +667,10 @@ public class FormaPagamento extends javax.swing.JDialog {
         new EncerrarComanda().setVisible(true);
     }//GEN-LAST:event_btnVoltarActionPerformed
 
+    public void removerItemLista(int indice){
+        
+    }
+    
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         // Instancia os objetos necessários para o encerramento da venda
         LogCaixa l = new LogCaixa(1);              
@@ -746,13 +751,15 @@ public class FormaPagamento extends javax.swing.JDialog {
         }
         
         // Retira todas as comandas da lista de comandas abertas e, em seguida, adiciona novamente
-        GerenciadorComandas.comandasAbertas.removeAll(GerenciadorComandas.comandasAbertas);
-        for (Comanda c:comandaDao.read()){
-            if(c.getStatus() == 1){
-                GerenciadorComandas.comandasAbertas.add(c);
-                iDao.read(c);
+        int contador = 0;
+        for (Comanda c:GerenciadorComandas.comandasAbertas){
+            if(c.getStatus() == 0){
+                break;
             }
+            contador += 1;
         }
+        GerenciadorComandas.comandasAbertas.remove(contador);
+        
         dispose();
         new GerenciadorComandas().setVisible(true);
     }//GEN-LAST:event_btnConfirmarActionPerformed
@@ -799,7 +806,11 @@ public class FormaPagamento extends javax.swing.JDialog {
                 carteiraDao.delete(f);
                 
                 Cliente c = clienteDao.readForId(f.getCliente().getId());
+                System.out.println("Nome cliente: "+c.getNome());
+                System.out.println("Valor forma: "+f.getValor());
+                System.out.println("Saldo cliente: "+c.getSaldo());
                 c.reduzirSaldo(f.getValor());
+                System.out.println("Novo saldo cliente: "+c.getSaldo());
                 c.reduzirSaldoPendente(f.getValor());
             }
             Double v = Double.parseDouble(GerenciadorComandas.tornarCompativel((String)dtm.getValueAt(indice, 1)));
