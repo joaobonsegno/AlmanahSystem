@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import model.bean.Categoria;
 import model.bean.Produto;
+import model.dao.CategoriaDAO;
 import model.dao.MateriaPrimaDAO;
 import model.dao.ProdutoDAO;
 
@@ -13,9 +14,10 @@ public class CadastrarProduto extends javax.swing.JFrame {
     ProdutoDAO pDao = new ProdutoDAO();
     
     public void criarCb(){
+        CategoriaDAO cDao = new CategoriaDAO();
         cbCategoria.removeAllItems();
         cbCategoria.addItem("");
-        for (Categoria c : Login.categorias){
+        for (Categoria c : cDao.read()){
             cbCategoria.addItem(c.getNome());
         }
         
@@ -409,7 +411,8 @@ public class CadastrarProduto extends javax.swing.JFrame {
 
                 // Instancia o objeto categoria do novo produto
                 Categoria categoria = new Categoria();
-                for(Categoria c:Login.categorias){
+                CategoriaDAO cDao = new CategoriaDAO();
+                for(Categoria c:cDao.read()){
                     if(cat.equals(c.getNome())){
                         categoria.setId(c.getId());
                         categoria.setNome(c.getNome());

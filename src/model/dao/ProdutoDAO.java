@@ -13,6 +13,7 @@ import model.bean.Produto;
 import relatorio.RelatorioProduto;
 
 public class ProdutoDAO {
+    CategoriaDAO cDao;
     public void create(Produto p){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -45,7 +46,7 @@ public class ProdutoDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         ArrayList<Produto> prods = new ArrayList<>();
-        CategoriaDAO cDao = new CategoriaDAO();
+        cDao = new CategoriaDAO();
         
         try{
             stmt = con.prepareStatement("SELECT * FROM produto");
@@ -65,7 +66,7 @@ public class ProdutoDAO {
                 p.setQtdEstoque(rs.getString("qtdEstoque"));
                 p.setValidade(rs.getString("validade"));
                 Integer categoriaProduto = (rs.getInt("idCategoria"));
-                for (Categoria c:Login.categorias){
+                for (Categoria c:cDao.read()){
                     if (c.getId() == categoriaProduto){
                         p.setCategoria(c);
                     }
@@ -85,7 +86,7 @@ public class ProdutoDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         ArrayList<Produto> prods = new ArrayList<>();
-        CategoriaDAO cDao = new CategoriaDAO();
+        cDao = new CategoriaDAO();
         
         try{
             stmt = con.prepareStatement("SELECT * FROM produto WHERE nome LIKE ?");
@@ -108,7 +109,7 @@ public class ProdutoDAO {
                 
                 Integer categoriaProduto = (rs.getInt("idCategoria"));
                 p.setValidade(rs.getString("validade"));
-                for (Categoria c:Login.categorias){
+                for (Categoria c:cDao.read()){
                     if (c.getId() == categoriaProduto){
                         p.setCategoria(c);
                     }
@@ -128,7 +129,7 @@ public class ProdutoDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         ArrayList<Produto> prods = new ArrayList<>();
-        CategoriaDAO cDao = new CategoriaDAO();
+        cDao = new CategoriaDAO();
         Categoria cat = new Categoria();
         
         try{

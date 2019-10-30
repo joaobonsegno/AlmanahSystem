@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Comanda;
 import model.bean.Produto;
@@ -32,11 +33,14 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         this.novaInstancia();
         lblErro.setVisible(false);
         this.setLocationRelativeTo(null);
-        getRootPane().setDefaultButton(btnNovaComanda);
+        //getRootPane().setDefaultButton(btnNovaComanda);
         jtComandas.getTableHeader().setFont(new Font("Century Gothic", 1, 14));
         if (Login.funcAtual.getCargo().getId() == 1){
             btnEncerrar.setEnabled(false);
         }
+        txtNumeroComanda.requestFocus();
+        txtNumeroComanda.setVisible(false);
+        txtNumeroComanda.requestFocus();
     }
 
     public void limparTabela(){
@@ -384,6 +388,8 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         btnEncerrar = new javax.swing.JButton();
         lblErro = new javax.swing.JLabel();
         btnRefeicao = new javax.swing.JButton();
+        txtNumeroComanda = new javax.swing.JTextField();
+        lblHora = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gerenciador de Comandas");
@@ -395,6 +401,11 @@ public class GerenciadorComandas extends javax.swing.JFrame {
                 formWindowGainedFocus(evt);
             }
             public void windowLostFocus(java.awt.event.WindowEvent evt) {
+            }
+        });
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                formKeyReleased(evt);
             }
         });
 
@@ -499,6 +510,17 @@ public class GerenciadorComandas extends javax.swing.JFrame {
             }
         });
 
+        txtNumeroComanda.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        txtNumeroComanda.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtNumeroComandaKeyReleased(evt);
+            }
+        });
+
+        lblHora.setFont(new java.awt.Font("Century Gothic", 0, 22)); // NOI18N
+        lblHora.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblHora.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -506,26 +528,34 @@ public class GerenciadorComandas extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnLancador)
-                        .addGap(135, 135, 135)
-                        .addComponent(btnStringGerenciador))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(66, 66, 66)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnSobremesa, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnBebida, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnRefeicao, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(62, 62, 62)
-                        .addComponent(btnEncerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(87, 87, 87)
-                        .addComponent(btnNovaComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(37, 37, 37)
-                        .addComponent(lblErro)))
-                .addContainerGap(36, Short.MAX_VALUE))
+                        .addComponent(lblErro)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblHora, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnLancador)
+                                .addGap(135, 135, 135)
+                                .addComponent(btnStringGerenciador))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(66, 66, 66)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(40, 40, 40)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnSobremesa, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnBebida, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnRefeicao, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(62, 62, 62)
+                                .addComponent(btnEncerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 26, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(87, 87, 87)
+                .addComponent(btnNovaComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtNumeroComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(95, 95, 95))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, 791, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -548,7 +578,9 @@ public class GerenciadorComandas extends javax.swing.JFrame {
                         .addGap(27, 27, 27)
                         .addComponent(lblErro))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(83, 83, 83)
+                        .addGap(8, 8, 8)
+                        .addComponent(txtNumeroComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(41, 41, 41)
                         .addComponent(btnRefeicao, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -558,8 +590,10 @@ public class GerenciadorComandas extends javax.swing.JFrame {
                                 .addGap(17, 17, 17)
                                 .addComponent(btnEncerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(30, 30, 30)
-                        .addComponent(btnSobremesa, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(35, Short.MAX_VALUE))
+                        .addComponent(btnSobremesa, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                        .addComponent(lblHora, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(52, 52, 52)
@@ -658,6 +692,23 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         lblErro.setVisible(false);
     }//GEN-LAST:event_jtComandasFocusGained
 
+    private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
+        System.out.println("asd");
+    }//GEN-LAST:event_formKeyReleased
+
+    private void txtNumeroComandaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumeroComandaKeyReleased
+        if (evt.getKeyCode() == 10){
+            ComandaDAO comDao = new ComandaDAO();
+            numeroNovaComanda = comDao.codComanda(txtNumeroComanda.getText());
+            if (numeroNovaComanda == 0){
+                JOptionPane.showMessageDialog(null, "Código de comanda inválido");
+            }else{
+                JOptionPane.showMessageDialog(null, "Comanda "+numeroNovaComanda+" criada com sucesso");
+            }
+            
+        }
+    }//GEN-LAST:event_txtNumeroComandaKeyReleased
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -701,7 +752,9 @@ public class GerenciadorComandas extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private static javax.swing.JTable jtComandas;
     public static javax.swing.JLabel lblErro;
+    private javax.swing.JLabel lblHora;
     private javax.swing.Box.Filler linha1;
+    private javax.swing.JTextField txtNumeroComanda;
     // End of variables declaration//GEN-END:variables
 }
 

@@ -31,6 +31,26 @@ public class ComandaDAO {
         }
     }
     
+    public int codComanda(String codigo){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        int id = 0;
+        
+        try{
+            stmt = con.prepareStatement("SELECT * FROM codComanda WHERE codigo LIKE '"+codigo+"'");
+            rs = stmt.executeQuery();
+            while (rs.next()){
+                id = (rs.getInt("idComanda"));                
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return id;
+    }
+    
     public ArrayList<Comanda> read(){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;

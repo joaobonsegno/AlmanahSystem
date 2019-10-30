@@ -91,7 +91,7 @@ public class PromocaoDAO {
                 p.setUnidadeDeMedida("unidadeDeMedida");
                 Integer categoriaProduto = (rs.getInt("idCategoria"));
                 p.setValidade(rs.getString("validade"));
-                for (Categoria c:Login.categorias){
+                for (Categoria c:cDao.read()){
                     if (c.getId() == categoriaProduto){
                         p.setCategoria(c);
                     }

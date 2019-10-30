@@ -34,13 +34,26 @@ public class GerenciadorDespesa extends javax.swing.JFrame {
         DefaultTableModel dtm = (DefaultTableModel) jtDespesas.getModel();
 
         for (AgendaDespesa d : a.read()){
-            dtm.addRow(
+            if (d.getFrequencia().equals("Parcela")){
+                dtm.addRow(
                 new Object[]{
-                    d.getDia(),                   
+                    d.getData(),                   
                     "R$ " + GerenciadorComandas.valorMonetario(d.getValor()),
                     d.getDescricao(),
+                    d.getQtdVezes(),
                     d.getId()}
-            );
+                );
+            }else{
+                dtm.addRow(
+                new Object[]{
+                    d.getData(),                   
+                    "R$ " + GerenciadorComandas.valorMonetario(d.getValor()),
+                    d.getDescricao(),
+                    "X",
+                    d.getId()}
+                );
+            }
+            
         }
     }
 
@@ -51,13 +64,25 @@ public class GerenciadorDespesa extends javax.swing.JFrame {
         DefaultTableModel dtm = (DefaultTableModel) jtDespesas.getModel();
 
         for (AgendaDespesa d : a.readForDescricao(desc)){
-            dtm.addRow(
+            if (d.getFrequencia().equals("Parcela")){
+                dtm.addRow(
                 new Object[]{
-                    d.getDia(),                    
+                    d.getData(),                   
                     "R$ " + GerenciadorComandas.valorMonetario(d.getValor()),
                     d.getDescricao(),
+                    d.getQtdVezes(),
                     d.getId()}
-            );
+                );
+            }else{
+                dtm.addRow(
+                new Object[]{
+                    d.getData(),                   
+                    "R$ " + GerenciadorComandas.valorMonetario(d.getValor()),
+                    d.getDescricao(),
+                    "X",
+                    d.getId()}
+                );
+            }
         }
     }
 
@@ -72,22 +97,26 @@ public class GerenciadorDespesa extends javax.swing.JFrame {
 
     public void formatarTabela() {
         jtDespesas.setRowHeight(27);
-        jtDespesas.getColumn("Dia").setCellRenderer(centro);
+        jtDespesas.getColumn("Próxima data").setCellRenderer(centro);
+        jtDespesas.getColumn("Parcelas restantes").setCellRenderer(centro);
         jtDespesas.getColumn("Valor").setCellRenderer(centro);
-        jtDespesas.getColumnModel().getColumn(0).setPreferredWidth(50);
+        jtDespesas.getColumnModel().getColumn(0).setPreferredWidth(150);
         jtDespesas.getColumnModel().getColumn(1).setPreferredWidth(150);
-        jtDespesas.getColumnModel().getColumn(2).setPreferredWidth(600);
-        jtDespesas.getColumnModel().getColumn(3).setPreferredWidth(0);
+        jtDespesas.getColumnModel().getColumn(2).setPreferredWidth(630);
+        jtDespesas.getColumnModel().getColumn(3).setPreferredWidth(130);
+        jtDespesas.getColumnModel().getColumn(4).setPreferredWidth(0);
         
-        jtDespesas.getColumnModel().getColumn(0).setMinWidth(50);
+        jtDespesas.getColumnModel().getColumn(0).setMinWidth(150);
         jtDespesas.getColumnModel().getColumn(1).setMinWidth(150);
-        jtDespesas.getColumnModel().getColumn(2).setMinWidth(600);
-        jtDespesas.getColumnModel().getColumn(3).setMinWidth(0);
+        jtDespesas.getColumnModel().getColumn(2).setMinWidth(630);
+        jtDespesas.getColumnModel().getColumn(3).setMinWidth(130);
+        jtDespesas.getColumnModel().getColumn(4).setMinWidth(0);
 
-        jtDespesas.getColumnModel().getColumn(0).setMaxWidth(50);
+        jtDespesas.getColumnModel().getColumn(0).setMaxWidth(150);
         jtDespesas.getColumnModel().getColumn(1).setMaxWidth(150);
-        jtDespesas.getColumnModel().getColumn(2).setMaxWidth(600);
-        jtDespesas.getColumnModel().getColumn(3).setMaxWidth(0);
+        jtDespesas.getColumnModel().getColumn(2).setMaxWidth(630);
+        jtDespesas.getColumnModel().getColumn(3).setMaxWidth(130);
+        jtDespesas.getColumnModel().getColumn(4).setMaxWidth(0);
     }
 
     DefaultTableCellRenderer centro = new DefaultTableCellRenderer() {
@@ -149,11 +178,11 @@ public class GerenciadorDespesa extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Dia", "Valor", "Descrição", "id"
+                "Próxima data", "Valor", "Descrição", "Parcelas restantes", "id"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -172,6 +201,7 @@ public class GerenciadorDespesa extends javax.swing.JFrame {
             jtDespesas.getColumnModel().getColumn(1).setResizable(false);
             jtDespesas.getColumnModel().getColumn(2).setResizable(false);
             jtDespesas.getColumnModel().getColumn(3).setResizable(false);
+            jtDespesas.getColumnModel().getColumn(4).setResizable(false);
         }
 
         lblStringNomeProduto.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
@@ -236,59 +266,62 @@ public class GerenciadorDespesa extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnLancador)
-                        .addGap(81, 81, 81)
-                        .addComponent(btnStringProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(32, 32, 32)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblStringNomeProduto)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnCriar, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnStringProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(lblStringNomeProduto)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnCriar, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 333, Short.MAX_VALUE)
                 .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(71, 71, 71)
+                .addGap(107, 107, 107)
                 .addComponent(btnAlterar2, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(162, 162, 162))
+                .addGap(335, 335, 335))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(linha1, javax.swing.GroupLayout.DEFAULT_SIZE, 734, Short.MAX_VALUE))
+                .addComponent(linha1, javax.swing.GroupLayout.DEFAULT_SIZE, 1105, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(linha2, javax.swing.GroupLayout.DEFAULT_SIZE, 734, Short.MAX_VALUE))
+                .addComponent(linha2, javax.swing.GroupLayout.DEFAULT_SIZE, 1105, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnStringProdutos)
-                    .addComponent(btnLancador, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnLancador, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnStringProdutos))
                 .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblStringNomeProduto)
                     .addComponent(txtDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCriar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(28, 28, 28)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnAlterar2, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAlterar2, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(28, 28, 28))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(63, 63, 63)
                     .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(532, Short.MAX_VALUE)))
+                    .addContainerGap(574, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(linha2, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(582, Short.MAX_VALUE)))
+                    .addContainerGap(626, Short.MAX_VALUE)))
         );
 
         pack();
@@ -315,7 +348,7 @@ public class GerenciadorDespesa extends javax.swing.JFrame {
 
     private void btnAlterar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterar2ActionPerformed
         //Menu.acaoEscolhida = 2;
-        idEscolhido = (Integer)jtDespesas.getValueAt(jtDespesas.getSelectedRow(),3);
+        idEscolhido = (Integer)jtDespesas.getValueAt(jtDespesas.getSelectedRow(),4);
         jtDespesas.clearSelection();
         opcaoEscolhida = 2;
         new AlterarDespesa(new javax.swing.JFrame(), true).setVisible(true);
@@ -325,7 +358,7 @@ public class GerenciadorDespesa extends javax.swing.JFrame {
         int reply = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir a despesa?", "Exclusão de Despesa", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             AgendaDespesaDAO a = new AgendaDespesaDAO();
-            a.delete((Integer)jtDespesas.getValueAt(jtDespesas.getSelectedRow(),3));
+            a.delete((Integer)jtDespesas.getValueAt(jtDespesas.getSelectedRow(),4));
             this.criarTabela();
             jtDespesas.clearSelection();
             btnExcluir.setEnabled(false);
@@ -428,8 +461,6 @@ public class GerenciadorDespesa extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAlterar;
-    private javax.swing.JButton btnAlterar1;
     private javax.swing.JButton btnAlterar2;
     private javax.swing.JButton btnCriar;
     private javax.swing.JButton btnExcluir;

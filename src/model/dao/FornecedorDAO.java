@@ -64,7 +64,7 @@ public class FornecedorDAO {
                 p.setQtdEstoque(rs.getString("qtdEstoque"));
                 p.setValidade(rs.getString("validade"));
                 Integer categoriaProduto = (rs.getInt("idCategoria"));
-                for (Categoria c:Login.categorias){
+                for (Categoria c:cDao.read()){
                     if (c.getId() == categoriaProduto){
                         p.setCategoria(c);
                     }
@@ -107,7 +107,7 @@ public class FornecedorDAO {
                 
                 Integer categoriaProduto = (rs.getInt("idCategoria"));
                 p.setValidade(rs.getString("validade"));
-                for (Categoria c:Login.categorias){
+                for (Categoria c:cDao.read()){
                     if (c.getId() == categoriaProduto){
                         p.setCategoria(c);
                     }

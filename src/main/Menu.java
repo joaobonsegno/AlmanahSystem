@@ -196,9 +196,9 @@ public class Menu extends javax.swing.JFrame {
         clientes_cadastrar = new javax.swing.JMenuItem();
         clientes_carteira = new javax.swing.JMenuItem();
         financeiro = new javax.swing.JMenu();
-        financeiro_promocoes = new javax.swing.JMenuItem();
         financeiro_despesas = new javax.swing.JMenuItem();
         financeiro_despesas1 = new javax.swing.JMenuItem();
+        financeiro_promocoes = new javax.swing.JMenuItem();
         financeiro_relatorios = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -434,16 +434,6 @@ public class Menu extends javax.swing.JFrame {
         financeiro.setText(" Financeiro");
         financeiro.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
 
-        financeiro_promocoes.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
-        financeiro_promocoes.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\tag (1).png")); // NOI18N
-        financeiro_promocoes.setText("Promoções");
-        financeiro_promocoes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                financeiro_promocoesActionPerformed(evt);
-            }
-        });
-        financeiro.add(financeiro_promocoes);
-
         financeiro_despesas.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
         financeiro_despesas.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\big-money-bag (2).png")); // NOI18N
         financeiro_despesas.setText("Despesas");
@@ -456,13 +446,23 @@ public class Menu extends javax.swing.JFrame {
 
         financeiro_despesas1.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
         financeiro_despesas1.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\calendar (2).png")); // NOI18N
-        financeiro_despesas1.setText("Agendar Despesa");
+        financeiro_despesas1.setText("Despesas Agendadas");
         financeiro_despesas1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 financeiro_despesas1ActionPerformed(evt);
             }
         });
         financeiro.add(financeiro_despesas1);
+
+        financeiro_promocoes.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        financeiro_promocoes.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\tag (1).png")); // NOI18N
+        financeiro_promocoes.setText("Promoções");
+        financeiro_promocoes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                financeiro_promocoesActionPerformed(evt);
+            }
+        });
+        financeiro.add(financeiro_promocoes);
 
         financeiro_relatorios.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
         financeiro_relatorios.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\relatorio (1).png")); // NOI18N

@@ -5,8 +5,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class AgendaDespesa {
-    private int id, dia, status;
-    private String descricao, data;
+    private int id, qtdVezes;
+    private String descricao, data, frequencia;
     private Double valor;
         
     public int getId() {
@@ -25,15 +25,6 @@ public class AgendaDespesa {
         this.descricao = descricao;
     }
 
-    public int getDia() {
-        return dia;
-    }
-
-    public void setDia(int dia) {
-        this.dia = dia;
-    }
-
-
     public Double getValor() {
         return valor;
     }
@@ -42,12 +33,20 @@ public class AgendaDespesa {
         this.valor = valor;
     }
 
-    public int getStatus() {
-        return status;
+    public int getQtdVezes() {
+        return qtdVezes;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setQtdVezes(int qtdVezes) {
+        this.qtdVezes = qtdVezes;
+    }
+
+    public String getFrequencia() {
+        return frequencia;
+    }
+
+    public void setFrequencia(String frequencia) {
+        this.frequencia = frequencia;
     }
 
     public String getData() {

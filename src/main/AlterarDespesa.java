@@ -1,11 +1,13 @@
 package main;
 
 import ArrumarString.Monetarios;
+import ArrumarString.SoNumeros;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import javax.swing.JOptionPane;
 import model.bean.AgendaDespesa;
 import model.dao.LogDAO;
 import model.bean.Despesa;
@@ -20,24 +22,49 @@ public class AlterarDespesa extends javax.swing.JDialog {
         initComponents();
         this.setLocationRelativeTo(null);
         txtValor.setDocument(new Monetarios(7,2));
+        txtRepeticao.setDocument(new SoNumeros());
         getRootPane().setDefaultButton(btnConfirmar);
         LogDAO logDao = new LogDAO();
         txtDescricao.setWrapStyleWord(true);
-        CriarDespesa.flagNovaDespesa = false;
+        CriarDespesa.flagNovaDespesa = false;       
         
-        AgendaDespesaDAO a = new AgendaDespesaDAO();
-        despesa = a.readForId(GerenciadorDespesa.idEscolhido);
-        txtDescricao.setText(despesa.getDescricao());
-        txtValor.setText(GerenciadorComandas.valorMonetario(despesa.getValor()));
-        sliderDia.setValue(despesa.getDia());
-        lblDia.setText(Integer.toString(despesa.getDia()));                   
-        
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            AgendaDespesaDAO a = new AgendaDespesaDAO();
+            despesa = a.readForId(GerenciadorDespesa.idEscolhido);
+            txtDescricao.setText(despesa.getDescricao());
+            txtValor.setText(GerenciadorComandas.valorMonetario(despesa.getValor()));
+            calendar.setDate(sdf.parse(despesa.getData()));
+            this.setarRadios(despesa.getFrequencia());
+        }catch(ParseException ex){}
     }
 
+    public void setarRadios(String frequencia){
+        if (frequencia.equals("Mensal")){
+            radioMensal.setSelected(true);
+            radioSemanal.setEnabled(false);
+            radioParcela.setEnabled(false);
+            txtRepeticao.setVisible(false);
+            lblVezes.setVisible(false);
+        }else if (frequencia.equals("Semanal")){
+            radioSemanal.setSelected(true);
+            radioMensal.setEnabled(false);
+            radioParcela.setEnabled(false);
+            txtRepeticao.setVisible(false);
+            lblVezes.setVisible(false);
+        }else{
+            radioParcela.setSelected(true);
+            radioSemanal.setEnabled(false);
+            radioMensal.setEnabled(false);
+            txtRepeticao.setText(Integer.toString(despesa.getQtdVezes()));
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        grupo1 = new javax.swing.ButtonGroup();
         txtStringSuprimento = new javax.swing.JLabel();
         linha = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
         lblInsiraSuprimento = new javax.swing.JLabel();
@@ -48,19 +75,25 @@ public class AlterarDespesa extends javax.swing.JDialog {
         lblInsiraSuprimento4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtDescricao = new javax.swing.JTextArea();
-        sliderDia = new javax.swing.JSlider();
         lblStringDia = new javax.swing.JLabel();
-        lblDia = new javax.swing.JLabel();
+        calendar = new com.toedter.calendar.JDateChooser();
+        lblStringDia1 = new javax.swing.JLabel();
+        radioMensal = new javax.swing.JRadioButton();
+        radioSemanal = new javax.swing.JRadioButton();
+        radioParcela = new javax.swing.JRadioButton();
+        txtRepeticao = new javax.swing.JTextField();
+        lblVezes = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Suprimento do Caixa");
-        setMinimumSize(new java.awt.Dimension(435, 283));
+        setMaximumSize(new java.awt.Dimension(496, 467));
+        setMinimumSize(new java.awt.Dimension(496, 467));
         setResizable(false);
 
         txtStringSuprimento.setBackground(new java.awt.Color(0, 102, 204));
         txtStringSuprimento.setFont(new java.awt.Font("Century Gothic", 0, 17)); // NOI18N
         txtStringSuprimento.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        txtStringSuprimento.setText("Criar Despesa");
+        txtStringSuprimento.setText("Alterar Despesa");
 
         linha.setBackground(new java.awt.Color(0, 0, 0));
         linha.setOpaque(true);
@@ -105,56 +138,98 @@ public class AlterarDespesa extends javax.swing.JDialog {
         txtDescricao.setTabSize(1);
         jScrollPane2.setViewportView(txtDescricao);
 
-        sliderDia.setMaximum(30);
-        sliderDia.setMinimum(1);
-        sliderDia.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                sliderDiaStateChanged(evt);
+        lblStringDia.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblStringDia.setText("Data:");
+
+        calendar.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+
+        lblStringDia1.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
+        lblStringDia1.setText("Repetições:");
+
+        grupo1.add(radioMensal);
+        radioMensal.setFont(new java.awt.Font("Century Gothic", 0, 13)); // NOI18N
+        radioMensal.setText("Mensal");
+        radioMensal.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                radioMensalFocusGained(evt);
             }
         });
 
-        lblStringDia.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        lblStringDia.setText("Dia de Vencimento:");
+        grupo1.add(radioSemanal);
+        radioSemanal.setFont(new java.awt.Font("Century Gothic", 0, 13)); // NOI18N
+        radioSemanal.setText("Semanal");
+        radioSemanal.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                radioSemanalFocusGained(evt);
+            }
+        });
 
-        lblDia.setFont(new java.awt.Font("Century Gothic", 0, 17)); // NOI18N
-        lblDia.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblDia.setText("30");
+        grupo1.add(radioParcela);
+        radioParcela.setFont(new java.awt.Font("Century Gothic", 0, 13)); // NOI18N
+        radioParcela.setText("Parcela");
+        radioParcela.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                radioParcelaFocusGained(evt);
+            }
+        });
+
+        txtRepeticao.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        txtRepeticao.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+
+        lblVezes.setFont(new java.awt.Font("Century Gothic", 0, 13)); // NOI18N
+        lblVezes.setText("vezes");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(18, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblInsiraSuprimento)
+                    .addComponent(lblStringDia))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblInsiraSuprimento1))
+                    .addComponent(calendar, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(161, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(txtStringSuprimento, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(141, 141, 141))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(40, 40, 40)
                         .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(96, 96, 96))
+                        .addGap(126, 126, 126))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblInsiraSuprimento4)
-                            .addComponent(lblStringDia)
-                            .addComponent(lblInsiraSuprimento))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblInsiraSuprimento1))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(sliderDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblInsiraSuprimento4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lblDia, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(21, 21, 21))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(128, 128, 128)
-                .addComponent(txtStringSuprimento, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblStringDia1)
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(radioSemanal)
+                                    .addComponent(radioMensal)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(radioParcela)
+                                        .addGap(24, 24, 24)
+                                        .addComponent(txtRepeticao, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(lblVezes)))
+                                .addGap(4, 4, 4)))
+                        .addGap(45, 45, 45))))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(linha, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE))
+                .addComponent(linha, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -166,27 +241,41 @@ public class AlterarDespesa extends javax.swing.JDialog {
                     .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblInsiraSuprimento1)
                     .addComponent(lblInsiraSuprimento))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblDia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(sliderDia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblStringDia))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(calendar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(13, 13, 13)
-                        .addComponent(lblInsiraSuprimento4)))
-                .addGap(31, 31, 31)
+                        .addGap(9, 9, 9)
+                        .addComponent(lblStringDia)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblStringDia1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(radioSemanal)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(radioMensal, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(radioParcela, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txtRepeticao)
+                                    .addComponent(lblVezes, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblInsiraSuprimento4)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(45, 45, 45)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(19, 19, 19))
+                .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(43, 43, 43)
                     .addComponent(linha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(300, Short.MAX_VALUE)))
+                    .addContainerGap(423, Short.MAX_VALUE)))
         );
 
         pack();
@@ -197,62 +286,84 @@ public class AlterarDespesa extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        //Instancia os objetos de manipulação de datas
-        SimpleDateFormat mesAno = new SimpleDateFormat("MM/yyyy");
-        SimpleDateFormat formatoBr = new SimpleDateFormat("dd/MM/yyyy");
-        Calendar atual = new GregorianCalendar();
-        Calendar calendario = Calendar.getInstance();
-        Date dataSelecionada, dataAtual;
-        
-        //Seta os atributos da agenda
-        AgendaDespesaDAO dDao = new AgendaDespesaDAO();
-        String valor = txtValor.getText();
-        valor = valor.replace("." , "");
-        valor = valor.replace("," , ".");
-        
-        despesa.setDescricao(txtDescricao.getText());
-        despesa.setValor(Double.parseDouble(valor));
-        despesa.setDia(sliderDia.getValue());
-        
-        // Faz as verificações com o dia      
-        String data = Integer.toString(sliderDia.getValue())+"/";                
-        data += mesAno.format(atual.getTime());
+        boolean flagValorOuRepeticao = false;
+        try{   
+            boolean flagParcelas = false;
+            if (txtRepeticao.getText().equals("0")){
+                flagParcelas = true;
+                JOptionPane.showMessageDialog(null, "A quantidade de parcelas deve ser maior do que zero (0)\n\nDICA: caso queira excluir esta despesa, faça-o na aba do Gerenciador de Despesas");
+            }
+            
+            if (!flagParcelas){
+                //Instancia os objetos de manipulação de datas
+                SimpleDateFormat formatoBr = new SimpleDateFormat("dd/MM/yyyy");
+                Calendar atual = new GregorianCalendar();
+                Calendar calendario = Calendar.getInstance();
+                Date dataSelecionada, dataAtual;
+                boolean dataSelecionadaMenor = false;
 
-        try{     
-            dataSelecionada = formatoBr.parse(data);
-            dataAtual = formatoBr.parse(GerenciadorComandas.getDataAtualSemHoraFormatoBr());
-            calendario.setTime(dataSelecionada);
-            calendario.set(Calendar.MONTH, calendario.get(Calendar.MONTH)+1);
-            int resultado = dataSelecionada.compareTo(dataAtual);
-            if (resultado == -1){ // DATA SELECIONADA é menor do que a DATA ATUAL               
-                despesa.setData(formatoBr.format(calendario.getTime()));                
-            }else if (resultado == 1){ // DATA SELECIONADA é IGUAL à DATA ATUAL
-                if (despesa.getStatus() == 0){
-                    despesa.setData(formatoBr.format(calendario.getTime())); 
-                }else{
-                    despesa.setData(data);
-                }               
-            }else{ // DATA SELECIONADA é maior do que a DATA ATUAL
-                if (despesa.getStatus() == 0){
-                    despesa.setData(formatoBr.format(calendario.getTime())); 
-                }else{
-                    despesa.setData(data);
+                //Instancia a data atual e a data selecionada, para compará-las
+                String data = formatoBr.format(calendar.getDate());
+                dataSelecionada = formatoBr.parse(data);
+                dataAtual = formatoBr.parse(GerenciadorComandas.getDataAtualSemHoraFormatoBr());
+                int resultado = dataSelecionada.compareTo(dataAtual);
+                if (resultado == -1){ // DATA SELECIONADA é menor do que a DATA ATUAL
+                    dataSelecionadaMenor = true;              
+                    JOptionPane.showMessageDialog(null, "A data selecionada deve ser maior ou igual à data atual");
+                }
+                
+                if (!dataSelecionadaMenor){
+                    //Seta os atributos da agenda
+                    AgendaDespesaDAO dDao = new AgendaDespesaDAO();
+                    String valor = txtValor.getText();
+                    valor = valor.replace("." , "");
+                    valor = valor.replace("," , ".");
+ 
+                    despesa.setDescricao(txtDescricao.getText());
+                    despesa.setValor(Double.parseDouble(valor));           
+
+                    if (despesa.getQtdVezes() > 0){                       
+                        flagValorOuRepeticao = true;
+                        despesa.setQtdVezes(Integer.parseInt(txtRepeticao.getText()));                       
+                    }                                  
+
+                    despesa.setData(formatoBr.format(dataSelecionada));
+                    
+                    
+                    despesa.setId(GerenciadorDespesa.idEscolhido);
+                    dDao.update(despesa);                      
+                    CriarDespesa.flagNovaDespesa = true;
+                    dispose();                
                 }
             }
-            despesa.setId(GerenciadorDespesa.idEscolhido);
-            dDao.update(despesa);                
-            CriarDespesa.flagNovaDespesa = true;
-            dispose();
-        
-        
+            
+        }catch(java.lang.NumberFormatException ex){
+            if (flagValorOuRepeticao)
+                JOptionPane.showMessageDialog(null, "Insira a quantidade de vezes que a despesa deverá ser cobrada");
+            else
+                JOptionPane.showMessageDialog(null, "Insira o valor da despesa");
+        }catch(java.lang.NullPointerException ex){
+            JOptionPane.showMessageDialog(null, "Informe a data da despesa");
         }catch(ParseException ex){
             System.err.println("Erro: "+ex);
         }
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
-    private void sliderDiaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderDiaStateChanged
-        lblDia.setText(Integer.toString(sliderDia.getValue()));
-    }//GEN-LAST:event_sliderDiaStateChanged
+    private void radioSemanalFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_radioSemanalFocusGained
+        txtRepeticao.setVisible(false);
+        lblVezes.setVisible(false);
+                
+    }//GEN-LAST:event_radioSemanalFocusGained
+
+    private void radioMensalFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_radioMensalFocusGained
+        txtRepeticao.setVisible(false);
+        lblVezes.setVisible(false);
+    }//GEN-LAST:event_radioMensalFocusGained
+
+    private void radioParcelaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_radioParcelaFocusGained
+        txtRepeticao.setVisible(true);
+        lblVezes.setVisible(true);
+    }//GEN-LAST:event_radioParcelaFocusGained
 
     /**
      * @param args the command line arguments
@@ -306,15 +417,21 @@ public class AlterarDespesa extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnConfirmar;
+    private com.toedter.calendar.JDateChooser calendar;
+    private javax.swing.ButtonGroup grupo1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel lblDia;
     private javax.swing.JLabel lblInsiraSuprimento;
     private javax.swing.JLabel lblInsiraSuprimento1;
     private javax.swing.JLabel lblInsiraSuprimento4;
     private javax.swing.JLabel lblStringDia;
+    private javax.swing.JLabel lblStringDia1;
+    private javax.swing.JLabel lblVezes;
     private javax.swing.Box.Filler linha;
-    private javax.swing.JSlider sliderDia;
+    private javax.swing.JRadioButton radioMensal;
+    private javax.swing.JRadioButton radioParcela;
+    private javax.swing.JRadioButton radioSemanal;
     private javax.swing.JTextArea txtDescricao;
+    private javax.swing.JTextField txtRepeticao;
     private javax.swing.JLabel txtStringSuprimento;
     private javax.swing.JTextField txtValor;
     // End of variables declaration//GEN-END:variables

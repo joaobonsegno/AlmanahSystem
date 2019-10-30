@@ -7,7 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import main.Login;
 import model.bean.CategoriaPrato;
 import model.bean.Prato;
 import model.bean.Produto;
@@ -50,7 +49,7 @@ public class PratoDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         ArrayList<Prato> pratos = new ArrayList<>();
-        CategoriaDAO cDao = new CategoriaDAO();
+        CategoriaPratoDAO cDao = new CategoriaPratoDAO();
         
         try{
             stmt = con.prepareStatement("SELECT * FROM prato");
@@ -61,7 +60,7 @@ public class PratoDAO {
                 p.setId(rs.getInt("idPrato"));
                 p.setNome(rs.getString("nome"));
                 p.setDescricao(rs.getString("descricao"));
-                for (CategoriaPrato c:Login.categoriasPratos){
+                for (CategoriaPrato c:cDao.read()){
                     if (c.getId() == rs.getInt("idCategoriaPrato")){
                         p.setCategoria(c);
                     }
@@ -84,6 +83,7 @@ public class PratoDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Prato p = new Prato();
+        CategoriaPratoDAO cDao = new CategoriaPratoDAO();
         try{
             stmt = con.prepareStatement("SELECT * FROM prato WHERE nome LIKE ?");
             stmt.setString(1, "%"+nome+"%");
@@ -93,7 +93,7 @@ public class PratoDAO {
                 p.setId(rs.getInt("idPrato"));
                 p.setNome(rs.getString("nome"));
                 p.setDescricao(rs.getString("descricao"));
-                for (CategoriaPrato c:Login.categoriasPratos){
+                for (CategoriaPrato c:cDao.read()){
                     if (c.getId() == rs.getInt("idCategoriaPrato")){
                         p.setCategoria(c);
                     }
@@ -112,7 +112,7 @@ public class PratoDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         ArrayList<Prato> pratos = new ArrayList<>();
-        CategoriaDAO cDao = new CategoriaDAO();       
+        CategoriaPratoDAO cDao = new CategoriaPratoDAO();     
         try{
             stmt = con.prepareStatement("SELECT * FROM prato WHERE nome LIKE ?");
             stmt.setString(1, "%"+nome+"%");
@@ -122,7 +122,7 @@ public class PratoDAO {
                 p.setId(rs.getInt("idPrato"));
                 p.setNome(rs.getString("nome"));
                 p.setDescricao(rs.getString("descricao"));
-                for (CategoriaPrato c:Login.categoriasPratos){
+                for (CategoriaPrato c:cDao.read()){
                     if (c.getId() == rs.getInt("idCategoriaPrato")){
                         p.setCategoria(c);
                     }
@@ -163,7 +163,7 @@ public class PratoDAO {
                 p.setId(rs.getInt("idPrato"));
                 p.setNome(rs.getString("nome"));
                 p.setDescricao(rs.getString("descricao"));
-                for (CategoriaPrato c:Login.categoriasPratos){
+                for (CategoriaPrato c:cDao.read()){
                     if (c.getId() == rs.getInt("idCategoriaPrato")){
                         p.setCategoria(c);
                     }

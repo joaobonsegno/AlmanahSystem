@@ -37,8 +37,6 @@ public class Login extends javax.swing.JFrame {
     public static Funcionario funcAtual;
     public static String user, password;
     public static String cargo = "Gerente";
-    public static ArrayList<Categoria> categorias = new ArrayList<>();
-    public static ArrayList<CategoriaPrato> categoriasPratos = new ArrayList<>();
     
     public Login() {
         initComponents();
@@ -48,55 +46,55 @@ public class Login extends javax.swing.JFrame {
         CaixaDAO caixaDao = new CaixaDAO();
         ComandaDAO comandaDao = new ComandaDAO();
         ItemComandaDAO itemDao = new ItemComandaDAO();
-        LogDAO logDao = new LogDAO();
-        ProdutoDAO pDao = new ProdutoDAO();
         
-        /*for (Produto p: pDao.read()){
-            listaProdutos.add(p);
-        }
-        
-        for (Categoria c:cDao.read()){
-            categorias.add(c);
-        }
-        
-        for (CategoriaPrato c:cpDao.read()){
-            categoriasPratos.add(c);
-        }*/
-        
+       
+        //Criar as despesas do dia ou dos dias passados
         Calendar calendario = Calendar.getInstance();
         SimpleDateFormat formatoBr = new SimpleDateFormat("dd/MM/yyyy");
-        Date dataDespesa, dataAtual;
         AgendaDespesaDAO agendaDao = new AgendaDespesaDAO();   
         DespesaDAO despesaDao = new DespesaDAO();
+        
         try{
-            for (AgendaDespesa a : agendaDao.readForStatus()){     
-                dataAtual = formatoBr.parse(GerenciadorComandas.getDataAtualSemHoraFormatoBr());
-                dataDespesa = formatoBr.parse(a.getData());
-                int resultado = dataDespesa.compareTo(dataAtual);
-                if (resultado == -1 || resultado == 0){
-                    // Instancia a despesa e seta seus atributos, para depois atualizar no banco
-                    Despesa d = new Despesa();
-                    d.setValor(a.getValor());
-                    d.setData(GerenciadorComandas.getDataAtualComHoraFormatoBr());
-                    d.setDescricao(a.getDescricao());
-                    despesaDao.create(d);
+            // CRIA DESPESAS MENSAIS
+            for (AgendaDespesa a : agendaDao.readForDataAtual()){
+                Date dataD = formatoBr.parse(a.getData());
+                // Instancia a despesa e seta seus atributos, para depois atualizar no banco                
+                Despesa d = new Despesa();
+                d.setValor(a.getValor());
+                d.setData(GerenciadorComandas.getDataAtualComHoraFormatoBr());
+                d.setDescricao(a.getDescricao());
+                despesaDao.create(d);
 
-                    // Atualiza o status e a data da agenda que acabou de virar despesa                    
-                    calendario.setTime(dataDespesa);
+                // Atualiza o status e a data da agenda que acabou de virar despesa                     
+                // Soma 1 mês
+                if (a.getFrequencia().equals("Semanal")){
+                    dataD.setDate(dataD.getDate()+7);
+                    a.setData(formatoBr.format(dataD));
+                }else{
+                    calendario.setTime(dataD);
                     calendario.set(Calendar.MONTH, calendario.get(Calendar.MONTH)+1);
                     a.setData(formatoBr.format(calendario.getTime()));
-                    a.setStatus(0);
-                    agendaDao.updateStatusEData(a);
+                }
+
+                // Verifica se a quantidade de parcelas chegou à zero. SE SIM, seta a FLAG para que não haja tentativa de update num registro que acabou de ser EXCLUÍDO
+                boolean flagParcelaZerada = false;
+                if (a.getFrequencia().equals("Parcela")){
+                    a.setQtdVezes(a.getQtdVezes()-1);
+                    if (a.getQtdVezes() == 0){
+                        agendaDao.delete(a.getId());
+                        flagParcelaZerada = true;
+                    }else{
+                        agendaDao.updateParcela(a);
+                    }
+                }
+                if (!flagParcelaZerada){                       
+                    agendaDao.updateData(a);
                 }
             }
         }catch(ParseException ex){
             System.err.println("Erro (AGENDA DESPESA NA TELA DE LOGIN): "+ex);
-        }
-        
-        if (agendaDao.readForStatus().isEmpty()){
-            agendaDao.updateStatusMassivo();
-        }
-        
+        } 
+        // ----------------------------------------------------------------------------------------------
         for (Caixa c:caixaDao.read()){
             if(c.getStatus() == 1){
                 caixaAtual = c;

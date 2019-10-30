@@ -5,7 +5,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import main.GerenciadorComandas;
 import model.bean.AgendaDespesa;
 
 
@@ -15,13 +18,13 @@ public class AgendaDespesaDAO {
         PreparedStatement stmt = null;
         
         try{
-            String sql = "INSERT INTO agendaDespesa (descricao, dia, valor, status, data)VALUES(?,?,?,?,?)";
+            String sql = "INSERT INTO agendaDespesa (descricao, frequencia, valor, data, qtdVezes)VALUES(?,?,?,?,?)";
             stmt = con.prepareStatement(sql);
             stmt.setString(1, d.getDescricao());
-            stmt.setInt(2, d.getDia());
+            stmt.setString(2, d.getFrequencia());
             stmt.setDouble(3, d.getValor());
-            stmt.setInt(4, d.getStatus());
-            stmt.setString(5, d.getData());
+            stmt.setString(4, d.getData());
+            stmt.setInt(5, d.getQtdVezes());
             
             stmt.executeUpdate();
             //System.out.println("Salvo com sucesso!");
@@ -39,7 +42,7 @@ public class AgendaDespesaDAO {
         ArrayList<AgendaDespesa> despesas = new ArrayList<>();
         
         try{
-            stmt = con.prepareStatement("SELECT * FROM agendaDespesa ORDER BY dia, valor");
+            stmt = con.prepareStatement("SELECT * FROM agendaDespesa ORDER BY str_to_date(data, '%d/%m/%Y'), valor, descricao");
             rs = stmt.executeQuery();
             while (rs.next()){
                 AgendaDespesa d = new AgendaDespesa();
@@ -47,37 +50,10 @@ public class AgendaDespesaDAO {
                 d.setId(rs.getInt("idAgendaDespesa"));
                 d.setDescricao(rs.getString("descricao"));
                 d.setValor(rs.getDouble("valor"));
-                d.setDia(rs.getInt("dia"));
-                d.setStatus(rs.getInt("status"));
+                d.setFrequencia(rs.getString("frequencia"));
+                d.setQtdVezes(rs.getInt("qtdVezes"));
                 d.setData(rs.getString("data"));
-                despesas.add(d);
-            }
-        }catch(SQLException ex){
-            System.err.println("Erro no READ MySQL: "+ex);
-        }finally{
-            ConnectionFactory.closeConnection(con, stmt, rs);
-        }
-        return despesas;
-    }
-    
-    public ArrayList<AgendaDespesa> readForStatus(){
-        Connection con = ConnectionFactory.getConnection();
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        ArrayList<AgendaDespesa> despesas = new ArrayList<>();
-        
-        try{
-            stmt = con.prepareStatement("SELECT * FROM agendaDespesa WHERE status = 1 ORDER BY dia");
-            rs = stmt.executeQuery();
-            while (rs.next()){
-                AgendaDespesa d = new AgendaDespesa();
                 
-                d.setId(rs.getInt("idAgendaDespesa"));
-                d.setDescricao(rs.getString("descricao"));
-                d.setValor(rs.getDouble("valor"));
-                d.setDia(rs.getInt("dia"));
-                d.setStatus(rs.getInt("status"));
-                d.setData(rs.getString("data"));
                 despesas.add(d);
             }
         }catch(SQLException ex){
@@ -101,8 +77,8 @@ public class AgendaDespesaDAO {
                 d.setId(rs.getInt("idAgendaDespesa"));
                 d.setDescricao(rs.getString("descricao"));
                 d.setValor(rs.getDouble("valor"));
-                d.setDia(rs.getInt("dia"));
-                d.setStatus(rs.getInt("status"));
+                d.setFrequencia(rs.getString("frequencia"));
+                d.setQtdVezes(rs.getInt("qtdVezes"));
                 d.setData(rs.getString("data"));
             }
         }catch(SQLException ex){
@@ -113,6 +89,34 @@ public class AgendaDespesaDAO {
         return d;
     }
     
+    public  ArrayList<AgendaDespesa> readForDataAtual(){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;       
+        ArrayList<AgendaDespesa> a = new ArrayList<>();
+        
+        try{
+            stmt = con.prepareStatement("SELECT * FROM agendaDespesa WHERE str_to_date(data, '%d/%m/%Y') <= str_to_date('"+GerenciadorComandas.getDataAtualSemHoraFormatoBr()+"', '%d/%m/%Y') "
+                    + "ORDER BY str_to_date(data, '%d/%m/%Y'), valor");
+            rs = stmt.executeQuery();
+            while (rs.next()){  
+                AgendaDespesa d = new AgendaDespesa();
+                d.setId(rs.getInt("idAgendaDespesa"));
+                d.setDescricao(rs.getString("descricao"));
+                d.setValor(rs.getDouble("valor"));
+                d.setFrequencia(rs.getString("frequencia"));
+                d.setQtdVezes(rs.getInt("qtdVezes"));
+                d.setData(rs.getString("data"));
+                a.add(d);
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return a;
+    }
+    
     public ArrayList<AgendaDespesa> readForDescricao(String desc){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -120,7 +124,7 @@ public class AgendaDespesaDAO {
         ArrayList<AgendaDespesa> despesas = new ArrayList<>();
         
         try{
-            String sql = "SELECT * FROM agendaDespesa WHERE descricao LIKE '%"+desc+"%' ORDER BY dia";
+            String sql = "SELECT * FROM agendaDespesa WHERE descricao LIKE '%"+desc+"%' ORDER BY str_to_date(data, '%d/%m/%Y'), valor, descricao";
             stmt = con.prepareStatement(sql);
             rs = stmt.executeQuery();
             while (rs.next()){
@@ -129,9 +133,10 @@ public class AgendaDespesaDAO {
                 d.setId(rs.getInt("idAgendaDespesa"));
                 d.setDescricao(rs.getString("descricao"));
                 d.setValor(rs.getDouble("valor"));
-                d.setDia(rs.getInt("dia"));
-                d.setStatus(rs.getInt("status"));
+                d.setFrequencia(rs.getString("frequencia"));
+                d.setQtdVezes(rs.getInt("qtdVezes"));
                 d.setData(rs.getString("data"));
+                
                 despesas.add(d);
             }
         }catch(SQLException ex){
@@ -147,13 +152,13 @@ public class AgendaDespesaDAO {
         PreparedStatement stmt = null;
         
         try{
-            String sql = "UPDATE agendaDespesa SET descricao=?, valor=?, dia=?, status=?, data=? WHERE idAgendaDespesa = ?";
+            String sql = "UPDATE agendaDespesa SET descricao=?, valor=?, frequencia=?, data=?, qtdVezes=? WHERE idAgendaDespesa = ?";
             stmt = con.prepareStatement(sql);
             stmt.setString(1, d.getDescricao());
             stmt.setDouble(2, d.getValor());
-            stmt.setInt(3, d.getDia());
-            stmt.setInt(4, d.getStatus());
-            stmt.setString(5, d.getData());
+            stmt.setString(3, d.getFrequencia());
+            stmt.setString(4, d.getData());
+            stmt.setInt(5, d.getQtdVezes());
             stmt.setInt(6, d.getId());            
             
             stmt.executeUpdate();
@@ -165,17 +170,16 @@ public class AgendaDespesaDAO {
         }
     }
     
-    public void updateStatusEData(AgendaDespesa d){
+    public void updateData(AgendaDespesa d){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         
         try{
-            String sql = "UPDATE agendaDespesa SET status=?, data=? WHERE idAgendaDespesa = ?";
+            String sql = "UPDATE agendaDespesa SET data=? WHERE idAgendaDespesa = ?";
             stmt = con.prepareStatement(sql);
             
-            stmt.setInt(1, d.getStatus());
-            stmt.setString(2, d.getData());
-            stmt.setInt(3, d.getId());            
+            stmt.setString(1, d.getData());
+            stmt.setInt(2, d.getId());            
             
             stmt.executeUpdate();
             //System.out.println("Atualizado com sucesso!");
@@ -186,13 +190,17 @@ public class AgendaDespesaDAO {
         }
     }
     
-    public void updateStatusMassivo(){
+    public void updateParcela(AgendaDespesa d){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         
         try{
-            String sql = "UPDATE agendaDespesa SET status=1";
-            stmt = con.prepareStatement(sql);                   
+            String sql = "UPDATE agendaDespesa SET qtdVezes=? WHERE idAgendaDespesa = ?";
+            stmt = con.prepareStatement(sql);
+            
+            stmt.setInt(1, d.getQtdVezes());
+            stmt.setInt(2, d.getId());            
+            
             stmt.executeUpdate();
             //System.out.println("Atualizado com sucesso!");
         }catch(SQLException ex){

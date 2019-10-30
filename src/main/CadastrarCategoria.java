@@ -141,14 +141,7 @@ public class CadastrarCategoria extends javax.swing.JFrame {
         c.setNome(txtNome.getText());
         c.setDescricao(txtDescricao.getText());
 
-        cDao.create(c);
-        for(Categoria cat:cDao.read()){
-            if(cat.getNome().equals(c.getNome())){
-                c.setId(cat.getId());
-            }
-        }
-        Login.categorias.add(c);
-        
+        cDao.create(c);        
         
         dispose();
     }//GEN-LAST:event_btnConfirmarActionPerformed

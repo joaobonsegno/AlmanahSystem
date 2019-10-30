@@ -143,13 +143,7 @@ public class CadastrarCategoriaPrato extends javax.swing.JFrame {
         c.setNome(txtNome.getText());
         c.setDescricao(txtDescricao.getText());
 
-        cDao.create(c);
-        for(CategoriaPrato cat:cDao.read()){
-            if(cat.getNome().equals(c.getNome())){
-                c.setId(cat.getId());
-            }
-        }
-        Login.categoriasPratos.add(c);       
+        cDao.create(c);      
         dispose();
     }//GEN-LAST:event_btnConfirmarActionPerformed
 

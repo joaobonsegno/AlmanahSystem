@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Fornecedor {
     private int id;
-    private String nome, descricao, telefone, celular;
+    private String nome, descricao, telefone, celular, cnpj, email;
     private ArrayList<Produto> produtosFornecidos;
 
     public int getId() {
