@@ -2,6 +2,8 @@ package main;
 
 import ArrumarString.Monetarios;
 import javax.swing.JOptionPane;
+import static main.GerenciadorComandas.idsAbertos;
+import model.dao.ComandaDAO;
 import model.dao.ItemComandaDAO;
 
 public class NovaRefeicao extends javax.swing.JDialog {
@@ -26,10 +28,7 @@ public class NovaRefeicao extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
-        cbPeso.setSelected(true);
-        String comString = Integer.toString(GerenciadorComandas.idSelecionado);
-        lblComanda.setText(comString);
-        getRootPane().setDefaultButton(btnConfirmar);
+        cbPeso.setSelected(true);       
         txtEntradaPreco.setDocument(new Monetarios(7,2));
     }
     
@@ -42,22 +41,23 @@ public class NovaRefeicao extends javax.swing.JDialog {
         linha = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
         lblStringPeso = new javax.swing.JLabel();
         txtEntradaPreco = new javax.swing.JTextField();
-        btnCancelar = new javax.swing.JButton();
-        btnConfirmar = new javax.swing.JButton();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(1, 6), new java.awt.Dimension(1, 6), new java.awt.Dimension(1, 3000));
         cbBuffet = new javax.swing.JCheckBox();
         cbPeso = new javax.swing.JCheckBox();
         lblStringkg = new javax.swing.JLabel();
-        lblStringComanda = new javax.swing.JLabel();
-        lblComanda = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        txtNumeroComanda = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        btnLancador = new javax.swing.JButton();
+        linha1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Novo Prato");
-        setMinimumSize(new java.awt.Dimension(516, 311));
+        setMaximumSize(new java.awt.Dimension(516, 290));
+        setMinimumSize(new java.awt.Dimension(516, 290));
         setResizable(false);
 
         lblStringNovoPrato.setBackground(new java.awt.Color(0, 102, 204));
-        lblStringNovoPrato.setFont(new java.awt.Font("Comic Sans MS", 0, 22)); // NOI18N
+        lblStringNovoPrato.setFont(new java.awt.Font("Century Gothic", 0, 22)); // NOI18N
         lblStringNovoPrato.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblStringNovoPrato.setText("Nova Refeição");
 
@@ -68,33 +68,11 @@ public class NovaRefeicao extends javax.swing.JDialog {
         lblStringPeso.setText("Valor da Refeição:");
 
         txtEntradaPreco.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-
-        btnCancelar.setBackground(new java.awt.Color(204, 0, 0));
-        btnCancelar.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        btnCancelar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\cancel.png")); // NOI18N
-        btnCancelar.setText("  Cancelar");
-        btnCancelar.setBorder(new javax.swing.border.MatteBorder(null));
-        btnCancelar.setBorderPainted(false);
-        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarActionPerformed(evt);
+        txtEntradaPreco.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtEntradaPrecoKeyReleased(evt);
             }
         });
-
-        btnConfirmar.setBackground(new java.awt.Color(0, 153, 0));
-        btnConfirmar.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        btnConfirmar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\confirm.png")); // NOI18N
-        btnConfirmar.setText(" Confirmar");
-        btnConfirmar.setBorder(new javax.swing.border.MatteBorder(null));
-        btnConfirmar.setBorderPainted(false);
-        btnConfirmar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnConfirmarActionPerformed(evt);
-            }
-        });
-
-        filler1.setBackground(new java.awt.Color(0, 0, 0));
-        filler1.setOpaque(true);
 
         grupo1.add(cbBuffet);
         cbBuffet.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
@@ -127,92 +105,121 @@ public class NovaRefeicao extends javax.swing.JDialog {
         lblStringkg.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         lblStringkg.setText("R$");
 
-        lblStringComanda.setFont(new java.awt.Font("Comic Sans MS", 0, 20)); // NOI18N
-        lblStringComanda.setForeground(new java.awt.Color(255, 0, 0));
-        lblStringComanda.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblStringComanda.setText("Comanda");
+        jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
-        lblComanda.setFont(new java.awt.Font("Comic Sans MS", 0, 20)); // NOI18N
-        lblComanda.setForeground(new java.awt.Color(255, 0, 0));
-        lblComanda.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblComanda.setText("X");
+        txtNumeroComanda.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        txtNumeroComanda.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtNumeroComandaFocusGained(evt);
+            }
+        });
+        txtNumeroComanda.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtNumeroComandaKeyReleased(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Código:");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtNumeroComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNumeroComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        btnLancador.setFont(new java.awt.Font("Century Gothic", 0, 17)); // NOI18N
+        btnLancador.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\voltar (1).png")); // NOI18N
+        btnLancador.setText("Voltar");
+        btnLancador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLancadorActionPerformed(evt);
+            }
+        });
+
+        linha1.setBackground(new java.awt.Color(0, 0, 0));
+        linha1.setOpaque(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 85, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(192, 192, 192)
-                        .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(80, 80, 80))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(lblStringComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(122, 122, 122)
-                        .addComponent(lblStringNovoPrato))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbBuffet)
-                            .addComponent(cbPeso)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(99, 99, 99)
-                        .addComponent(lblStringPeso)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtEntradaPreco, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblStringkg)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(138, 138, 138)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(52, 52, 52)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(cbBuffet)
+                                .addComponent(cbPeso)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(lblStringPeso)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(txtEntradaPreco, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(lblStringkg))))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(btnLancador)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblStringNovoPrato))))
+                .addContainerGap(141, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(linha, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 516, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(linha1, javax.swing.GroupLayout.DEFAULT_SIZE, 516, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(filler1, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
-                    .addComponent(lblStringNovoPrato, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblStringComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(33, 33, 33)
+                .addGap(17, 17, 17)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblStringNovoPrato)
+                    .addComponent(btnLancador, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(22, 22, 22)
                 .addComponent(cbBuffet)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(cbPeso)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblStringkg)
                     .addComponent(txtEntradaPreco, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblStringPeso))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(20, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(41, 41, 41)
+                    .addGap(57, 57, 57)
                     .addComponent(linha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(269, Short.MAX_VALUE)))
+                    .addContainerGap(232, Short.MAX_VALUE)))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(278, Short.MAX_VALUE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        dispose();   
-        
-    }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void cbBuffetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbBuffetMouseClicked
         alterarCheckBox();
@@ -230,25 +237,65 @@ public class NovaRefeicao extends javax.swing.JDialog {
         alterarCheckBox();
     }//GEN-LAST:event_cbPesoMouseClicked
 
-    private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        //try{
-            String valor = txtEntradaPreco.getText();
-            valor = valor.replace("." , "");
-            valor = valor.replace(",", ".");
-            ItemComandaDAO item = new ItemComandaDAO();
-            if (cbPeso.isSelected()){
-                //preco = GerenciadorComandas.arredondarValor(preco);
-                Double precoPrato = Double.parseDouble(valor);
-                GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1).setPratos(precoPrato);
-                item.create(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1), precoPrato);
-            }
-            else{
-                GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1).setPratos(24.90);
-                item.create(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado-1), 24.90);
-            }
-            dispose();
+    private void txtNumeroComandaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNumeroComandaFocusGained
+        
+    }//GEN-LAST:event_txtNumeroComandaFocusGained
 
-    }//GEN-LAST:event_btnConfirmarActionPerformed
+    private void txtNumeroComandaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumeroComandaKeyReleased
+        if (evt.getKeyCode() == 10){
+            ComandaDAO comDao = new ComandaDAO();
+            int cod = comDao.codComanda(txtNumeroComanda.getText());
+            if (cod == 0){
+                JOptionPane.showMessageDialog(null, "Código de comanda inválido");
+            }else{
+                try{
+                    txtNumeroComanda.setText("");
+                    boolean flagComandaAberta = false;
+                    for (Integer i : idsAbertos){
+                        if (i == cod){
+                            flagComandaAberta = true;
+                            break;
+                        }
+                    }
+                    if (!flagComandaAberta){
+                        GerenciadorComandas.novaComanda(cod);
+                    }
+                    String valor = txtEntradaPreco.getText();
+                    valor = valor.replace("." , "");
+                    valor = valor.replace(",", ".");
+                    int indice = GerenciadorComandas.retornaIndice(cod);
+                    ItemComandaDAO item = new ItemComandaDAO();
+                    if (cbPeso.isSelected()){
+                        //preco = GerenciadorComandas.arredondarValor(preco);
+                        Double precoPrato = Double.parseDouble(valor);
+                        if (precoPrato > 0.0){
+                            GerenciadorComandas.comandasAbertas.get(indice).setPratos(precoPrato);
+                            item.create(GerenciadorComandas.comandasAbertas.get(indice), precoPrato);
+                        }else{
+                            JOptionPane.showMessageDialog(null, "Insira o valor do prato");
+                        }                      
+                    }
+                    else{
+                        GerenciadorComandas.comandasAbertas.get(indice).setPratos(24.90);
+                        item.create(GerenciadorComandas.comandasAbertas.get(indice), 24.90);
+                    }
+                    dispose();
+                }catch(java.lang.NumberFormatException ex){
+                    JOptionPane.showMessageDialog(null, "Insira o valor do prato");
+                }
+            }
+        }
+    }//GEN-LAST:event_txtNumeroComandaKeyReleased
+
+    private void btnLancadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLancadorActionPerformed
+        
+        dispose();
+    }//GEN-LAST:event_btnLancadorActionPerformed
+
+    private void txtEntradaPrecoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEntradaPrecoKeyReleased
+        if (evt.getKeyCode() == 10)
+            txtNumeroComanda.requestFocus();
+    }//GEN-LAST:event_txtEntradaPrecoKeyReleased
 
     /**
      * @param args the command line arguments
@@ -300,18 +347,18 @@ public class NovaRefeicao extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnConfirmar;
+    private javax.swing.JButton btnLancador;
     private javax.swing.JCheckBox cbBuffet;
     private javax.swing.JCheckBox cbPeso;
-    private javax.swing.Box.Filler filler1;
     private javax.swing.ButtonGroup grupo1;
-    public static javax.swing.JLabel lblComanda;
-    public static javax.swing.JLabel lblStringComanda;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblStringNovoPrato;
     private javax.swing.JLabel lblStringPeso;
     private javax.swing.JLabel lblStringkg;
     private javax.swing.Box.Filler linha;
+    private javax.swing.Box.Filler linha1;
     private javax.swing.JTextField txtEntradaPreco;
+    private javax.swing.JTextField txtNumeroComanda;
     // End of variables declaration//GEN-END:variables
 }

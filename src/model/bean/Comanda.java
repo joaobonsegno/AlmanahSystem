@@ -11,6 +11,7 @@ public class Comanda {
 
     private Integer id, idBanco, status;
     private Double valor, valorPendente;
+    private String data;
     private ArrayList<Produto> itens = new ArrayList<>();
     private ArrayList<String> qnt = new ArrayList<>();
     private ArrayList<Double> pratos = new ArrayList<>();
@@ -114,6 +115,14 @@ public class Comanda {
 
     public int getId() {
         return id;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
     }
 
     public void setId(int id) {

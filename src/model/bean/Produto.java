@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Produto implements Comparable<Produto>{
     private Integer idProduto;
-    private String nome, ncm, ean, descricao, validade, qtdMinima, qtdEstoque, unidadeDeMedida;
+    private String nome, ncm, ean, descricao, qtdMinima, qtdEstoque, unidadeDeMedida;
     private Double preco, precoComDesconto;
     private Categoria categoria;
     private ArrayList<Produto> materiasPrimas = new ArrayList<>();
@@ -105,10 +105,6 @@ public class Produto implements Comparable<Produto>{
         this.qtdEstoque = qtdEstoque;
     }
 
-    public String getValidade() {
-        return validade;
-    }
-
     public String getUnidadeDeMedida() {
         return unidadeDeMedida;
     }
@@ -123,9 +119,5 @@ public class Produto implements Comparable<Produto>{
 
     public void setPrecoComDesconto(Double precoComPromocao) {
         this.precoComDesconto = precoComPromocao;
-    }
-    
-    public void setValidade(String validade) {
-        this.validade = validade;
     }
 }

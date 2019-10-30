@@ -15,12 +15,13 @@ public class ComandaDAO {
         PreparedStatement stmt = null;
         
         try{
-            String sql = "INSERT INTO comanda (valor, valorPendente, idSistema, status)VALUES(?,?,?,?)";
+            String sql = "INSERT INTO comanda (valor, valorPendente, idSistema, status, data)VALUES(?,?,?,?,?)";
             stmt = con.prepareStatement(sql);
             stmt.setDouble(1, c.getValor());
             stmt.setDouble(2, c.getValorPendente());
             stmt.setInt(3, c.getId());
             stmt.setInt(4, c.getStatus());
+            stmt.setString(5, c.getData());
             
             stmt.executeUpdate();
             System.out.println("Salvo com sucesso!");
@@ -71,6 +72,7 @@ public class ComandaDAO {
                 c.setValorPendente(rs.getDouble("valorPendente"));
                 c.setStatus(rs.getInt("status"));
                 c.setId(rs.getInt("idSistema"));
+                c.setData(rs.getString("data"));
 
                 for (Cliente cliente : clienteDao.read()){
                     if (cliente.getId() == rs.getInt("idCliente")){

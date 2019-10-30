@@ -3,11 +3,6 @@ package main;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.table.DefaultTableModel;
-import static main.GerenciadorComandas.comandasAbertas;
-import static main.GerenciadorComandas.lblErro;
-import static main.GerenciadorComandas.ordenarListas;
-import static main.GerenciadorProdutos.listaProdutos;
-import model.bean.Comanda;
 import model.bean.Produto;
 import model.dao.ProdutoDAO;
 

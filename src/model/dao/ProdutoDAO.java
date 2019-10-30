@@ -19,7 +19,7 @@ public class ProdutoDAO {
         PreparedStatement stmt = null;
         
         try{
-            String sql = "INSERT INTO produto (nome, ncm, ean, descricao, qtdMinima, preco, validade, qtdEstoque, unidadeDeMedida, idCategoria, precoComDesconto)VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO produto (nome, ncm, ean, descricao, qtdMinima, preco, qtdEstoque, unidadeDeMedida, idCategoria, precoComDesconto)VALUES(?,?,?,?,?,?,?,?,?,?)";
             stmt = con.prepareStatement(sql);
             stmt.setString(1, p.getNome());
             stmt.setString(2, p.getNcm());
@@ -27,11 +27,10 @@ public class ProdutoDAO {
             stmt.setString(4, p.getDescricao());
             stmt.setString(5, p.getQtdMinima());
             stmt.setDouble(6, p.getPreco());  
-            stmt.setString(7, p.getValidade());
-            stmt.setString(8, p.getQtdEstoque());
-            stmt.setString(9, p.getUnidadeDeMedida());
-            stmt.setInt(10, p.getCategoria().getId());
-            stmt.setDouble(11, p.getPreco());
+            stmt.setString(7, p.getQtdEstoque());
+            stmt.setString(8, p.getUnidadeDeMedida());
+            stmt.setInt(9, p.getCategoria().getId());
+            stmt.setDouble(10, p.getPreco());
             stmt.executeUpdate();
             System.out.println("Salvo com sucesso!");
         }catch(SQLException ex){
@@ -64,7 +63,6 @@ public class ProdutoDAO {
                 p.setUnidadeDeMedida(rs.getString("unidadeDeMedida"));
                 p.setPrecoComDesconto(rs.getDouble("precoComDesconto"));
                 p.setQtdEstoque(rs.getString("qtdEstoque"));
-                p.setValidade(rs.getString("validade"));
                 Integer categoriaProduto = (rs.getInt("idCategoria"));
                 for (Categoria c:cDao.read()){
                     if (c.getId() == categoriaProduto){
@@ -108,7 +106,6 @@ public class ProdutoDAO {
                 p.setPrecoComDesconto(rs.getDouble("precoComDesconto"));
                 
                 Integer categoriaProduto = (rs.getInt("idCategoria"));
-                p.setValidade(rs.getString("validade"));
                 for (Categoria c:cDao.read()){
                     if (c.getId() == categoriaProduto){
                         p.setCategoria(c);
@@ -158,7 +155,6 @@ public class ProdutoDAO {
                 p.setQtdMinima(rs.getString("qtdMinima"));
                 p.setQtdEstoque(rs.getString("qtdEstoque"));
                 Integer categoriaProduto = (rs.getInt("idCategoria"));
-                p.setValidade(rs.getString("validade"));
                 p.setUnidadeDeMedida(rs.getString("unidadeDeMedida"));
                 p.setPrecoComDesconto(rs.getDouble("precoComDesconto"));
                 p.setCategoria(cat);
@@ -185,11 +181,10 @@ public class ProdutoDAO {
             stmt.setString(4, p.getDescricao());
             stmt.setString(5, p.getQtdMinima());
             stmt.setDouble(6, p.getPreco());  
-            stmt.setString(7, p.getValidade());
-            stmt.setString(8, p.getQtdEstoque());
-            stmt.setInt(9, p.getCategoria().getId());
-            stmt.setString(10, p.getUnidadeDeMedida());
-            stmt.setInt(11, p.getIdProduto());
+            stmt.setString(7, p.getQtdEstoque());
+            stmt.setInt(8, p.getCategoria().getId());
+            stmt.setString(9, p.getUnidadeDeMedida());
+            stmt.setInt(10, p.getIdProduto());
             
             stmt.executeUpdate();
             //System.out.println("Atualizado com sucesso!");

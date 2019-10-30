@@ -427,12 +427,11 @@ public class CadastrarProduto extends javax.swing.JFrame {
                 p.setDescricao(txtDescricao.getText());        //Atributo 6
                 p.setNcm(txtNcm.getText());                    //Atributo 7
                 p.setEan(txtEan.getText());                    //Atributo 8
-                p.setValidade("");                             //Atributo 9
-                p.setQtdEstoque("0");                          //Atributo 10
+                p.setQtdEstoque("0");                          //Atributo 9
                 
                 // Verifica se o sistema controlará o ESTOQUE do produto
                 if(!txtQtdMinima.getText().equals("")){
-                    p.setQtdMinima(txtQtdMinima.getText());    //Atributo 11
+                    p.setQtdMinima(txtQtdMinima.getText());    //Atributo 10
                 }else{
                     p.setQtdMinima("X");
                     p.setQtdEstoque("X");

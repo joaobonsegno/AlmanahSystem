@@ -105,7 +105,6 @@ public class Login extends javax.swing.JFrame {
         for (Comanda c:comandaDao.read()){
             if(c.getStatus() == 1){
                 GerenciadorComandas.comandasAbertas.add(c);
-                GerenciadorComandas.numeroNovaComanda = c.getId();
                 itemDao.read(c);
             }else{
                 comandaDao.delete(c.getIdBanco());

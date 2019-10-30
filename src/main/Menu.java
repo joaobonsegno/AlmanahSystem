@@ -30,7 +30,7 @@ public class Menu extends javax.swing.JFrame {
         }
         
         setPromocao();
-        setFuncionario();      
+        //setFuncionario();      
     }
     
     public void setFuncionario(){
