@@ -88,7 +88,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
     
     public static String getDataAtualComHoraFormatoBr(){
         Calendar data = new GregorianCalendar();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy   HH:mm:ss");
         String dataFormatada = sdf.format(data.getTime());
         return dataFormatada;
     }
@@ -364,7 +364,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
     }
     
     public void novaInstancia(){
-        limparTabela();
+        limparTabela();  
         DefaultTableModel dtmComandas = (DefaultTableModel) jtComandas.getModel();
         idsAbertos.removeAll(idsAbertos);
         for(Comanda c : comandasAbertas){
@@ -756,20 +756,11 @@ public class GerenciadorComandas extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBebidaActionPerformed
 
     private void btnSobremesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSobremesaActionPerformed
-        try{
-            idSelecionado = (Integer)jtComandas.getValueAt(jtComandas.getSelectedRow(), 0);
-            indiceSelecionado = retornaIndice()+1;
-            if (existeComanda()){
-                new NovaSobremesa().setVisible(true); 
-              //  dispose();
-            }
-        }catch(java.lang.ArrayIndexOutOfBoundsException ex){
-
-        }
+        new NovaSobremesa().setVisible(true); 
     }//GEN-LAST:event_btnSobremesaActionPerformed
 
     private void btnEncerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEncerrarActionPerformed
-        try{
+        /*try{
             idSelecionado = (Integer)jtComandas.getValueAt(jtComandas.getSelectedRow(), 0);
             indiceSelecionado = retornaIndice();
             for(Comanda c:comandasAbertas){
@@ -784,15 +775,15 @@ public class GerenciadorComandas extends javax.swing.JFrame {
                         //ordenarComandas();  
                         c.setStatus(0);
                         comandaDao.update(c);
-                    }else{
+                    }else{*/
                         new EncerrarComanda().setVisible(true); 
                         dispose();
-                    }
+                    /*}
                 }
             }    
         }catch(java.lang.NumberFormatException|java.lang.NullPointerException ex){
 
-        }catch(java.util.ConcurrentModificationException ex){}
+        }catch(java.util.ConcurrentModificationException ex){}*/
     }//GEN-LAST:event_btnEncerrarActionPerformed
 
     private void btnRefeicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefeicaoActionPerformed
@@ -817,7 +808,8 @@ public class GerenciadorComandas extends javax.swing.JFrame {
             ComandaDAO comDao = new ComandaDAO();
             int cod = comDao.codComanda(txtNumeroComanda.getText());           
             if (cod == 0){
-                JOptionPane.showMessageDialog(null, "Código de comanda inválido");
+                if (!txtNumeroComanda.getText().equals(""))
+                    JOptionPane.showMessageDialog(null, "Código de comanda inválido");
             }else{
                 txtNumeroComanda.setText("");
                 boolean flagComandaAberta = false;

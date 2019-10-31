@@ -90,6 +90,38 @@ public class ComandaDAO {
         return comandas;
     }
     
+    public Comanda readForId(int id){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ClienteDAO clienteDao = new ClienteDAO();
+        Comanda c = new Comanda();
+        
+        try{
+            stmt = con.prepareStatement("SELECT * FROM comanda WHERE idSistema = "+id+" AND status = 1");
+            rs = stmt.executeQuery();
+            while (rs.next()){
+                c.setIdBanco(rs.getInt("idComanda"));
+                c.setValor(rs.getDouble("valor"));
+                c.setValorPendente(rs.getDouble("valorPendente"));
+                c.setStatus(rs.getInt("status"));
+                c.setId(rs.getInt("idSistema"));
+                c.setData(rs.getString("data"));
+
+                for (Cliente cliente : clienteDao.read()){
+                    if (cliente.getId() == rs.getInt("idCliente")){
+                        c.setCliente(cliente);
+                    }
+                }
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return c;
+    }
+    
     public void update(Comanda c){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -102,6 +134,25 @@ public class ComandaDAO {
             stmt.setInt(3, c.getId());
             stmt.setInt(4, c.getStatus());
             stmt.setInt(5, c.getIdBanco());
+            
+            stmt.executeUpdate();
+           // System.out.println("Atualizado com sucesso!");
+        }catch(SQLException ex){
+            System.err.println("Erro ao atualizar: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+    }
+    
+    public void updateStatus(Comanda c){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        
+        try{
+            String sql = "UPDATE comanda SET status=? WHERE idComanda = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, 0);
+            stmt.setInt(2, c.getIdBanco());
             
             stmt.executeUpdate();
            // System.out.println("Atualizado com sucesso!");

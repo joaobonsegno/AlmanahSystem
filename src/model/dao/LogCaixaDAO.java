@@ -102,7 +102,7 @@ public class LogCaixaDAO {
         ResultSet rs = null;
         LogCaixa l = new LogCaixa();
         try{
-            stmt = con.prepareStatement("SELECT * FROM logCaixa");           
+            stmt = con.prepareStatement("SELECT * FROM logCaixa ORDER BY idLogCaixa DESC LIMIT 1");           
             rs = stmt.executeQuery();
             while (rs.next()){         
                 l.setId(rs.getInt("idLogCaixa"));

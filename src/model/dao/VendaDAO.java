@@ -54,6 +54,25 @@ public class VendaDAO {
         }
     }
     
+    public void updateCliente(Venda v){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        
+        try{
+            String sql = "UPDATE venda SET idCliente = ? WHERE idVenda = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setDouble(1, v.getCliente().getId());
+            stmt.setInt(2, v.getIdBanco());
+            
+            stmt.executeUpdate();
+            //System.out.println("Atualizado com sucesso!");
+        }catch(SQLException ex){
+            System.err.println("Erro ao atualizar: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+    }
+    
     public ArrayList<Venda> read(){
         CaixaDAO caixaDao = new CaixaDAO();
         Connection con = ConnectionFactory.getConnection();
@@ -83,6 +102,34 @@ public class VendaDAO {
             ConnectionFactory.closeConnection(con, stmt, rs);
         }
         return vendas;
+    }
+    
+    public Venda readLast(){
+        CaixaDAO caixaDao = new CaixaDAO();
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Venda v = new Venda();
+        
+        try{
+            stmt = con.prepareStatement("SELECT * FROM venda ORDER BY idVenda DESC LIMIT 1");
+            rs = stmt.executeQuery();
+            while (rs.next()){
+                v.setIdBanco(rs.getInt("idVenda"));
+                v.setData(rs.getString("data"));
+                v.setTotal(rs.getDouble("total"));
+                for(Caixa c:caixaDao.read()){
+                    if(rs.getInt("idCaixa") == c.getIdCaixa()){
+                        v.setCaixa(c);
+                    }
+                }
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return v;
     }
     
     public ArrayList<Venda> relatorio(String dataMaior, String dataMenor){

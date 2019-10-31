@@ -2,6 +2,7 @@ package main;
 
 import ArrumarString.Monetarios;
 import ArrumarString.SoNumeros;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import model.bean.Caixa;
 import model.bean.Carteira;
@@ -14,7 +15,7 @@ import model.dao.LogDAO;
 
 public class InserirCliente extends javax.swing.JDialog {
     public static Cliente cliente;
-    public static Carteira carteira;
+    public static ArrayList<Carteira> listaCarteiras = new ArrayList<>();
     public static boolean flagCliente = false;
     
     public InserirCliente(java.awt.Frame parent, boolean modal) {
@@ -24,9 +25,8 @@ public class InserirCliente extends javax.swing.JDialog {
         getRootPane().setDefaultButton(btnConfirmar); 
         btnConfirmar.setEnabled(false);
         ClienteDAO cliDao = new ClienteDAO();
-        if (GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getCliente() != null){
-            System.out.println("ESTOU PEGANDO CLIENTE DO BANCO");
-            cliente = cliDao.readForId(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).getCliente().getId());            
+        if (EncerrarComanda.venda.getCliente() != null){
+            cliente = EncerrarComanda.venda.getCliente();
             txtCpf.setText(cliente.getCpf());           
             lblNome.setText(cliente.getNome());
             try{
@@ -214,29 +214,23 @@ public class InserirCliente extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        try{
+        /*
             // Adicionando ao cliente a nova dívida
             Double saldo = cliente.getSaldo();
             saldo += FormaPagamento.valorCobrado;
             cliente.setSaldo(saldo);
             cliente.aumentarSaldoPendente(FormaPagamento.valorCobrado);
             ClienteDAO cDao = new ClienteDAO();
-            cDao.updateSaldo(cliente);
+            cDao.updateSaldo(cliente);*/
             
             // Tornando flagCliente TRUE para a tela de FormasDePagamento chamar o método de nova FORMA
             flagCliente = true;
             
             // Instanciando a CARTEIRA - o LOG das rotinas de Cateira de clientes
-            carteira = new Carteira(GerenciadorComandas.getDataAtualComHoraFormatoBr(), FormaPagamento.valorCobrado, cliente, Login.funcAtual);
-            
-            CarteiraDAO carteiraDao = new CarteiraDAO();
-            carteiraDao.create(carteira);  
-            carteira.setId(carteiraDao.readLast().getId());
-            
+            Carteira carteira = new Carteira(GerenciadorComandas.getDataAtualComHoraFormatoBr(), FormaPagamento.valorCobrado, cliente, Login.funcAtual);
+            listaCarteiras.add(carteira);
             dispose();
-        }catch(java.lang.NumberFormatException ex){
-            JOptionPane.showMessageDialog(null, "Insira um valor válido");
-        }
+        
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void txtCpfKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCpfKeyTyped

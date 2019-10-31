@@ -4,27 +4,100 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import main.EncerrarComanda;
+import model.dao.ProdutoDAO;
 
 public class Venda {
     private Integer idBanco;
-    private Double total;
+    private Double total, totalPendente;
     private String data;
     private Caixa caixa;
     private Cliente cliente;
     private ArrayList<Produto> itens = new ArrayList<>();
     private ArrayList<String> qnt = new ArrayList<>();
     private ArrayList<Double> pratos = new ArrayList<>();
+    private ArrayList<Forma> formasPagamento = new ArrayList<>();
 
+    public Venda(){}
+    
+    public Venda(Double valor){
+        this.total = valor;
+        this.totalPendente = valor;
+    }
+    
+    // MÉTODOS IMPORTANTES PARA FECHAMENTO DE COMANDAS
+    public void setItem(Produto p, String qtd){
+        Integer qtdInt = Integer.parseInt(qtd);
+        itens.add(p);
+        qnt.add(qtd);
+        this.total += p.getPrecoComDesconto()*qtdInt;
+        this.totalPendente += p.getPrecoComDesconto()*qtdInt;
+    }
+    
+    public void setPrato(Double d){
+        pratos.add(d);
+        this.total += d;
+        this.totalPendente += d;
+    }
+    
+    public void removerItem(int indice){
+        int qtd = Integer.parseInt(this.qnt.get(indice));
+        Double valor = this.itens.get(indice).getPrecoComDesconto()*qtd;
+        Produto p = this.itens.get(indice);
+        this.total -= valor;
+        this.totalPendente -= valor;
+        this.itens.remove(indice);
+        this.qnt.remove(indice);   
+    }
+    
+    public void removerPrato(int indice){
+        this.total -= this.pratos.get(indice);
+        this.totalPendente -= this.pratos.get(indice);
+        this.pratos.remove(indice);  
+    }
+    
+    public void setForma(Forma f){
+        this.formasPagamento.add(f);
+        this.totalPendente -= f.getValor();
+    }
+    
+    public void removerForma(int indice){
+        Double d = this.formasPagamento.get(indice).getValor();
+        this.total += d;
+        this.totalPendente += d;
+        this.formasPagamento.remove(indice);      
+    }
+    
+    // -----------------------------------------------
     public String dataAtual(){
         Calendar data = new GregorianCalendar();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy   HH:mm:ss");
         String dataFormatada = sdf.format(data.getTime());
         return dataFormatada;
     }
+
+    public Double getTotalPendente() {
+        return totalPendente;
+    }
+
+    public ArrayList<Forma> getFormasPagamento() {
+        return formasPagamento;
+    }
+
+    public void setFormasPagamento(ArrayList<Forma> formasPagamento) {
+        this.formasPagamento = formasPagamento;
+    }
+
+    public void setFormaPagamento(Forma f){
+        this.formasPagamento.add(f);
+    }
     
-    public void setAtributos(String data, Double total){
-        this.data = data;
-        this.total = total;
+    public Forma getFormaPagamento(int indice){
+        return this.formasPagamento.get(indice);
+    }
+    
+    public void setTotalPendente(Double totalPendente) {
+        this.totalPendente = totalPendente;
     }
     
     public Integer getIdBanco() {
@@ -34,8 +107,6 @@ public class Venda {
     public void setIdBanco(Integer idBanco) {
         this.idBanco = idBanco;
     }
-   
-    public Venda(){}
 
     public Double getTotal() {
         return total;

@@ -25,12 +25,6 @@ public class NovaBebida extends javax.swing.JFrame {
         formatarTabela();
         SpinnerNumberModel nm = new SpinnerNumberModel(1, 1, 50, 1);
         SpinnerQtd.setModel(nm);
-        ProdutoDAO pDao = new ProdutoDAO();
-        for (Produto p: pDao.read()){
-            if(p.getCategoria().getNome().equals("Bebida")|p.getCategoria().getNome().equals("Suco")){
-                listaProdutos.add(p);
-            }
-        }
         criarTabela();
         this.setLocationRelativeTo(null);
         txtNumeroComanda.requestFocus();
@@ -450,11 +444,13 @@ public class NovaBebida extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNumeroComandaFocusGained
 
     private void txtNumeroComandaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumeroComandaKeyReleased
+        ProdutoDAO pDao = new ProdutoDAO();
         if (evt.getKeyCode() == 10){
             ComandaDAO comDao = new ComandaDAO();
             int cod = comDao.codComanda(txtNumeroComanda.getText());
             if (cod == 0){
-                JOptionPane.showMessageDialog(null, "Código de comanda inválido");
+                if (!txtNumeroComanda.getText().equals(""))
+                    JOptionPane.showMessageDialog(null, "Código de comanda inválido");
             }else{
                 txtNumeroComanda.setText("");
                 boolean flagComandaAberta = false;
@@ -475,6 +471,7 @@ public class NovaBebida extends javax.swing.JFrame {
                         muitosSelecionados = true;
                     }
                     if (!muitosSelecionados){
+                        
                         int indice = GerenciadorComandas.retornaIndice(cod);
                         
                         LogDAO logDao = new LogDAO();
@@ -484,7 +481,7 @@ public class NovaBebida extends javax.swing.JFrame {
                         idSelecionado = (Integer)jtBebidas.getValueAt(jtBebidas.getSelectedRow(), 0);                     
                         Integer qtdInt = (Integer)SpinnerQtd.getValue();
                         String qtd = Integer.toString(qtdInt);
-                        for(Produto prod:listaProdutos){
+                        for(Produto prod:pDao.read()){
                             if(prod.getIdProduto().equals(idSelecionado)){
                                 if(!prod.getQtdEstoque().equals("X")){
                                     if(Integer.parseInt(prod.getQtdEstoque()) < qtdInt){

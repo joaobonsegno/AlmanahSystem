@@ -117,7 +117,14 @@ public class Menu extends javax.swing.JFrame {
                     if (prod.getCategoria().getNome().equals("Suco")){
                         prod.setPrecoComDesconto(prod.getPreco()*promocaoUm.getMultiplicador());
                         pDao.updatePromocao(prod);
-                    }              
+                    }
+                }
+            }else{
+                for (Produto prod:pDao.read()){
+                    if (prod.getCategoria().getNome().equals("Suco")){
+                        prod.setPrecoComDesconto(prod.getPreco());
+                        pDao.updatePromocao(prod);
+                    }
                 }
             }         
         }

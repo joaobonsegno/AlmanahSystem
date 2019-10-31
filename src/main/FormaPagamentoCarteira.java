@@ -717,6 +717,8 @@ public class FormaPagamentoCarteira extends javax.swing.JDialog {
         valor = valor.replace(",", ".");
         valorCobrado = Double.parseDouble(valor);
         adicionarFormaDePagamento("Dinheiro");
+        txtEntregue.setText("0,00");
+        jpTroco.setVisible(false);
     }//GEN-LAST:event_btnAdicionarActionPerformed
     private void jtPagamentoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtPagamentoFocusLost
         
@@ -738,6 +740,7 @@ public class FormaPagamentoCarteira extends javax.swing.JDialog {
 
     private void txtValorASerCobradoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtValorASerCobradoFocusGained
         jpTroco.setVisible(false);
+        txtEntregue.setEnabled(true);
         this.limparSelecao();
     }//GEN-LAST:event_txtValorASerCobradoFocusGained
 

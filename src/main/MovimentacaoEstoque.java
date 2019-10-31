@@ -128,7 +128,7 @@ public class MovimentacaoEstoque extends javax.swing.JFrame {
             jtLogs.getColumnModel().getColumn(2).setResizable(false);
         }
 
-        btnVoltar.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
+        btnVoltar.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         btnVoltar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\voltar (1).png")); // NOI18N
         btnVoltar.setText("Voltar");
         btnVoltar.setBorder(new javax.swing.border.MatteBorder(null));

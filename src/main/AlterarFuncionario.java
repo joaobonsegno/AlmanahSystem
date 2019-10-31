@@ -122,10 +122,12 @@ public class AlterarFuncionario extends javax.swing.JFrame {
         txtCelular = new javax.swing.JFormattedTextField();
         txtCep = new javax.swing.JFormattedTextField();
         txtCpf = new javax.swing.JFormattedTextField();
+        linha2 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Cadastrar Produto");
-        setMinimumSize(new java.awt.Dimension(1148, 671));
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Alterar Funcionário");
+        setMaximumSize(new java.awt.Dimension(1152, 690));
+        setMinimumSize(new java.awt.Dimension(1152, 690));
         setResizable(false);
 
         lblStringNovoFunc.setBackground(new java.awt.Color(0, 102, 204));
@@ -161,21 +163,21 @@ public class AlterarFuncionario extends javax.swing.JFrame {
         });
 
         lblStringFuncao.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringFuncao.setText("Função:");
+        lblStringFuncao.setText("*Função:");
 
         txtNome.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
 
         lblStringSexo.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringSexo.setText("Sexo:");
+        lblStringSexo.setText("*Sexo:");
 
         lblStringCpf.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringCpf.setText("CPF:");
+        lblStringCpf.setText("*CPF:");
 
         lblStringContatoUm.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
         lblStringContatoUm.setText("Telefone:");
 
         lblStringNascimento.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringNascimento.setText("Nascimento:");
+        lblStringNascimento.setText("*Nascimento:");
 
         lblStringEmail.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
         lblStringEmail.setText("Email:");
@@ -188,7 +190,7 @@ public class AlterarFuncionario extends javax.swing.JFrame {
         });
 
         lblStringNome.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringNome.setText("Nome:");
+        lblStringNome.setText("*Nome:");
 
         cbSexo.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         cbSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Masculino", "Feminino" }));
@@ -214,21 +216,21 @@ public class AlterarFuncionario extends javax.swing.JFrame {
         calendarNasc.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
 
         lblStringContatoDois.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringContatoDois.setText("Celular:");
+        lblStringContatoDois.setText("*Celular:");
 
         txtEmail.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
 
         lblStringSalario.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringSalario.setText("Salário (R$):");
+        lblStringSalario.setText("*Salário (R$):");
 
         lblStringUsuario.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringUsuario.setText("Usuário:");
+        lblStringUsuario.setText("*Usuário:");
 
         lblStringConfirmacao.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringConfirmacao.setText("Confirmação da Senha:");
+        lblStringConfirmacao.setText("*Confirmação da Senha:");
 
         lblStringSenha.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringSenha.setText("Senha:");
+        lblStringSenha.setText("*Senha:");
 
         txtSalario.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
         txtSalario.addActionListener(new java.awt.event.ActionListener() {
@@ -242,16 +244,16 @@ public class AlterarFuncionario extends javax.swing.JFrame {
         txtConfirmacao.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
 
         lblStringBairro.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringBairro.setText("Bairro:");
+        lblStringBairro.setText("*Bairro:");
 
         lblStringLogradouro.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringLogradouro.setText("Logradouro:");
+        lblStringLogradouro.setText("*Logradouro:");
 
         lblStringNumero.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringNumero.setText("Número:");
+        lblStringNumero.setText("*Número:");
 
         lblStringCidade.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringCidade.setText("Cidade:");
+        lblStringCidade.setText("*Cidade:");
 
         txtLogradouro.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
 
@@ -260,7 +262,7 @@ public class AlterarFuncionario extends javax.swing.JFrame {
         txtComplemento.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
 
         lblStringCep.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringCep.setText("CEP:");
+        lblStringCep.setText("*CEP:");
 
         txtNumero.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
         txtNumero.addActionListener(new java.awt.event.ActionListener() {
@@ -275,7 +277,7 @@ public class AlterarFuncionario extends javax.swing.JFrame {
         txtCidade.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
 
         lblStringUf.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringUf.setText("UF:");
+        lblStringUf.setText("*UF:");
 
         cbUf.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         cbUf.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -313,57 +315,58 @@ public class AlterarFuncionario extends javax.swing.JFrame {
         }
         txtCpf.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
 
+        linha2.setBackground(new java.awt.Color(0, 0, 0));
+        linha2.setOpaque(true);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(linha1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1148, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(lblStringNascimento)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(2, 2, 2)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(lblStringLogradouro)
-                                .addComponent(lblStringContatoUm)
-                                .addComponent(lblStringEmail)
-                                .addComponent(lblStringSenha)
-                                .addComponent(lblStringNome)
-                                .addComponent(lblStringBairro)))
-                        .addComponent(lblStringCidade, javax.swing.GroupLayout.Alignment.TRAILING))
-                    .addComponent(lblStringComplemento))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(lblStringNascimento)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(2, 2, 2)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(lblStringLogradouro)
+                                        .addComponent(lblStringContatoUm)
+                                        .addComponent(lblStringEmail)
+                                        .addComponent(lblStringSenha)
+                                        .addComponent(lblStringNome)
+                                        .addComponent(lblStringBairro)))
+                                .addComponent(lblStringCidade, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(lblStringComplemento))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(txtComplemento, javax.swing.GroupLayout.PREFERRED_SIZE, 555, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
                                 .addComponent(lblStringUf))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 555, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(txtLogradouro, javax.swing.GroupLayout.PREFERRED_SIZE, 555, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addComponent(txtEmail, javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(txtNome, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                        .addComponent(calendarNasc, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
-                                                        .addComponent(txtTelefone))
-                                                    .addGap(18, 18, 18)
-                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                        .addComponent(lblStringSalario)
-                                                        .addComponent(lblStringContatoDois))
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(txtSalario, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(txtCelular))))
-                                            .addGap(4, 4, 4)))
-                                    .addComponent(txtCidade, javax.swing.GroupLayout.PREFERRED_SIZE, 555, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtEmail)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(calendarNasc, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(lblStringSalario)
+                                            .addComponent(lblStringContatoDois))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txtCelular, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                                            .addComponent(txtSalario)))
+                                    .addComponent(txtNome)
+                                    .addComponent(txtCidade, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
+                                    .addComponent(txtBairro, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
+                                    .addComponent(txtLogradouro, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addGap(4, 4, 4)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(22, 22, 22)
@@ -384,35 +387,35 @@ public class AlterarFuncionario extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(lblStringConfirmacao)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtConfirmacao, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbFuncao, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbSexo, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtConfirmacao, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
+                            .addComponent(txtNumero, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
+                            .addComponent(txtUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
+                            .addComponent(cbFuncao, 0, 227, Short.MAX_VALUE)
+                            .addComponent(cbSexo, 0, 227, Short.MAX_VALUE)
                             .addComponent(cbUf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtCep)
-                            .addComponent(txtCpf, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE))
-                        .addContainerGap(74, Short.MAX_VALUE))
+                            .addComponent(txtCep, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCpf)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(155, 155, 155)
+                        .addGap(450, 450, 450)
+                        .addComponent(lblStringNovoFunc))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(335, 335, 335)
                         .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(119, 119, 119)
-                        .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(lblStringNovoFunc, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(400, 400, 400))
+                        .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(55, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(linha1, javax.swing.GroupLayout.DEFAULT_SIZE, 1148, Short.MAX_VALUE))
+                .addComponent(linha2, javax.swing.GroupLayout.DEFAULT_SIZE, 1152, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(24, 24, 24)
                 .addComponent(lblStringNovoFunc)
-                .addGap(36, 36, 36)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblStringNome)
@@ -480,16 +483,16 @@ public class AlterarFuncionario extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtComplemento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(lblStringComplemento)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addGap(49, 49, 49)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36))
+                .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(54, 54, 54)
-                    .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(633, Short.MAX_VALUE)))
+                    .addContainerGap()
+                    .addComponent(linha2, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(676, Short.MAX_VALUE)))
         );
 
         pack();
@@ -948,6 +951,7 @@ public class AlterarFuncionario extends javax.swing.JFrame {
     private javax.swing.JLabel lblStringUf;
     private javax.swing.JLabel lblStringUsuario;
     private javax.swing.Box.Filler linha1;
+    private javax.swing.Box.Filler linha2;
     private javax.swing.JTextField txtBairro;
     private javax.swing.JFormattedTextField txtCelular;
     private javax.swing.JFormattedTextField txtCep;

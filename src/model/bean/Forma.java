@@ -5,29 +5,18 @@ public class Forma {
     private Double valor;
     private String formaPagamento;
     private Venda venda;
-    private Comanda comanda;
     private Cliente cliente;
 
-    public Forma(Double v, String f, Comanda c){
+    public Forma(Double v, String f, Venda venda){
         this.valor = v;
         this.formaPagamento = f;
-        this.comanda = c;       
+        this.venda = venda;       
     }
     
     public Forma(Double v, String f, Cliente c){
         this.valor = v;
         this.formaPagamento = f;
         this.cliente = c;       
-    }
-    
-    public Forma clonarComanda(Forma f, Comanda id) {
-        f.setId(this.id);
-        f.setValor(this.valor);
-        f.setFormaPagamento(this.formaPagamento);
-        f.setVenda(this.venda);
-        f.setComanda(id);
-        f.setCliente(this.cliente);
-        return f;
     }
     
     // GETTERS E SETTERS PADRÃO
@@ -72,14 +61,4 @@ public class Forma {
     public void setVenda(Venda venda) {
         this.venda = venda;
     }
-
-    public Comanda getComanda() {
-        return comanda;
-    }
-
-    public void setComanda(Comanda comanda) {
-        this.comanda = comanda;
-    }
-    
-    
 }

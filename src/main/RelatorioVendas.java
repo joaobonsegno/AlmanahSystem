@@ -87,9 +87,9 @@ public class RelatorioVendas extends javax.swing.JFrame {
     }
     
     public void formatarTabela() {
-        jtVendas.setRowHeight(22);
+        jtVendas.setRowHeight(23);
         jtVendas.getColumn("No").setCellRenderer(centro);
-        jtVendas.getColumn("Valor (R$)").setCellRenderer(direita);
+        jtVendas.getColumn("Valor").setCellRenderer(centro);
         jtVendas.getColumn("Data").setCellRenderer(centro);
         jtVendas.getColumnModel().getColumn(0).setPreferredWidth(70);
         jtVendas.getColumnModel().getColumn(1).setPreferredWidth(200);
@@ -112,7 +112,7 @@ public class RelatorioVendas extends javax.swing.JFrame {
                     new Object[]{
                         contador,
                         v.getData(),
-                        GerenciadorComandas.valorMonetario(v.getTotal())+"  "}
+                        "R$ "+GerenciadorComandas.valorMonetario(v.getTotal())}
             );
             contador += 1;
         }
@@ -254,7 +254,7 @@ public class RelatorioVendas extends javax.swing.JFrame {
 
             },
             new String [] {
-                "No", "Data", "Valor (R$)"
+                "No", "Data", "Valor"
             }
         ) {
             boolean[] canEdit = new boolean [] {

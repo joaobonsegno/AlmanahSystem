@@ -57,7 +57,7 @@ public class ItemComandaDAO {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        
+        ProdutoDAO pDao = new ProdutoDAO();
         try{
             stmt = con.prepareStatement("SELECT * FROM item_comanda");
             rs = stmt.executeQuery();
@@ -66,8 +66,9 @@ public class ItemComandaDAO {
                 if(idCom == c.getIdBanco()){
                     int idProd = rs.getInt("idProduto");
                     if(idProd >= 1){
-                        for(Produto p:GerenciadorProdutos.listaProdutos){
+                        for(Produto p:pDao.read()){
                             if(p.getIdProduto() == idProd){
+                                //System.out.println("Setando produto no ItemComandaDAO (READ)\nComanda: "+c.getId());
                                 String qtdString = Integer.toString(rs.getInt("qnt"));
                                 c.setItensBanco(p, qtdString);
                             }

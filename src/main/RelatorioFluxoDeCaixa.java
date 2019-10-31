@@ -67,38 +67,16 @@ public class RelatorioFluxoDeCaixa extends javax.swing.JFrame {
         for (RelatorioFluxo r : fDao.relatorioFormas(GerenciadorRelatorios.dMaior, GerenciadorRelatorios.dMenor)) {
             listaFluxos.add(r);
             credito += r.getValor();
-            /*for (Forma f : v.getFormas(ve)) {
-                if (f.getFormaPagamento().equals("Débito")) {
-                    debito += f.getValor();
-                } else if (f.getFormaPagamento().equals("Crédito")) {
-                    credito += f.getValor();
-                    break;
-                } else if (f.getFormaPagamento().equals("Voucher")) {
-                    voucher += f.getValor();
-                } else if (f.getFormaPagamento().equals("Dinheiro")){
-                    dinheiro += f.getValor();
-                } else{
-                    carteira += f.getValor();
-                }
-            }*/
         }
         for (RelatorioFluxo r : fDao.relatorioFormasCarteira(GerenciadorRelatorios.dMaior, GerenciadorRelatorios.dMenor)) {
             listaFluxos.add(r);
             credito += r.getValor();
-             System.out.println("Valor: "+r.getValor());
         }
         for (RelatorioFluxo r : fDao.relatorioDespesas(GerenciadorRelatorios.dMaior, GerenciadorRelatorios.dMenor)){
             listaFluxos.add(r);
-            System.out.println("Valor: "+r.getValor());
             debito += r.getValor();
         }
         total = credito - debito;
-        
-        /*total += dinheiro;
-        total += debito;
-        total += credito;
-        total += voucher;
-        total += carteira;*/
     }
     
     public void ordenarDatas(){

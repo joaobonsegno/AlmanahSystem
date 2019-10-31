@@ -3,6 +3,7 @@ package main;
 import model.bean.Cliente;
 import model.dao.ClienteDAO;
 import model.dao.ComandaDAO;
+import model.dao.VendaDAO;
 
 public class AssociarCliente extends javax.swing.JDialog {
     public static Cliente cliente;
@@ -13,8 +14,7 @@ public class AssociarCliente extends javax.swing.JDialog {
         initComponents();
         this.setLocationRelativeTo(null);
         getRootPane().setDefaultButton(btnConfirmar); 
-        btnConfirmar.setEnabled(false);
-        
+        btnConfirmar.setEnabled(false);       
     }
 
     @SuppressWarnings("unchecked")
@@ -30,10 +30,12 @@ public class AssociarCliente extends javax.swing.JDialog {
         lblInsiraSuprimento2 = new javax.swing.JLabel();
         txtCpf = new javax.swing.JFormattedTextField();
         lblInsiraSuprimento = new javax.swing.JLabel();
+        linha1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Associar Cliente");
-        setMinimumSize(new java.awt.Dimension(528, 252));
+        setMaximumSize(new java.awt.Dimension(535, 271));
+        setMinimumSize(new java.awt.Dimension(535, 271));
         setResizable(false);
 
         lbl1.setBackground(new java.awt.Color(0, 102, 204));
@@ -120,14 +122,14 @@ public class AssociarCliente extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
+        linha1.setBackground(new java.awt.Color(0, 0, 0));
+        linha1.setOpaque(true);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(184, 184, 184)
-                .addComponent(lbl1)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(linha, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -139,26 +141,32 @@ public class AssociarCliente extends javax.swing.JDialog {
                         .addContainerGap()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(lbl1)
+                .addGap(184, 184, 184))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(linha, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE))
+                .addComponent(linha1, javax.swing.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(23, 23, 23)
                 .addComponent(lbl1)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(linha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addGap(21, 21, 21))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(43, 43, 43)
-                    .addComponent(linha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(208, Short.MAX_VALUE)))
+                    .addContainerGap()
+                    .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(257, Short.MAX_VALUE)))
         );
 
         pack();
@@ -169,13 +177,7 @@ public class AssociarCliente extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        ComandaDAO cDao = new ComandaDAO();
-        GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado).setCliente(cliente);
-        cDao.updateCliente(GerenciadorComandas.comandasAbertas.get(GerenciadorComandas.indiceSelecionado));
-
-        // Tornando flagCliente TRUE para a tela de FormasDePagamento chamar o método de nova FORMA
-        //flagCliente = true;
-
+        EncerrarComanda.venda.setCliente(cliente);
         dispose();
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
@@ -270,6 +272,7 @@ public class AssociarCliente extends javax.swing.JDialog {
     private javax.swing.JLabel lblInsiraSuprimento2;
     private javax.swing.JLabel lblNome;
     private javax.swing.Box.Filler linha;
+    private javax.swing.Box.Filler linha1;
     private javax.swing.JFormattedTextField txtCpf;
     // End of variables declaration//GEN-END:variables
 }

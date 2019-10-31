@@ -246,7 +246,8 @@ public class NovaRefeicao extends javax.swing.JDialog {
             ComandaDAO comDao = new ComandaDAO();
             int cod = comDao.codComanda(txtNumeroComanda.getText());
             if (cod == 0){
-                JOptionPane.showMessageDialog(null, "Código de comanda inválido");
+                if (!txtNumeroComanda.getText().equals(""))
+                    JOptionPane.showMessageDialog(null, "Código de comanda inválido");
             }else{
                 try{
                     txtNumeroComanda.setText("");
