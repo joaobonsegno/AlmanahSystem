@@ -1,7 +1,9 @@
 package main;
 
 import java.util.ArrayList;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Comanda;
 import model.bean.Produto;
@@ -34,7 +36,7 @@ public class EncerrarComanda extends javax.swing.JFrame {
     
     public void adicionarPratoTabela(Double d, Comanda c){
         DefaultTableModel dtmComandas = (DefaultTableModel) jtItens.getModel();
-        Object[] dados = {c.getId(), "Refeição Geral", "1", GerenciadorComandas.valorMonetario(d), GerenciadorComandas.valorMonetario(d)};
+        Object[] dados = {c.getId(), "Refeição Geral", "1", "R$ "+GerenciadorComandas.valorMonetario(d), "R$ "+GerenciadorComandas.valorMonetario(d)};
         dtmComandas.addRow(dados);
         
     }
@@ -42,7 +44,7 @@ public class EncerrarComanda extends javax.swing.JFrame {
     public void adicionarProdutoTabela(Produto p, String q, Comanda c){
         int qtd = Integer.parseInt(q);
         DefaultTableModel dtmComandas = (DefaultTableModel) jtItens.getModel();
-        Object[] dados = {c.getId(), p.getNome(), q, GerenciadorComandas.valorMonetario(p.getPrecoComDesconto()), GerenciadorComandas.valorMonetario(p.getPrecoComDesconto()*qtd)};
+        Object[] dados = {c.getId(), p.getNome(), q, "R$ "+GerenciadorComandas.valorMonetario(p.getPrecoComDesconto()), "R$ "+GerenciadorComandas.valorMonetario(p.getPrecoComDesconto()*qtd)};
         dtmComandas.addRow(dados);
     }
     
@@ -100,25 +102,43 @@ public class EncerrarComanda extends javax.swing.JFrame {
     
     public void formatarTabela(){
         jtItens.setRowHeight(40);
+        jtItens.getColumn("ID Comanda").setCellRenderer(centro);
+        jtItens.getColumn("Qtd").setCellRenderer(centro);
+        jtItens.getColumn("Unitário").setCellRenderer(centro);
+        jtItens.getColumn("Total").setCellRenderer(centro);
         jtItens.getColumnModel().getColumn(0).setPreferredWidth(80); //ID
-        jtItens.getColumnModel().getColumn(1).setPreferredWidth(420); //NOME
+        jtItens.getColumnModel().getColumn(1).setPreferredWidth(450); //NOME
         jtItens.getColumnModel().getColumn(2).setPreferredWidth(80); // QTD
         jtItens.getColumnModel().getColumn(3).setPreferredWidth(120); // UNITARIO
         jtItens.getColumnModel().getColumn(4).setPreferredWidth(140); // TOTAL
         
         jtItens.getColumnModel().getColumn(0).setMinWidth(80); //ID
-        jtItens.getColumnModel().getColumn(1).setMinWidth(420); //NOME
+        jtItens.getColumnModel().getColumn(1).setMinWidth(450); //NOME
         jtItens.getColumnModel().getColumn(2).setMinWidth(80); // QTD
         jtItens.getColumnModel().getColumn(3).setMinWidth(120); // UNITARIO
         jtItens.getColumnModel().getColumn(4).setMinWidth(140); // TOTAL
         
         jtItens.getColumnModel().getColumn(0).setMaxWidth(80); //ID
-        jtItens.getColumnModel().getColumn(1).setMaxWidth(420); //NOME
+        jtItens.getColumnModel().getColumn(1).setMaxWidth(450); //NOME
         jtItens.getColumnModel().getColumn(2).setMaxWidth(80); // QTD
         jtItens.getColumnModel().getColumn(3).setMaxWidth(120); // UNITARIO
         jtItens.getColumnModel().getColumn(4).setMaxWidth(140); // TOTAL
     }
 
+    //MÉTODOS PARA ARRUMAR CÉLULAS DA TABELA
+    DefaultTableCellRenderer centro = new DefaultTableCellRenderer() {
+        public void setValue(Object value) {
+            setHorizontalAlignment(JLabel.CENTER);
+            super.setValue(value);
+        }
+    };
+
+    DefaultTableCellRenderer direita = new DefaultTableCellRenderer() {
+        public void setValue(Object value) {
+            setHorizontalAlignment(JLabel.RIGHT);
+            super.setValue(value);
+        }
+    };
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -335,8 +355,8 @@ public class EncerrarComanda extends javax.swing.JFrame {
                 .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblStringValorTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblValorTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE))
+                    .addComponent(lblStringValorTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                    .addComponent(lblValorTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -355,10 +375,11 @@ public class EncerrarComanda extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(38, 38, 38)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(lblValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
