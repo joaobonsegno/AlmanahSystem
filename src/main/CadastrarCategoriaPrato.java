@@ -30,10 +30,12 @@ public class CadastrarCategoriaPrato extends javax.swing.JFrame {
         lblStringDescricao = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtDescricao = new javax.swing.JTextArea();
+        linha2 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Categoria de Prato");
-        setMinimumSize(new java.awt.Dimension(570, 460));
+        setMaximumSize(new java.awt.Dimension(573, 388));
+        setMinimumSize(new java.awt.Dimension(573, 388));
         setResizable(false);
 
         lblStringNovoProduto.setBackground(new java.awt.Color(0, 102, 204));
@@ -71,7 +73,7 @@ public class CadastrarCategoriaPrato extends javax.swing.JFrame {
         txtNome.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
 
         lblStringNome.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringNome.setText("Nome:");
+        lblStringNome.setText("*Nome:");
 
         lblStringDescricao.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
         lblStringDescricao.setText("Observações:");
@@ -80,6 +82,9 @@ public class CadastrarCategoriaPrato extends javax.swing.JFrame {
         txtDescricao.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         txtDescricao.setRows(5);
         jScrollPane2.setViewportView(txtDescricao);
+
+        linha2.setBackground(new java.awt.Color(0, 0, 0));
+        linha2.setOpaque(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -94,9 +99,9 @@ public class CadastrarCategoriaPrato extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
                     .addComponent(txtNome))
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(87, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -105,16 +110,18 @@ public class CadastrarCategoriaPrato extends javax.swing.JFrame {
                         .addGap(76, 76, 76))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(lblStringNovoProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(95, 95, 95))))
+                        .addGap(96, 96, 96))))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(linha1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 571, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(linha2, javax.swing.GroupLayout.DEFAULT_SIZE, 573, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(24, 24, 24)
                 .addComponent(lblStringNovoProduto)
-                .addGap(48, 48, 48)
+                .addGap(37, 37, 37)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblStringNome)
                     .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -132,6 +139,11 @@ public class CadastrarCategoriaPrato extends javax.swing.JFrame {
                     .addGap(60, 60, 60)
                     .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(327, Short.MAX_VALUE)))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(linha2, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(374, Short.MAX_VALUE)))
         );
 
         pack();
@@ -257,6 +269,7 @@ public class CadastrarCategoriaPrato extends javax.swing.JFrame {
     private javax.swing.JLabel lblStringNome;
     private javax.swing.JLabel lblStringNovoProduto;
     private javax.swing.Box.Filler linha1;
+    private javax.swing.Box.Filler linha2;
     private javax.swing.JTextArea txtDescricao;
     private javax.swing.JTextField txtNome;
     // End of variables declaration//GEN-END:variables

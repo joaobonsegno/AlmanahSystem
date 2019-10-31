@@ -116,9 +116,9 @@ public class GerenciadorCaixa extends javax.swing.JFrame {
         btnAbrirCaixa = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("Nova Bebida");
-        setMaximumSize(new java.awt.Dimension(859, 464));
-        setMinimumSize(new java.awt.Dimension(859, 464));
+        setTitle("Caixa");
+        setMaximumSize(new java.awt.Dimension(861, 466));
+        setMinimumSize(new java.awt.Dimension(861, 466));
         setResizable(false);
 
         btnStringGerenciador.setBackground(new java.awt.Color(0, 102, 204));
@@ -238,7 +238,7 @@ public class GerenciadorCaixa extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnMenu)
-                        .addGap(276, 276, 276)
+                        .addGap(261, 261, 261)
                         .addComponent(btnStringGerenciador, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -313,7 +313,7 @@ public class GerenciadorCaixa extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnSangria, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnSuprimento, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(59, 59, 59)

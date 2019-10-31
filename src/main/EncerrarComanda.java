@@ -143,7 +143,8 @@ public class EncerrarComanda extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Encerramento de Comanda");
-        setMinimumSize(new java.awt.Dimension(874, 634));
+        setMaximumSize(new java.awt.Dimension(892, 637));
+        setMinimumSize(new java.awt.Dimension(892, 637));
         setResizable(false);
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
             public void windowGainedFocus(java.awt.event.WindowEvent evt) {
@@ -305,13 +306,14 @@ public class EncerrarComanda extends javax.swing.JFrame {
             }
         });
 
-        lblValorTotal.setFont(new java.awt.Font("Century Gothic", 0, 30)); // NOI18N
+        lblValorTotal.setFont(new java.awt.Font("Century Gothic", 1, 29)); // NOI18N
         lblValorTotal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblValorTotal.setText("R$ 0,00");
         lblValorTotal.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(0, 0, 0)));
 
-        lblStringValorTotal.setFont(new java.awt.Font("Century Gothic", 0, 25)); // NOI18N
-        lblStringValorTotal.setText("Valor Total");
+        lblStringValorTotal.setFont(new java.awt.Font("Century Gothic", 1, 25)); // NOI18N
+        lblStringValorTotal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblStringValorTotal.setText("Valor  Total");
 
         btnPagamento.setBackground(new java.awt.Color(0, 153, 0));
         btnPagamento.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
@@ -332,14 +334,11 @@ public class EncerrarComanda extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(lblValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(lblStringValorTotal)
-                        .addGap(228, 228, 228))))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblStringValorTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblValorTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 868, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -368,8 +367,8 @@ public class EncerrarComanda extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(155, 155, 155)
-                .addComponent(btnStringGerenciador, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(203, 203, 203)
+                .addComponent(btnStringGerenciador)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()

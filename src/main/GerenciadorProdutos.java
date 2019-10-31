@@ -17,7 +17,6 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
         initComponents();
        
         jtProdutos.setRowHeight(27);
-        getRootPane().setDefaultButton(btnOk);
         this.setLocationRelativeTo(null);
         jtProdutos.getColumnModel().getColumn(0).setPreferredWidth(500); 
         jtProdutos.getColumnModel().getColumn(1).setPreferredWidth(150);
@@ -162,14 +161,14 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
         btnInativar = new javax.swing.JButton();
         lblStringNomeProduto = new javax.swing.JLabel();
         txtPesquisa = new javax.swing.JTextField();
-        btnOk = new javax.swing.JButton();
         lblStringNomeProduto1 = new javax.swing.JLabel();
         cbCategorias = new javax.swing.JComboBox<>();
+        linha2 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Gerenciador de Produtos");
-        setMaximumSize(new java.awt.Dimension(757, 668));
-        setMinimumSize(new java.awt.Dimension(757, 668));
+        setMaximumSize(new java.awt.Dimension(763, 668));
+        setMinimumSize(new java.awt.Dimension(763, 668));
         setResizable(false);
 
         btnStringProdutos.setBackground(new java.awt.Color(0, 102, 204));
@@ -243,18 +242,6 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
 
         txtPesquisa.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
 
-        btnOk.setBackground(new java.awt.Color(0, 153, 204));
-        btnOk.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        btnOk.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\pesquisar (1).png")); // NOI18N
-        btnOk.setText(" Buscar");
-        btnOk.setBorder(new javax.swing.border.MatteBorder(null));
-        btnOk.setBorderPainted(false);
-        btnOk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOkActionPerformed(evt);
-            }
-        });
-
         lblStringNomeProduto1.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
         lblStringNomeProduto1.setText("Exibir Somente:");
 
@@ -271,15 +258,18 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
             }
         });
 
+        linha2.setBackground(new java.awt.Color(0, 0, 0));
+        linha2.setOpaque(true);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnLancador)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(241, 241, 241)
+                        .addComponent(btnLancador)
+                        .addGap(109, 109, 109)
                         .addComponent(btnStringProdutos))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(65, 65, 65)
@@ -291,34 +281,33 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
                                     .addComponent(lblStringNomeProduto1))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(cbCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(65, Short.MAX_VALUE))
+                                    .addComponent(cbCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(124, 124, 124)))))
+                .addContainerGap(71, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btnInativar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(67, 67, 67)
                 .addComponent(btnAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(173, 173, 173))
+            .addComponent(linha1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(linha1, javax.swing.GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE))
+                .addComponent(linha2, javax.swing.GroupLayout.DEFAULT_SIZE, 763, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnStringProdutos))
+                .addGap(19, 19, 19)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnStringProdutos)
                     .addComponent(btnLancador, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(48, 48, 48)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblStringNomeProduto)
-                    .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblStringNomeProduto))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -332,9 +321,9 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
                 .addGap(21, 21, 21))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(60, 60, 60)
-                    .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(607, Short.MAX_VALUE)))
+                    .addContainerGap()
+                    .addComponent(linha2, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(654, Short.MAX_VALUE)))
         );
 
         pack();
@@ -376,11 +365,6 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
             System.out.println("Deu a exceção");
         }
     }//GEN-LAST:event_btnInativarActionPerformed
-
-    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
-        cbCategorias.setSelectedIndex(0);
-        criarTabelaNome(txtPesquisa.getText());     
-    }//GEN-LAST:event_btnOkActionPerformed
 
     private void cbCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCategoriasActionPerformed
         
@@ -442,7 +426,6 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
     private javax.swing.JButton btnAlterar;
     private javax.swing.JButton btnInativar;
     private javax.swing.JButton btnLancador;
-    private javax.swing.JButton btnOk;
     private javax.swing.JLabel btnStringProdutos;
     private javax.swing.JComboBox<String> cbCategorias;
     private javax.swing.JScrollPane jScrollPane1;
@@ -450,6 +433,7 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
     private javax.swing.JLabel lblStringNomeProduto;
     private javax.swing.JLabel lblStringNomeProduto1;
     private javax.swing.Box.Filler linha1;
+    private javax.swing.Box.Filler linha2;
     private javax.swing.JTextField txtPesquisa;
     // End of variables declaration//GEN-END:variables
 }

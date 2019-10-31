@@ -12,7 +12,7 @@ import model.bean.Categoria;
 import model.bean.Produto;
 
 public class FornecedorDAO {
-    public void create(Produto p){
+    /*public void create(Produto p){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         
@@ -252,5 +252,5 @@ public class FornecedorDAO {
         }finally{
             ConnectionFactory.closeConnection(con, stmt);
         }
-    }
+    }*/
 }

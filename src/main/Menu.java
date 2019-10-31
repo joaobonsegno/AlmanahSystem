@@ -208,11 +208,11 @@ public class Menu extends javax.swing.JFrame {
         financeiro_promocoes = new javax.swing.JMenuItem();
         financeiro_relatorios = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Menu");
         setBackground(new java.awt.Color(153, 204, 255));
-        setMaximumSize(new java.awt.Dimension(950, 513));
-        setMinimumSize(new java.awt.Dimension(950, 513));
+        setMaximumSize(new java.awt.Dimension(953, 518));
+        setMinimumSize(new java.awt.Dimension(953, 518));
         setResizable(false);
 
         linha1.setBackground(new java.awt.Color(0, 0, 0));
@@ -511,7 +511,7 @@ public class Menu extends javax.swing.JFrame {
                             .addComponent(btnLancador1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(lblStringMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(331, 331, 331)
+                                .addGap(349, 349, 349)
                                 .addComponent(btnSair))))))
             .addComponent(linha1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );

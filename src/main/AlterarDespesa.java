@@ -86,7 +86,7 @@ public class AlterarDespesa extends javax.swing.JDialog {
         linha1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("Alterar Despesa");
+        setTitle("Alterar Agendamento de Despesa");
         setMaximumSize(new java.awt.Dimension(498, 468));
         setMinimumSize(new java.awt.Dimension(498, 468));
         setResizable(false);

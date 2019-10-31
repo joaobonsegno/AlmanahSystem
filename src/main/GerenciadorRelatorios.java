@@ -72,11 +72,12 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
         dataMaior = new com.toedter.calendar.JDateChooser();
         lblStringNomeProduto2 = new javax.swing.JLabel();
         lblStringNomeProduto3 = new javax.swing.JLabel();
+        linha2 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Gerenciador de Produtos");
-        setMaximumSize(new java.awt.Dimension(575, 361));
-        setMinimumSize(new java.awt.Dimension(575, 361));
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Gerenciador de Relatórios");
+        setMaximumSize(new java.awt.Dimension(575, 325));
+        setMinimumSize(new java.awt.Dimension(575, 325));
         setResizable(false);
 
         btnStringProdutos.setBackground(new java.awt.Color(0, 102, 204));
@@ -134,6 +135,9 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
         lblStringNomeProduto3.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
         lblStringNomeProduto3.setText("Data Inicial:");
 
+        linha2.setBackground(new java.awt.Color(0, 0, 0));
+        linha2.setOpaque(true);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -168,16 +172,17 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(linha1, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(linha2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnStringProdutos))
-                    .addComponent(btnLancador, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(52, 52, 52)
+                .addGap(22, 22, 22)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnLancador, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnStringProdutos))
+                .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblStringNomeProduto1))
@@ -197,6 +202,11 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
                     .addGap(60, 60, 60)
                     .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(264, Short.MAX_VALUE)))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(linha2, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(311, Short.MAX_VALUE)))
         );
 
         pack();
@@ -347,5 +357,6 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
     private javax.swing.JLabel lblStringNomeProduto2;
     private javax.swing.JLabel lblStringNomeProduto3;
     private javax.swing.Box.Filler linha1;
+    private javax.swing.Box.Filler linha2;
     // End of variables declaration//GEN-END:variables
 }

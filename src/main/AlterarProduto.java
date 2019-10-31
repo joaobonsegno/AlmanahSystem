@@ -191,7 +191,7 @@ public class AlterarProduto extends javax.swing.JFrame {
         txtNome.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
 
         lblStringNome.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringNome.setText("Nome:");
+        lblStringNome.setText("*Nome:");
 
         txtNcm.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
 
@@ -233,7 +233,7 @@ public class AlterarProduto extends javax.swing.JFrame {
         });
 
         lblStringUnidade.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringUnidade.setText("Unidade de Medida:");
+        lblStringUnidade.setText("*Unidade de Medida:");
 
         cbUnidade.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         cbUnidade.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -244,7 +244,7 @@ public class AlterarProduto extends javax.swing.JFrame {
         });
 
         lblStringId1.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringId1.setText("Categoria:");
+        lblStringId1.setText("*Categoria:");
 
         lblStringId.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
         lblStringId.setText("Matéria-prima:");
@@ -337,15 +337,14 @@ public class AlterarProduto extends javax.swing.JFrame {
                                             .addComponent(lblStringUnidade, javax.swing.GroupLayout.Alignment.LEADING))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 561, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addGroup(layout.createSequentialGroup()
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addGroup(layout.createSequentialGroup()
-                                                        .addGap(241, 241, 241)
+                                                        .addGap(228, 228, 228)
                                                         .addComponent(lblStringId1))
                                                     .addGroup(layout.createSequentialGroup()
                                                         .addComponent(cbUnidade, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addGap(18, 18, 18)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                         .addComponent(lblStringPreco)))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -354,7 +353,8 @@ public class AlterarProduto extends javax.swing.JFrame {
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addComponent(lblAdicionar1)
-                                                    .addComponent(lblStringPreco1))))
+                                                    .addComponent(lblStringPreco1)))
+                                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 561, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(4, 4, 4))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -383,7 +383,7 @@ public class AlterarProduto extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(311, 311, 311)
                         .addComponent(lblStringNovoProduto)))
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(linha1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 810, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

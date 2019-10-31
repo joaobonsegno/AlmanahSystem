@@ -85,11 +85,12 @@ public class CadastrarCliente extends javax.swing.JFrame {
         txtCelular = new javax.swing.JFormattedTextField();
         txtCep = new javax.swing.JFormattedTextField();
         txtCpf = new javax.swing.JFormattedTextField();
+        linha2 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Cadastrar Cliente");
-        setMaximumSize(new java.awt.Dimension(1098, 559));
-        setMinimumSize(new java.awt.Dimension(1098, 559));
+        setMaximumSize(new java.awt.Dimension(1110, 564));
+        setMinimumSize(new java.awt.Dimension(1110, 564));
         setResizable(false);
 
         lblStringNovoFunc.setBackground(new java.awt.Color(0, 102, 204));
@@ -127,22 +128,22 @@ public class CadastrarCliente extends javax.swing.JFrame {
         txtNome.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
 
         lblStringSexo.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringSexo.setText("Sexo:");
+        lblStringSexo.setText("*Sexo:");
 
         lblStringCpf.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringCpf.setText("CPF:");
+        lblStringCpf.setText("*CPF:");
 
         lblStringContatoUm.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
         lblStringContatoUm.setText("Telefone:");
 
         lblStringNascimento.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringNascimento.setText("Nascimento:");
+        lblStringNascimento.setText("*Nascimento:");
 
         lblStringEmail.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringEmail.setText("Email:");
+        lblStringEmail.setText("*Email:");
 
         lblStringNome.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringNome.setText("Nome:");
+        lblStringNome.setText("*Nome:");
 
         cbSexo.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         cbSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Masculino", "Feminino" }));
@@ -155,21 +156,21 @@ public class CadastrarCliente extends javax.swing.JFrame {
         calendarNasc.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
 
         lblStringContatoDois.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringContatoDois.setText("Celular:");
+        lblStringContatoDois.setText("*Celular:");
 
         txtEmail.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
 
         lblStringBairro.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringBairro.setText("Bairro:");
+        lblStringBairro.setText("*Bairro:");
 
         lblStringLogradouro.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringLogradouro.setText("Logradouro:");
+        lblStringLogradouro.setText("*Logradouro:");
 
         lblStringNumero.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringNumero.setText("Número:");
+        lblStringNumero.setText("*Número:");
 
         lblStringCidade.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringCidade.setText("Cidade:");
+        lblStringCidade.setText("*Cidade:");
 
         txtLogradouro.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
 
@@ -178,7 +179,7 @@ public class CadastrarCliente extends javax.swing.JFrame {
         txtComplemento.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
 
         lblStringCep.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringCep.setText("CEP:");
+        lblStringCep.setText("*CEP:");
 
         txtNumero.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
         txtNumero.addActionListener(new java.awt.event.ActionListener() {
@@ -193,7 +194,7 @@ public class CadastrarCliente extends javax.swing.JFrame {
         txtCidade.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
 
         lblStringUf.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringUf.setText("UF:");
+        lblStringUf.setText("*UF:");
 
         cbUf.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         cbUf.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -231,27 +232,31 @@ public class CadastrarCliente extends javax.swing.JFrame {
         }
         txtCpf.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
 
+        linha2.setBackground(new java.awt.Color(0, 0, 0));
+        linha2.setOpaque(true);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(lblStringNovoFunc, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(400, 400, 400))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblStringNascimento)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(32, 32, 32)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(lblStringContatoUm)
-                                    .addComponent(lblStringEmail)
-                                    .addComponent(lblStringNome))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(47, 47, 47)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblStringNascimento)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(46, 46, 46)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(lblStringEmail)
+                                            .addComponent(lblStringNome))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblStringContatoUm)
+                                .addGap(15, 15, 15)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(txtEmail, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtNome, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -262,7 +267,7 @@ public class CadastrarCliente extends javax.swing.JFrame {
                                 .addGap(55, 55, 55)
                                 .addComponent(lblStringContatoDois)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtCelular)))
+                                .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(54, 54, 54)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblStringSexo, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -309,19 +314,22 @@ public class CadastrarCliente extends javax.swing.JFrame {
                         .addGap(313, 313, 313)
                         .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(119, 119, 119)
-                        .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(75, Short.MAX_VALUE))
+                        .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(446, 446, 446)
+                        .addComponent(lblStringNovoFunc)))
+                .addContainerGap(66, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, 1096, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 2, Short.MAX_VALUE)))
+                .addComponent(linha1, javax.swing.GroupLayout.DEFAULT_SIZE, 1110, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(linha2, javax.swing.GroupLayout.DEFAULT_SIZE, 1110, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(23, 23, 23)
                 .addComponent(lblStringNovoFunc)
-                .addGap(36, 36, 36)
+                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -345,15 +353,16 @@ public class CadastrarCliente extends javax.swing.JFrame {
                     .addComponent(calendarNasc, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblStringContatoUm)
-                            .addComponent(lblStringContatoDois))
-                        .addGroup(layout.createSequentialGroup()
                             .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(2, 2, 2)))
-                    .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(lblStringContatoUm))
+                        .addGap(15, 15, 15))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblStringContatoDois))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -386,9 +395,14 @@ public class CadastrarCliente extends javax.swing.JFrame {
                 .addGap(26, 26, 26))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(54, 54, 54)
+                    .addGap(64, 64, 64)
                     .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(504, Short.MAX_VALUE)))
+                    .addContainerGap(499, Short.MAX_VALUE)))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(linha2, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(550, Short.MAX_VALUE)))
         );
 
         pack();
@@ -597,6 +611,7 @@ public class CadastrarCliente extends javax.swing.JFrame {
     private javax.swing.JLabel lblStringSexo;
     private javax.swing.JLabel lblStringUf;
     private javax.swing.Box.Filler linha1;
+    private javax.swing.Box.Filler linha2;
     private javax.swing.JTextField txtBairro;
     private javax.swing.JFormattedTextField txtCelular;
     private javax.swing.JFormattedTextField txtCep;
