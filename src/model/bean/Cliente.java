@@ -3,7 +3,7 @@ package model.bean;
 import model.dao.ClienteDAO;
 
 public class Cliente implements Comparable<Cliente>{
-    Integer id, numero;
+    Integer id, numero, status;
     String nome, cpf, dataNasc, telefone, celular, sexo;
     String logradouro, bairro, cidade, email, complemento, cep;
     Double saldo, saldoPendente;
@@ -42,6 +42,14 @@ public class Cliente implements Comparable<Cliente>{
 
     public Double getSaldo() {
         return saldo;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public void setSaldo(Double saldo) {

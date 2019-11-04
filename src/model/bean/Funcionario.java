@@ -1,7 +1,7 @@
 package model.bean;
 
 public class Funcionario implements Comparable<Funcionario>{
-    Integer idFuncionario, numero;
+    Integer idFuncionario, numero, status;
     String nome, cpf, dataNasc, telefone, celular, sexo, usuario;
     String senha, logradouro, bairro, cidade, email, complemento, cep;
     Double salario;
@@ -34,6 +34,14 @@ public class Funcionario implements Comparable<Funcionario>{
 
     public String getSenha() {
         return senha;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public void setSenha(String senha) {

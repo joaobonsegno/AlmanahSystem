@@ -18,7 +18,7 @@ public class ClienteDAO {
         
         try{
             String sql = "INSERT INTO cliente (nome, cpf, sexo, dataNasc, telefone, celular, email, logradouro, bairro, "+
-                         "cidade, numero, complemento, cep, idEstado, saldo, saldoPendente) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                         "cidade, numero, complemento, cep, idEstado, saldo, saldoPendente, status) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             stmt = con.prepareStatement(sql);
             stmt.setString(1, c.getNome());
             stmt.setString(2, c.getCpf());
@@ -36,6 +36,7 @@ public class ClienteDAO {
             stmt.setInt(14, c.getEstado().getId());
             stmt.setDouble(15, 0.0);
             stmt.setDouble(16, 0.0);
+            stmt.setInt(17,1);
             stmt.executeUpdate();
             System.out.println("Salvo com sucesso!");
         }catch(SQLException ex){
@@ -45,6 +46,7 @@ public class ClienteDAO {
         }
     }
     
+    // <editor-fold defaultstate="collapsed" desc="READS"> 
     public ArrayList<Cliente> read(){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -52,7 +54,7 @@ public class ClienteDAO {
         ArrayList<Cliente> clientes = new ArrayList<>();
         
         try{
-            stmt = con.prepareStatement("SELECT * FROM cliente");
+            stmt = con.prepareStatement("SELECT * FROM cliente WHERE status = 1");
             rs = stmt.executeQuery();
             while (rs.next()){
                 Cliente c = new Cliente();               
@@ -139,7 +141,7 @@ public class ClienteDAO {
         Cliente c = new Cliente();
         
         try{
-            stmt = con.prepareStatement("SELECT * FROM cliente WHERE cpf LIKE '"+cpf+"'");
+            stmt = con.prepareStatement("SELECT * FROM cliente WHERE cpf LIKE '"+cpf+"' AND status = 1");
             rs = stmt.executeQuery();
             while (rs.next()){               
                 c.setId(rs.getInt("idCliente"));
@@ -181,7 +183,7 @@ public class ClienteDAO {
         cpf = cpf.replace(" ", "");
         cpf = cpf.replace("-", "");
         try{
-            String sql = "SELECT * FROM cliente WHERE cpf LIKE '"+cpf+"%'";
+            String sql = "SELECT * FROM cliente WHERE cpf LIKE '"+cpf+"%' AND status = 1";
             stmt = con.prepareStatement(sql);
             rs = stmt.executeQuery();
             while (rs.next()){   
@@ -219,7 +221,7 @@ public class ClienteDAO {
         ArrayList<Cliente> clientes = new ArrayList<>();
         
         try{
-            stmt = con.prepareStatement("SELECT * FROM cliente WHERE saldo > 0");
+            stmt = con.prepareStatement("SELECT * FROM cliente WHERE saldo > 0 AND status = 1");
             rs = stmt.executeQuery();
             while (rs.next()){   
                 Cliente c = new Cliente();
@@ -248,7 +250,9 @@ public class ClienteDAO {
         }
         return clientes;
     }
+    // </editor-fold> 
     
+    // <editor-fold defaultstate="collapsed" desc="UPDATES"> 
     public void updateSaldo(Cliente c){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -322,4 +326,90 @@ public class ClienteDAO {
             ConnectionFactory.closeConnection(con, stmt);
         }
     }
+    // </editor-fold> 
+    
+    // <editor-fold defaultstate="collapsed" desc="MÉTODOS DE CLIENTES INATIVOS"> 
+    public ArrayList<Cliente> readInativos(){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ArrayList<Cliente> clientes = new ArrayList<>();
+        
+        try{
+            stmt = con.prepareStatement("SELECT * FROM cliente WHERE status = 0");
+            rs = stmt.executeQuery();
+            while (rs.next()){
+                Cliente c = new Cliente();               
+                
+                c.setId(rs.getInt("idCliente"));
+                c.setNome(rs.getString("nome")); 
+                c.setCpf(rs.getString("cpf"));
+                c.setEmail(rs.getString("email"));
+                c.setSexo(rs.getString("sexo"));
+                c.setTelefone(rs.getString("telefone"));
+                c.setCelular(rs.getString("celular"));
+                c.setLogradouro(rs.getString("logradouro"));
+                c.setBairro(rs.getString("bairro"));
+                c.setNumero(rs.getInt("numero"));
+                c.setCidade(rs.getString("cidade"));
+                c.setCep(rs.getString("cep"));
+                c.setComplemento(rs.getString("complemento"));
+                c.setDataNasc(rs.getString("dataNasc"));
+                c.setSaldo(rs.getDouble("saldo"));
+                c.setSaldoPendente(rs.getDouble("saldoPendente"));
+                
+                for (Estado e:eDao.read()){
+                    if (e.getId() == rs.getInt("idEstado")){
+                        c.setEstado(e);
+                    }
+                }               
+
+                clientes.add(c);
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return clientes;
+    }
+    
+    public void setInativo(int c){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        
+        try{
+            String sql = "UPDATE cliente SET status=? WHERE idCliente = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, 0);
+            stmt.setInt(2, c);
+            
+            stmt.executeUpdate();
+            //System.out.println("Atualizado com sucesso!");
+        }catch(SQLException ex){
+            System.err.println("Erro ao atualizar: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+    }
+    
+    public void setAtivo(int c){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        
+        try{
+            String sql = "UPDATE cliente SET status=? WHERE idCliente = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, 1);
+            stmt.setInt(2, c);
+            
+            stmt.executeUpdate();
+            //System.out.println("Atualizado com sucesso!");
+        }catch(SQLException ex){
+            System.err.println("Erro ao atualizar: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+    }
+    // </editor-fold> 
 }

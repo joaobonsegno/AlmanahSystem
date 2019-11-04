@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Prato implements Comparable<Prato>{
     private String nome, descricao;
-    private int id;
+    private int id, status;
     private CategoriaPrato categoria;
     private ArrayList<Produto> subprodutos = new ArrayList<>();
 
@@ -17,6 +17,10 @@ public class Prato implements Comparable<Prato>{
     }
     
     public Prato(){}
+    
+    public void limparSubprodutos(){
+        this.subprodutos.removeAll(this.subprodutos);
+    }
     
     public String getNome() {
         return nome;
@@ -34,6 +38,14 @@ public class Prato implements Comparable<Prato>{
         this.descricao = descricao;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+    
     public int getId() {
         return id;
     }

@@ -2,6 +2,7 @@ package main;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Categoria;
 import model.bean.Produto;
@@ -35,39 +36,9 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
             listaProdutos.add(p);
         }
         CadastrarMateriaPrima.materiasSelecionadas.removeAll(CadastrarMateriaPrima.materiasSelecionadas);
-        criarTabela();
         criarComboBox();
-    }
-
-    public void criarTabela(){
-        limparTabela();
-        ArrayList<Produto> ordenador = new ArrayList<>();
-        
-        for (Produto prod : listaProdutos){
-            ordenador.add(prod);
-        }
-        //ordenador = listaProdutos.sort(listaProdutos);
-        Collections.sort(ordenador);
-        
-        DefaultTableModel dtmBebidas = (DefaultTableModel) jtProdutos.getModel();
-        for (Produto p: ordenador){
-            if (p.getPreco() == 0.0){
-                dtmBebidas.addRow(
-                    new Object[]{
-                        p.getNome(),
-                        "X",
-                        p.getIdProduto()}
-                );
-            }else{
-                String valor = GerenciadorComandas.valorMonetario(p.getPreco());
-                dtmBebidas.addRow(
-                    new Object[]{
-                        p.getNome(),
-                        valor,
-                        p.getIdProduto()}
-                );
-            }
-        }
+        btnAlterar.setEnabled(false);
+        btnInativar.setEnabled(false);
     }
     
     public void criarTabelaNome(String nome){
@@ -164,6 +135,7 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
         lblStringNomeProduto1 = new javax.swing.JLabel();
         cbCategorias = new javax.swing.JComboBox<>();
         linha2 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
+        btnLancador1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Gerenciador de Produtos");
@@ -206,6 +178,12 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jtProdutos.getTableHeader().setReorderingAllowed(false);
+        jtProdutos.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtProdutosFocusGained(evt);
+            }
+        });
         jScrollPane1.setViewportView(jtProdutos);
         if (jtProdutos.getColumnModel().getColumnCount() > 0) {
             jtProdutos.getColumnModel().getColumn(0).setResizable(false);
@@ -219,6 +197,11 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
         btnAlterar.setText("   Alterar");
         btnAlterar.setBorder(new javax.swing.border.MatteBorder(null));
         btnAlterar.setBorderPainted(false);
+        btnAlterar.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                btnAlterarFocusGained(evt);
+            }
+        });
         btnAlterar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAlterarActionPerformed(evt);
@@ -241,6 +224,16 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
         lblStringNomeProduto.setText("Nome do Produto:");
 
         txtPesquisa.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        txtPesquisa.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtPesquisaFocusGained(evt);
+            }
+        });
+        txtPesquisa.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPesquisaKeyReleased(evt);
+            }
+        });
 
         lblStringNomeProduto1.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
         lblStringNomeProduto1.setText("Exibir Somente:");
@@ -252,6 +245,11 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
                 cbCategoriasItemStateChanged(evt);
             }
         });
+        cbCategorias.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                cbCategoriasFocusGained(evt);
+            }
+        });
         cbCategorias.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbCategoriasActionPerformed(evt);
@@ -261,16 +259,28 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
         linha2.setBackground(new java.awt.Color(0, 0, 0));
         linha2.setOpaque(true);
 
+        btnLancador1.setFont(new java.awt.Font("Century Gothic", 0, 17)); // NOI18N
+        btnLancador1.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\inativo true (1).png")); // NOI18N
+        btnLancador1.setText("Inativos");
+        btnLancador1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLancador1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(linha1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(btnLancador)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnStringProdutos)
+                .addGap(103, 103, 103)
+                .addComponent(btnLancador1))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnLancador)
-                        .addGap(109, 109, 109)
-                        .addComponent(btnStringProdutos))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(65, 65, 65)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -283,25 +293,24 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(cbCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(124, 124, 124)))))
+                                .addGap(124, 124, 124))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(176, 176, 176)
+                        .addComponent(btnInativar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(67, 67, 67)
+                        .addComponent(btnAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(71, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnInativar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(67, 67, 67)
-                .addComponent(btnAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(173, 173, 173))
-            .addComponent(linha1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(linha2, javax.swing.GroupLayout.DEFAULT_SIZE, 763, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(19, 19, 19)
+                .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnStringProdutos)
-                    .addComponent(btnLancador, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnLancador1)
+                    .addComponent(btnLancador, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnStringProdutos))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(24, 24, 24)
@@ -314,16 +323,16 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
                     .addComponent(lblStringNomeProduto1))
                 .addGap(25, 25, 25)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
+                .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnInativar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21))
+                .addGap(25, 25, 25))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(linha2, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(654, Short.MAX_VALUE)))
+                    .addContainerGap(658, Short.MAX_VALUE)))
         );
 
         pack();
@@ -335,34 +344,43 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLancadorActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
-        Menu.acaoEscolhida = 2;
-        Integer idSelecionado = (Integer)jtProdutos.getValueAt(jtProdutos.getSelectedRow(), 2);
+        try{
+            Menu.acaoEscolhida = 2;
+            Integer idSelecionado = (Integer)jtProdutos.getValueAt(jtProdutos.getSelectedRow(), 2);
 
-        for(Produto p:listaProdutos){
-            if(p.getIdProduto().equals(idSelecionado)){
-                prodSelecionado = p;
-                new AlterarProduto().setVisible(true); 
-                dispose();
+            for(Produto p:listaProdutos){
+                if(p.getIdProduto().equals(idSelecionado)){
+                    prodSelecionado = p;
+                    new AlterarProduto().setVisible(true); 
+                    dispose();
+                }
             }
+        }catch(java.lang.ArrayIndexOutOfBoundsException ex){
+            JOptionPane.showMessageDialog(null, "Selecione O produto que deseja alterar");
         }
-        
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void btnInativarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInativarActionPerformed
         try{
-            Integer idSelecionado = (Integer)jtProdutos.getValueAt(jtProdutos.getSelectedRow(), 2); 
-            
-            for(Produto p:listaProdutos){
-                if(p.getIdProduto().equals(idSelecionado)){
-                    prodSelecionado = p;
-                    InativarProduto inativar = new InativarProduto(new javax.swing.JFrame(), true);
-                    inativar.setVisible(true); 
-                    dispose();
-                }
-            }
-           
+            int reply = JOptionPane.showConfirmDialog(null, "Deseja realmente inativar o produto?","Inativação de Produto", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.YES_OPTION) {
+                    Integer idSelecionado = (Integer)jtProdutos.getValueAt(jtProdutos.getSelectedRow(), 2); 
+
+                for(Produto p:listaProdutos){
+                    if(p.getIdProduto().equals(idSelecionado)){
+                        ProdutoDAO cDao = new ProdutoDAO();
+                        cDao.setInativo(p.getIdProduto());
+                        this.limparTabela();
+                        btnAlterar.setEnabled(false);
+                        btnInativar.setEnabled(false);
+                        jtProdutos.clearSelection();
+                    }
+                }  
+            }  
         }catch(java.util.ConcurrentModificationException ex){
             System.out.println("Deu a exceção");
+        }catch(java.lang.ArrayIndexOutOfBoundsException ex){
+            JOptionPane.showMessageDialog(null, "Selecione O produto que deseja inativar");
         }
     }//GEN-LAST:event_btnInativarActionPerformed
 
@@ -377,16 +395,52 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
             if (!escolhido.equals("")){
                 criarTabelaCategoria(escolhido);
             }else{
-                criarTabela();
+                limparTabela();
             }
         }catch(java.lang.NullPointerException ex){
             
         }
     }//GEN-LAST:event_cbCategoriasItemStateChanged
 
-    /**
-     * @param args the command line arguments
-     */
+    private void txtPesquisaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPesquisaKeyReleased
+        String entrada = txtPesquisa.getText();
+        if (entrada.length() >= 3){
+            this.criarTabelaNome(entrada);
+        }else{
+            this.limparTabela();
+        }
+        
+    }//GEN-LAST:event_txtPesquisaKeyReleased
+
+    private void txtPesquisaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPesquisaFocusGained
+        cbCategorias.setSelectedIndex(0);
+        btnAlterar.setEnabled(false);
+        btnInativar.setEnabled(false);
+        jtProdutos.clearSelection();
+    }//GEN-LAST:event_txtPesquisaFocusGained
+
+    private void btnLancador1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLancador1ActionPerformed
+        InativosProdutos novoPrato = new InativosProdutos(new javax.swing.JFrame(), true);
+        novoPrato.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnLancador1ActionPerformed
+
+    private void jtProdutosFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtProdutosFocusGained
+        btnAlterar.setEnabled(true);
+        btnInativar.setEnabled(true);
+    }//GEN-LAST:event_jtProdutosFocusGained
+
+    private void cbCategoriasFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbCategoriasFocusGained
+        btnAlterar.setEnabled(false);
+        btnInativar.setEnabled(false);
+        jtProdutos.clearSelection();
+    }//GEN-LAST:event_cbCategoriasFocusGained
+
+    private void btnAlterarFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_btnAlterarFocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAlterarFocusGained
+
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -426,6 +480,7 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
     private javax.swing.JButton btnAlterar;
     private javax.swing.JButton btnInativar;
     private javax.swing.JButton btnLancador;
+    private javax.swing.JButton btnLancador1;
     private javax.swing.JLabel btnStringProdutos;
     private javax.swing.JComboBox<String> cbCategorias;
     private javax.swing.JScrollPane jScrollPane1;

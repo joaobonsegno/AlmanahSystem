@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import model.bean.CategoriaPrato;
 import model.bean.Prato;
 import model.bean.Produto;
@@ -43,6 +44,42 @@ public class PratoDAO {
             ConnectionFactory.closeConnection(con, stmt);
         }
     } 
+    
+    public void update(Prato p){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        
+        try{
+            //Exclui todos os subprodutos do banco
+            deleteSubprodutos(p);
+            
+            // Atualiza o prato
+            String sql = "UPDATE prato SET nome=?, descricao=?, idCategoriaPrato=? WHERE idPrato = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, p.getNome());
+            stmt.setString(2, p.getDescricao());
+            stmt.setInt(3, p.getCategoria().getId());
+            stmt.setInt(4, p.getId());
+            
+            stmt.executeUpdate();
+            
+            // Cria novamente os subprodutos corretos        
+            for (Produto prod:p.getSubprodutos()){
+                sql = "INSERT INTO subproduto (idProduto, idPrato)VALUES(?,?)";
+                stmt = con.prepareStatement(sql);
+                stmt.setInt(1, prod.getIdProduto());
+                stmt.setInt(2, p.getId());
+                stmt.executeUpdate();
+            } 
+            
+            
+            //System.out.println("Atualizado com sucesso!");
+        }catch(SQLException ex){
+            System.err.println("Erro ao atualizar: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+    }
     
     public ArrayList<Prato> read(){
         Connection con = ConnectionFactory.getConnection();
@@ -137,6 +174,34 @@ public class PratoDAO {
         return pratos;
     }
     
+    public Prato readForId(int id){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Prato p = new Prato();
+        CategoriaPratoDAO cDao = new CategoriaPratoDAO();     
+        try{
+            stmt = con.prepareStatement("SELECT * FROM prato WHERE idPrato = "+id);
+            rs = stmt.executeQuery();
+            while (rs.next()){   
+                
+                p.setId(rs.getInt("idPrato"));
+                p.setNome(rs.getString("nome"));
+                p.setDescricao(rs.getString("descricao"));
+                for (CategoriaPrato c:cDao.read()){
+                    if (c.getId() == rs.getInt("idCategoriaPrato")){
+                        p.setCategoria(c);
+                    }
+                }
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return p;
+    }
+    
     public ArrayList<Prato> readForCategoria(String nome){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -176,6 +241,23 @@ public class PratoDAO {
             ConnectionFactory.closeConnection(con, stmt, rs);
         }
         return pratos;
+    }
+    
+    public void deleteSubprodutos(Prato p){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        
+        try{
+            String sql = "DELETE FROM subproduto WHERE idPrato = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, p.getId());
+            stmt.executeUpdate();
+
+        }catch(SQLException ex){
+            System.err.println("Erro ao deletar subproduto (PRATODAO): "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt);
+        }
     }
     
     public void setSubprodutos(Prato prato){

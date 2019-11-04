@@ -2,6 +2,7 @@ package main;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Cliente;
 import model.dao.ClienteDAO;
@@ -14,7 +15,7 @@ public class GerenciadorClientes extends javax.swing.JFrame {
     public GerenciadorClientes() {        
        initComponents();
        
-       jtClientes.setRowHeight(22);
+       jtClientes.setRowHeight(24);
        this.setLocationRelativeTo(null);
        jtClientes.getColumnModel().getColumn(0).setPreferredWidth(0); 
        jtClientes.getColumnModel().getColumn(1).setPreferredWidth(470);
@@ -98,6 +99,7 @@ public class GerenciadorClientes extends javax.swing.JFrame {
         lblStringNomeProduto = new javax.swing.JLabel();
         txtPesquisa = new javax.swing.JTextField();
         linha2 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
+        btnLancador1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Gerenciador de Clientes");
@@ -180,42 +182,51 @@ public class GerenciadorClientes extends javax.swing.JFrame {
         linha2.setBackground(new java.awt.Color(0, 0, 0));
         linha2.setOpaque(true);
 
+        btnLancador1.setFont(new java.awt.Font("Century Gothic", 0, 17)); // NOI18N
+        btnLancador1.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\inativo true (1).png")); // NOI18N
+        btnLancador1.setText("Inativos");
+        btnLancador1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLancador1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addComponent(btnLancador)
+                .addGap(96, 96, 96)
+                .addComponent(btnStringProdutos)
+                .addGap(78, 78, 78)
+                .addComponent(btnLancador1))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(50, 50, 50)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 627, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnLancador)
-                        .addGap(108, 108, 108)
-                        .addComponent(btnStringProdutos))
+                        .addGap(110, 110, 110)
+                        .addComponent(btnInativar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(67, 67, 67)
+                        .addComponent(btnAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 627, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(110, 110, 110)
-                                .addComponent(btnInativar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(67, 67, 67)
-                                .addComponent(btnAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblStringNomeProduto)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(53, Short.MAX_VALUE))
+                        .addComponent(lblStringNomeProduto)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE))))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(linha1, javax.swing.GroupLayout.DEFAULT_SIZE, 729, Short.MAX_VALUE))
+                .addComponent(linha1, javax.swing.GroupLayout.DEFAULT_SIZE, 717, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(linha2, javax.swing.GroupLayout.DEFAULT_SIZE, 729, Short.MAX_VALUE))
+                .addComponent(linha2, javax.swing.GroupLayout.DEFAULT_SIZE, 717, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnLancador, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnStringProdutos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnLancador)
+                    .addComponent(btnStringProdutos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnLancador1))
                 .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -231,12 +242,12 @@ public class GerenciadorClientes extends javax.swing.JFrame {
                 .addGroup(layout.createSequentialGroup()
                     .addGap(71, 71, 71)
                     .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(516, Short.MAX_VALUE)))
+                    .addContainerGap(517, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(linha2, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(574, Short.MAX_VALUE)))
+                    .addGap(19, 19, 19)
+                    .addComponent(linha2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(569, Short.MAX_VALUE)))
         );
 
         pack();
@@ -263,34 +274,34 @@ public class GerenciadorClientes extends javax.swing.JFrame {
 
     private void btnInativarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInativarActionPerformed
         try{
-            Integer idSelecionado = (Integer)jtClientes.getValueAt(jtClientes.getSelectedRow(), 0); 
-            
-            for(Cliente c:listaClientes){
-                if(c.getId().equals(idSelecionado)){
-                    clienteSelecionado = c;
-                    InativarProduto inativar = new InativarProduto(new javax.swing.JFrame(), true);
-                    inativar.setVisible(true); 
-                    dispose();
-                }
-            }
-           
+            int reply = JOptionPane.showConfirmDialog(null, "Deseja realmente inativar o cliente?","Inativação de Cliente", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.YES_OPTION) {
+                    Integer idSelecionado = (Integer)jtClientes.getValueAt(jtClientes.getSelectedRow(), 0); 
+
+                for(Cliente c:listaClientes){
+                    if(c.getId().equals(idSelecionado)){
+                        ClienteDAO cDao = new ClienteDAO();
+                        cDao.setInativo(c.getId());
+                        this.limparTabela();
+                        
+                    }
+                }  
+            }  
         }catch(java.util.ConcurrentModificationException ex){
             System.out.println("Deu a exceção");
         }
     }//GEN-LAST:event_btnInativarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void btnLancador1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLancador1ActionPerformed
+        InativosClientes novoPrato = new InativosClientes(new javax.swing.JFrame(), true);
+        novoPrato.setVisible(true); 
+        dispose();
+    }//GEN-LAST:event_btnLancador1ActionPerformed
+
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("WebLaF".equals(info.getName())) {
+                if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -325,6 +336,7 @@ public class GerenciadorClientes extends javax.swing.JFrame {
     private javax.swing.JButton btnAlterar;
     private javax.swing.JButton btnInativar;
     private javax.swing.JButton btnLancador;
+    private javax.swing.JButton btnLancador1;
     private javax.swing.JLabel btnStringProdutos;
     private javax.swing.JScrollPane jScrollPane1;
     private static javax.swing.JTable jtClientes;

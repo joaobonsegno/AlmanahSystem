@@ -240,10 +240,10 @@ public class ImportarCardapio extends javax.swing.JDialog {
             if (jtPratos.getSelectedRowCount() > 1){
                 JOptionPane.showMessageDialog(null, "Selecione somente 1 (um) cardápio para importar");
             }else{
+                dispose();
                 dataSelecionada = (String)jtPratos.getValueAt(jtPratos.getSelectedRow(), 1);
                 SelecionarPratoParaImportacao novoPrato = new SelecionarPratoParaImportacao(new javax.swing.JFrame(), true);
-                novoPrato.setVisible(true);
-                dispose();
+                novoPrato.setVisible(true);               
             }
         }catch(java.lang.IndexOutOfBoundsException ex){
             JOptionPane.showMessageDialog(null, "Selecione um cardápio para importar");

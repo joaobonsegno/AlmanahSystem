@@ -127,7 +127,7 @@ public class NovaSobremesa extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("Nova Bebida");
+        setTitle("Nova Sobremesa");
         setMinimumSize(new java.awt.Dimension(770, 670));
         setResizable(false);
 

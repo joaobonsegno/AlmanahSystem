@@ -3,7 +3,7 @@ package model.bean;
 import java.util.ArrayList;
 
 public class Produto implements Comparable<Produto>{
-    private Integer idProduto;
+    private Integer idProduto, status;
     private String nome, ncm, ean, descricao, qtdMinima, qtdEstoque, unidadeDeMedida;
     private Double preco, precoComDesconto;
     private Categoria categoria;
@@ -35,6 +35,14 @@ public class Produto implements Comparable<Produto>{
     
     public Integer getIdProduto() {
         return idProduto;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Categoria getCategoria() {

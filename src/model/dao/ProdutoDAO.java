@@ -19,7 +19,7 @@ public class ProdutoDAO {
         PreparedStatement stmt = null;
         
         try{
-            String sql = "INSERT INTO produto (nome, ncm, ean, descricao, qtdMinima, preco, qtdEstoque, unidadeDeMedida, idCategoria, precoComDesconto)VALUES(?,?,?,?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO produto (nome, ncm, ean, descricao, qtdMinima, preco, qtdEstoque, unidadeDeMedida, idCategoria, precoComDesconto, status)VALUES(?,?,?,?,?,?,?,?,?,?,?)";
             stmt = con.prepareStatement(sql);
             stmt.setString(1, p.getNome());
             stmt.setString(2, p.getNcm());
@@ -31,8 +31,9 @@ public class ProdutoDAO {
             stmt.setString(8, p.getUnidadeDeMedida());
             stmt.setInt(9, p.getCategoria().getId());
             stmt.setDouble(10, p.getPreco());
+            stmt.setInt(11, 1);
             stmt.executeUpdate();
-            System.out.println("Salvo com sucesso!");
+            //System.out.println("Salvo com sucesso!");
         }catch(SQLException ex){
             System.err.println("Erro SQL: "+ex);
         }finally{
@@ -40,6 +41,7 @@ public class ProdutoDAO {
         }
     }
     
+    // READS
     public ArrayList<Produto> read(){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -48,7 +50,7 @@ public class ProdutoDAO {
         cDao = new CategoriaDAO();
         
         try{
-            stmt = con.prepareStatement("SELECT * FROM produto");
+            stmt = con.prepareStatement("SELECT * FROM produto WHERE status = 1");
             rs = stmt.executeQuery();
             while (rs.next()){
                 Produto p = new Produto();
@@ -87,7 +89,7 @@ public class ProdutoDAO {
         cDao = new CategoriaDAO();
         
         try{
-            stmt = con.prepareStatement("SELECT * FROM produto WHERE nome LIKE ?");
+            stmt = con.prepareStatement("SELECT * FROM produto WHERE status = 1 AND nome LIKE ? ");
             stmt.setString(1, "%"+nome+"%");
             
             rs = stmt.executeQuery();
@@ -139,7 +141,7 @@ public class ProdutoDAO {
                 cat.setDescricao(rs.getString("descricao"));
             }
             
-            stmt = con.prepareStatement("SELECT * FROM produto WHERE idCategoria LIKE ?");
+            stmt = con.prepareStatement("SELECT * FROM produto WHERE status = 1 AND idCategoria LIKE ?");
             stmt.setInt(1, cat.getId());
             rs = stmt.executeQuery();
             while (rs.next()){
@@ -168,12 +170,13 @@ public class ProdutoDAO {
         return prods;
     }
     
+    // UPDATES 
     public void update(Produto p){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         
         try{
-            String sql = "UPDATE produto SET nome=?, ncm=?, ean=?, descricao=?, qtdMinima=?, preco=?, validade=?, qtdEstoque=?, idCategoria=?, unidadeDeMedida=? WHERE idProduto = ?";
+            String sql = "UPDATE produto SET nome=?, ncm=?, ean=?, descricao=?, qtdMinima=?, preco=?, qtdEstoque=?, idCategoria=?, unidadeDeMedida=? WHERE idProduto = ?";
             stmt = con.prepareStatement(sql);
             stmt.setString(1, p.getNome());
             stmt.setString(2, p.getNcm());
@@ -246,6 +249,88 @@ public class ProdutoDAO {
             System.out.println("Excluído com sucesso!");
         }catch(SQLException ex){
             System.err.println("Erro SQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+    }
+    
+    // PRODUTO INATIVO
+    public ArrayList<Produto> readInativos(){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ArrayList<Produto> prods = new ArrayList<>();
+        cDao = new CategoriaDAO();
+        
+        try{
+            stmt = con.prepareStatement("SELECT * FROM produto WHERE status = 0");
+            rs = stmt.executeQuery();
+            while (rs.next()){
+                Produto p = new Produto();
+                
+                p.setIdProduto(rs.getInt("idProduto"));
+                p.setNome(rs.getString("nome"));
+                p.setDescricao(rs.getString("descricao"));
+                p.setNcm(rs.getString("ncm"));
+                p.setEan(rs.getString("ean"));
+                p.setPreco(rs.getDouble("preco"));
+                p.setQtdMinima(rs.getString("qtdMinima"));
+                p.setUnidadeDeMedida(rs.getString("unidadeDeMedida"));
+                p.setPrecoComDesconto(rs.getDouble("precoComDesconto"));
+                p.setQtdEstoque(rs.getString("qtdEstoque"));
+                Integer categoriaProduto = (rs.getInt("idCategoria"));
+                for (Categoria c:cDao.read()){
+                    if (c.getId() == categoriaProduto){
+                        p.setCategoria(c);
+                    }
+                }
+                prods.add(p);
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return prods;
+    }
+    
+    public void setAtivo(){
+        
+    }
+    
+    public void setInativo(int c){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        
+        try{
+            String sql = "UPDATE produto SET status=? WHERE idProduto = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, 0);
+            stmt.setInt(2, c);
+            
+            stmt.executeUpdate();
+            //System.out.println("Atualizado com sucesso!");
+        }catch(SQLException ex){
+            System.err.println("Erro ao atualizar: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+    }
+    
+    public void setAtivo(int c){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        
+        try{
+            String sql = "UPDATE produto SET status=? WHERE idProduto = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, 1);
+            stmt.setInt(2, c);
+            
+            stmt.executeUpdate();
+            //System.out.println("Atualizado com sucesso!");
+        }catch(SQLException ex){
+            System.err.println("Erro ao atualizar: "+ex);
         }finally{
             ConnectionFactory.closeConnection(con, stmt);
         }

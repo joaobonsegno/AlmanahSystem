@@ -628,7 +628,8 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_produtos_cadastrarPratosActionPerformed
 
     private void produtos_gerenciarPratosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_produtos_gerenciarPratosActionPerformed
-        // TODO add your handling code here:
+        new GerenciadorPratos().setVisible(true);
+        dispose();
     }//GEN-LAST:event_produtos_gerenciarPratosActionPerformed
 
     private void produtos_cardapioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_produtos_cardapioActionPerformed

@@ -35,32 +35,9 @@ public class CadastrarSubproduto extends javax.swing.JDialog {
         for (Produto p: pDao.read()){
             listaProdutos.add(p);
         }
-        criarTabela();
-        criarComboBox();  
-        
+        criarComboBox();      
     }
-    
-    public void criarTabela(){
-        limparTabela();
-        ArrayList<Produto> ordenador = new ArrayList<>();
-        
-        for (Produto prod : listaProdutos){
-            ordenador.add(prod);
-        }
-        Collections.sort(ordenador);
-        
-        DefaultTableModel dtmBebidas = (DefaultTableModel) jtProdutos.getModel();
-        for (Produto p: ordenador){
-            String valor = GerenciadorComandas.valorMonetario(p.getPreco());
-            dtmBebidas.addRow(
-                new Object[]{
-                    p.getNome(),
-                    p.getIdProduto()}
-            );
-        } 
-        setarSelecionado();
-    }
-    
+
     public void criarTabelaCategoria(String nome){
         ArrayList<Produto> ordenador = new ArrayList<>();
         
@@ -292,12 +269,13 @@ public class CadastrarSubproduto extends javax.swing.JDialog {
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         subprodutosSelecionados.removeAll(subprodutosSelecionados);
+        
         int quantidadeDeSelecionados = jtProdutos.getSelectedRows().length;
         if (quantidadeDeSelecionados > 9){
             JOptionPane.showMessageDialog(null, "Falha no cadastro:\nSó é possível selecionar até 9 matérias-primas para um produto.");
         }else{
             for (int i = 0; i < quantidadeDeSelecionados; i++){
-            Integer idSelecionado = (Integer)jtProdutos.getValueAt(jtProdutos.getSelectedRows()[i], 1);
+                Integer idSelecionado = (Integer)jtProdutos.getValueAt(jtProdutos.getSelectedRows()[i], 1);
                 for (Produto p:listaProdutos){
                     if (p.getIdProduto() == idSelecionado){
                         subprodutosSelecionados.add(p);
@@ -320,7 +298,7 @@ public class CadastrarSubproduto extends javax.swing.JDialog {
             if (!escolhido.equals("")){
                 criarTabelaCategoria(escolhido);
             }else{
-                criarTabela();
+                limparTabela();
             }
         }catch(java.lang.NullPointerException ex){
 
@@ -331,9 +309,7 @@ public class CadastrarSubproduto extends javax.swing.JDialog {
 
     }//GEN-LAST:event_cbCategoriasActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -357,13 +333,7 @@ public class CadastrarSubproduto extends javax.swing.JDialog {
             java.util.logging.Logger.getLogger(CadastrarSubproduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
+
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {

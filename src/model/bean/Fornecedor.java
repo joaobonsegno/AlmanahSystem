@@ -3,7 +3,7 @@ package model.bean;
 import java.util.ArrayList;
 
 public class Fornecedor {
-    private int id;
+    private int id, status;
     private String nome, descricao, telefone, celular, cnpj, email;
     private ArrayList<Produto> produtosFornecidos;
 
@@ -25,6 +25,30 @@ public class Fornecedor {
 
     public String getDescricao() {
         return descricao;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getCnpj() {
+        return cnpj;
+    }
+
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setDescricao(String descricao) {

@@ -39,6 +39,8 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         txtNumeroComanda.requestFocus();      
     }
 
+    // <editor-fold defaultstate="collapsed" desc="Métodos Diversos">  
+    
     public void formatarTabela(){
         jtComandas.setRowHeight(28);
         jtComandas.getColumn("ID").setCellRenderer(centro);
@@ -397,6 +399,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         }
         return contador;
     }
+    // </editor-fold> 
     
     // MÉTODOS PARA ARRUMAR CÉLULAS DA TABELA
     DefaultTableCellRenderer centro = new DefaultTableCellRenderer() {
@@ -805,25 +808,27 @@ public class GerenciadorComandas extends javax.swing.JFrame {
 
     private void txtNumeroComandaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumeroComandaKeyReleased
         if (evt.getKeyCode() == 10){
-            ComandaDAO comDao = new ComandaDAO();
-            int cod = comDao.codComanda(txtNumeroComanda.getText());           
-            if (cod == 0){
-                if (!txtNumeroComanda.getText().equals(""))
-                    JOptionPane.showMessageDialog(null, "Código de comanda inválido");
-            }else{
-                txtNumeroComanda.setText("");
-                boolean flagComandaAberta = false;
-                for (Integer i : idsAbertos){
-                    if (i == cod){
-                        JOptionPane.showMessageDialog(null, "Comanda "+cod+" já foi aberta");
-                        flagComandaAberta = true;
-                        break;
+            if (!txtNumeroComanda.getText().equals("")){
+                ComandaDAO comDao = new ComandaDAO();
+                int cod = comDao.codComanda(txtNumeroComanda.getText());           
+                if (cod == 0){
+                    if (!txtNumeroComanda.getText().equals(""))
+                        JOptionPane.showMessageDialog(null, "Código de comanda inválido");
+                }else{
+                    txtNumeroComanda.setText("");
+                    boolean flagComandaAberta = false;
+                    for (Integer i : idsAbertos){
+                        if (i == cod){
+                            JOptionPane.showMessageDialog(null, "Comanda "+cod+" já foi aberta");
+                            flagComandaAberta = true;
+                            break;
+                        }
                     }
+                    if (!flagComandaAberta){
+                        this.novaComanda(cod);
+                    }               
                 }
-                if (!flagComandaAberta){
-                    this.novaComanda(cod);
-                }               
-            }           
+            }                      
         }
     }//GEN-LAST:event_txtNumeroComandaKeyReleased
 
