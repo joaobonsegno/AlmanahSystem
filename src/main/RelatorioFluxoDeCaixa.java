@@ -1,5 +1,7 @@
 package main;
 
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
@@ -7,7 +9,9 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.Phrase;
 import java.awt.Color;
 import java.awt.Desktop;
@@ -20,6 +24,8 @@ import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Despesa;
 import model.bean.Forma;
@@ -105,7 +111,7 @@ public class RelatorioFluxoDeCaixa extends javax.swing.JFrame {
     }
     
     public void formatarTabela() {
-        jtVendas.setRowHeight(22);
+        jtVendas.setRowHeight(23);
         jtVendas.getColumnModel().getColumn(0).setPreferredWidth(80); //TIPO
         jtVendas.getColumnModel().getColumn(1).setPreferredWidth(105); //VALOR
         jtVendas.getColumnModel().getColumn(2).setPreferredWidth(180); //DATA
@@ -136,19 +142,95 @@ public class RelatorioFluxoDeCaixa extends javax.swing.JFrame {
     }
     
     // ----------------------- MÉTODOS PARA CRIAR RELATÓRIOS -----------------------
-    public PdfPTable criarCabecalho() throws DocumentException {
+    public PdfPTable criarCabecalho() throws DocumentException {      
+        PdfPTable table = new PdfPTable(new float[]{5f,10f});
+        table.setWidthPercentage(100.0f);
+        PdfPCell cabecalho = new PdfPCell();
+        cabecalho.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        Paragraph espaco = new Paragraph(new Phrase("\n", FontFactory.getFont(FontFactory.HELVETICA, 20F)));
+
+        // Colocar imagem na tabela
+        Image jpg;
+        try {
+            jpg = Image.getInstance("C:\\Projetos Netbeans\\AlmanahSystem\\images\\logo.png");
+            jpg.scaleAbsoluteWidth(100);
+            jpg.scaleAbsoluteHeight(80);
+            jpg.setAlignment(Element.ALIGN_CENTER);
+
+            PdfPCell imagem = new PdfPCell();
+            // cell.setBorder(PdfPCell.NO_BORDER);;
+            //imagem.addElement(espaco);
+            imagem.addElement(jpg);
+            imagem.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            table.addCell(imagem);
+        } catch (BadElementException ex) {System.err.println("Erro: "+ex);
+        } catch (IOException ex)         {System.err.println("Erro: "+ex);}
+        
+        
+        // Célula do TÍTULO ("Restaurante Almanah")
+        Paragraph pTitulo = new Paragraph(new Phrase(20F, "Restaurante Almanah\n", FontFactory.getFont(FontFactory.HELVETICA, 20F, Font.BOLD)));
+        pTitulo.setAlignment(Element.ALIGN_CENTER);
+        pTitulo.setSpacingBefore(20);
+        pTitulo.setSpacingAfter(20);       
+        cabecalho.addElement(pTitulo);
+        
+        // Célula do SUBTÍTULO ("Relatório de ...")
+        Paragraph pSubtitulo = new Paragraph(new Phrase(20F, "Relatório de Fluxo de Caixa\n", FontFactory.getFont(FontFactory.HELVETICA, 16F)));
+        pSubtitulo.setAlignment(Element.ALIGN_CENTER);
+        pTitulo.setSpacingBefore(20);
+        pTitulo.setSpacingAfter(20);       
+        cabecalho.addElement(pSubtitulo);
+
+        // Célula do DATAS ("Datas inicial e final")
+        Paragraph pSubtituloDatas = new Paragraph(new Phrase(20F, "Data Inicial: " + GerenciadorRelatorios.dMenor + "  Data Final: " + GerenciadorRelatorios.dMaior + "\n\n", FontFactory.getFont(FontFactory.HELVETICA, 12F)));
+        pSubtituloDatas.setAlignment(Element.ALIGN_CENTER);
+        pTitulo.setSpacingBefore(20);
+        pTitulo.setSpacingAfter(20);       
+        cabecalho.addElement(pSubtituloDatas);
+        
+        table.addCell(cabecalho);
+        return table;
+    }
+    
+    public PdfPTable criarTabelaPdf() throws DocumentException {
         PdfPTable table = new PdfPTable(new float[]{2.5f, 4f, 3.8f, 10f});
-        PdfPCell celulaTipo = new PdfPCell(new Phrase(15F, "Tipo", FontFactory.getFont(FontFactory.HELVETICA, 14F)));
-        celulaTipo.setHorizontalAlignment(Element.ALIGN_CENTER);
-
-        PdfPCell celulaValor = new PdfPCell(new Phrase(15F, "Valor", FontFactory.getFont(FontFactory.HELVETICA, 14F)));
-        celulaValor.setHorizontalAlignment(Element.ALIGN_CENTER);
-
-        PdfPCell celulaData = new PdfPCell(new Phrase(15F, "Data", FontFactory.getFont(FontFactory.HELVETICA, 14F)));
-        celulaData.setHorizontalAlignment(Element.ALIGN_CENTER);
-
-        PdfPCell celulaDescricao = new PdfPCell(new Phrase(15F, "Descrição", FontFactory.getFont(FontFactory.HELVETICA, 14F)));
-        celulaDescricao.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.setWidthPercentage(100.0f);
+        
+        // Célula do Tipo
+        Paragraph t = new Paragraph(new Phrase(15F, "  \nTipo", FontFactory.getFont(FontFactory.HELVETICA, 14F)));
+        t.setAlignment(Element.ALIGN_CENTER);
+        t.setSpacingBefore(20);
+        t.setSpacingAfter(20);
+        PdfPCell celulaTipo = new PdfPCell();
+        celulaTipo.addElement(t);
+        celulaTipo.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        
+        // Célula do Valor
+        Paragraph v = new Paragraph(new Phrase(15F, "  \nValor", FontFactory.getFont(FontFactory.HELVETICA, 14F)));
+        v.setAlignment(Element.ALIGN_CENTER);
+        v.setSpacingBefore(20);
+        v.setSpacingAfter(20);
+        PdfPCell celulaValor = new PdfPCell();
+        celulaValor.addElement(v);
+        celulaValor.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        
+        // Célula da Data
+        Paragraph d = new Paragraph(new Phrase(15F, "  \nData", FontFactory.getFont(FontFactory.HELVETICA, 14F)));
+        d.setAlignment(Element.ALIGN_CENTER);
+        d.setSpacingBefore(20);
+        d.setSpacingAfter(20);
+        PdfPCell celulaData = new PdfPCell();
+        celulaData.addElement(d);
+        celulaData.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        
+        // Célula da Descrição
+        Paragraph de = new Paragraph(new Phrase(15F, "  \nDescrição", FontFactory.getFont(FontFactory.HELVETICA, 14F)));
+        de.setAlignment(Element.ALIGN_CENTER);
+        de.setSpacingBefore(20);
+        de.setSpacingAfter(20);
+        PdfPCell celulaDescricao = new PdfPCell();
+        celulaDescricao.addElement(de);
+        celulaDescricao.setBackgroundColor(BaseColor.LIGHT_GRAY);
         
         table.addCell(celulaTipo);
         table.addCell(celulaValor);
@@ -419,32 +501,21 @@ public class RelatorioFluxoDeCaixa extends javax.swing.JFrame {
 
     private void btnExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportarActionPerformed
 
-        //Cria a estrutura inicial do relatório de VENDAS       
-        Paragraph pTitulo = new Paragraph(new Phrase(20F, "Restaurante Almanah\n", FontFactory.getFont(FontFactory.HELVETICA, 20F)));
-        pTitulo.setAlignment(Element.ALIGN_CENTER);
-
-        Paragraph pSubtitulo = new Paragraph(new Phrase(20F, "Relatório de Fluxo de Caixa\n", FontFactory.getFont(FontFactory.HELVETICA, 16F)));
-        pSubtitulo.setAlignment(Element.ALIGN_CENTER);
-
-        Paragraph pSubtituloDatas = new Paragraph(new Phrase(20F, "Data Inicial: " + GerenciadorRelatorios.dMenor + "  Data Final: " + GerenciadorRelatorios.dMaior + "\n\n", FontFactory.getFont(FontFactory.HELVETICA, 12F)));
-        pSubtituloDatas.setAlignment(Element.ALIGN_CENTER);
-
-        Paragraph pData = new Paragraph(new Phrase(20F, "Data de Emissão: " + GerenciadorComandas.getDataAtualComHoraFormatoBr() + "\n\n", FontFactory.getFont(FontFactory.HELVETICA, 11F)));
+        Paragraph pData = new Paragraph(new Phrase(20F, "Data de Emissão: " + GerenciadorComandas.getDataAtualComHoraFormatoBr(), FontFactory.getFont(FontFactory.HELVETICA, 11F)));
         pData.setAlignment(Element.ALIGN_RIGHT);
+        pData.setSpacingBefore(2);
+        pData.setSpacingAfter(2);
         Document documento = new Document();
         try {
             PdfWriter pdf = PdfWriter.getInstance(documento, new FileOutputStream("C:\\Projetos Netbeans\\AlmanahSystem\\relatorios\\fluxo de caixa\\Fluxo De Caixa.pdf"));
 
-            //Adiciona ao documento as estruturas de cabeçalho
+            //Adiciona ao documento as estruturas de cabeçalho           
             documento.open();
-            documento.add(pTitulo);
-            documento.add(pSubtitulo);
-            documento.add(pSubtituloDatas);
+            documento.add(criarCabecalho());
             documento.add(pData);
 
             //Cria a tabela e adiciona seu conteúdo
-            PdfPTable table = this.criarCabecalho();
-
+            PdfPTable table = this.criarTabelaPdf();
             this.preencherDados(documento, table, listaFluxos);
 
             //Cria o rodapé, com totais das vendas                   
@@ -455,7 +526,7 @@ public class RelatorioFluxoDeCaixa extends javax.swing.JFrame {
             pCredito.setAlignment(Element.ALIGN_RIGHT);
             Paragraph pLinha = new Paragraph(new Phrase(20F, "____________________\n\n", FontFactory.getFont(FontFactory.HELVETICA, 12F)));
             pLinha.setAlignment(Element.ALIGN_RIGHT);            
-            Paragraph pTotal = new Paragraph(new Phrase(20F, "Saldo:  R$ " + GerenciadorComandas.valorMonetario(total), FontFactory.getFont(FontFactory.HELVETICA, 14F)));
+            Paragraph pTotal = new Paragraph(new Phrase(20F, "Saldo:  R$ " + GerenciadorComandas.valorMonetario(total), FontFactory.getFont(FontFactory.HELVETICA, 14F,Font.BOLD)));
             pTotal.setAlignment(Element.ALIGN_RIGHT);
             
             documento.add(pCredito);
@@ -500,35 +571,6 @@ public class RelatorioFluxoDeCaixa extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(RelatorioFluxoDeCaixa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>

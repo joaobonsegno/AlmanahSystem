@@ -8,39 +8,32 @@ import model.bean.Cliente;
 import model.dao.ClienteDAO;
 
 public class GerenciadorClientes extends javax.swing.JFrame {
-    public static ArrayList<Cliente> listaClientes = new ArrayList<>();
     ClienteDAO cDao = new ClienteDAO();
     public static Cliente clienteSelecionado;
-    
-    public GerenciadorClientes() {        
-       initComponents();
-       
-       jtClientes.setRowHeight(24);
-       this.setLocationRelativeTo(null);
-       jtClientes.getColumnModel().getColumn(0).setPreferredWidth(0); 
-       jtClientes.getColumnModel().getColumn(1).setPreferredWidth(470);
-       jtClientes.getColumnModel().getColumn(2).setPreferredWidth(150);
-        
-       jtClientes.getColumnModel().getColumn(0).setMinWidth(0);
-       jtClientes.getColumnModel().getColumn(1).setMinWidth(470);
-       jtClientes.getColumnModel().getColumn(2).setMinWidth(150);
-        
-       jtClientes.getColumnModel().getColumn(0).setMaxWidth(0);
-       jtClientes.getColumnModel().getColumn(1).setMaxWidth(470);
-       jtClientes.getColumnModel().getColumn(2).setMaxWidth(150);
 
-       listaClientes.removeAll(listaClientes);
-       for (Cliente c: cDao.read()){
-            listaClientes.add(c);
-        }
-        criarTabela();
+    public GerenciadorClientes() {
+        initComponents();
+
+        jtClientes.setRowHeight(24);
+        this.setLocationRelativeTo(null);
+        jtClientes.getColumnModel().getColumn(0).setPreferredWidth(0);
+        jtClientes.getColumnModel().getColumn(1).setPreferredWidth(470);
+        jtClientes.getColumnModel().getColumn(2).setPreferredWidth(150);
+
+        jtClientes.getColumnModel().getColumn(0).setMinWidth(0);
+        jtClientes.getColumnModel().getColumn(1).setMinWidth(470);
+        jtClientes.getColumnModel().getColumn(2).setMinWidth(150);
+
+        jtClientes.getColumnModel().getColumn(0).setMaxWidth(0);
+        jtClientes.getColumnModel().getColumn(1).setMaxWidth(470);
+        jtClientes.getColumnModel().getColumn(2).setMaxWidth(150);
     }
 
-    public void criarTabela(){
+    public void criarTabelaNome(String nome){
         limparTabela();
         ArrayList<Cliente> ordenador = new ArrayList<>();
         
-        for (Cliente cliente : listaClientes){
+        for (Cliente cliente : cDao.readForNome(nome)){
             ordenador.add(cliente);
         }
         Collections.sort(ordenador);
@@ -56,35 +49,15 @@ public class GerenciadorClientes extends javax.swing.JFrame {
         }
     }
     
-    /*public void criarTabelaNome(String nome){
-        limparTabela();
-        ArrayList<Cliente> ordenador = new ArrayList<>();
-        
-        for (Cliente cliente : cDao.readForNome()){
-            ordenador.add(cliente);
-        }
-        Collections.sort(ordenador);
-        
-        DefaultTableModel dtmBebidas = (DefaultTableModel) jtClientes.getModel();
-        for (Cliente c: ordenador){
-            dtmBebidas.addRow(
-                new Object[]{
-                    c.getId(),
-                    c.getNome(),
-                    c.getCpf()}
-            );           
-        }
-    }*/
-    
-    public void limparTabela(){
+    public void limparTabela() {
         DefaultTableModel dtmBebidas = (DefaultTableModel) jtClientes.getModel();
         int i = dtmBebidas.getRowCount();
-        
-        for (int j = 0; j < i; j++){
+
+        for (int j = 0; j < i; j++) {
             dtmBebidas.removeRow(0);
-        }       
+        }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -178,6 +151,11 @@ public class GerenciadorClientes extends javax.swing.JFrame {
         lblStringNomeProduto.setText("Nome do Cliente:");
 
         txtPesquisa.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        txtPesquisa.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPesquisaKeyReleased(evt);
+            }
+        });
 
         linha2.setBackground(new java.awt.Color(0, 0, 0));
         linha2.setOpaque(true);
@@ -254,49 +232,62 @@ public class GerenciadorClientes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLancadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLancadorActionPerformed
-        new Menu().setVisible(true); 
+        new Menu().setVisible(true);
         dispose();
     }//GEN-LAST:event_btnLancadorActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
         //Menu.acaoEscolhida = 2;
-        Integer idSelecionado = (Integer)jtClientes.getValueAt(jtClientes.getSelectedRow(), 0);
+        Integer idSelecionado = (Integer) jtClientes.getValueAt(jtClientes.getSelectedRow(), 0);
 
-        for(Cliente c:listaClientes){
-            if(c.getId().equals(idSelecionado)){
+        for (Cliente c : cDao.read()) {
+            if (c.getId().equals(idSelecionado)) {
                 clienteSelecionado = c;
-                new AlterarCliente().setVisible(true); 
+                new AlterarCliente().setVisible(true);
                 dispose();
             }
         }
-        
+
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void btnInativarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInativarActionPerformed
-        try{
-            int reply = JOptionPane.showConfirmDialog(null, "Deseja realmente inativar o cliente?","Inativação de Cliente", JOptionPane.YES_NO_OPTION);
+        try {
+            if (jtClientes.getSelectedRowCount() > 1) {
+                JOptionPane.showMessageDialog(null, "Selecione somente 1 (um) cliente");
+            } else {
+                int reply = JOptionPane.showConfirmDialog(null, "Deseja realmente inativar o cliente?", "Inativação de Cliente", JOptionPane.YES_NO_OPTION);
                 if (reply == JOptionPane.YES_OPTION) {
-                    Integer idSelecionado = (Integer)jtClientes.getValueAt(jtClientes.getSelectedRow(), 0); 
+                    Integer idSelecionado = (Integer) jtClientes.getValueAt(jtClientes.getSelectedRow(), 0);
 
-                for(Cliente c:listaClientes){
-                    if(c.getId().equals(idSelecionado)){
-                        ClienteDAO cDao = new ClienteDAO();
-                        cDao.setInativo(c.getId());
-                        this.limparTabela();
-                        
+                    for (Cliente c : cDao.read()) {
+                        if (c.getId().equals(idSelecionado)) {
+                            ClienteDAO cDao = new ClienteDAO();
+                            cDao.setInativo(c.getId());
+                            this.limparTabela();
+
+                        }
                     }
-                }  
-            }  
-        }catch(java.util.ConcurrentModificationException ex){
+                }
+            }
+        } catch (java.util.ConcurrentModificationException ex) {
             System.out.println("Deu a exceção");
         }
     }//GEN-LAST:event_btnInativarActionPerformed
 
     private void btnLancador1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLancador1ActionPerformed
         InativosClientes novoPrato = new InativosClientes(new javax.swing.JFrame(), true);
-        novoPrato.setVisible(true); 
+        novoPrato.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnLancador1ActionPerformed
+
+    private void txtPesquisaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPesquisaKeyReleased
+        String entrada = txtPesquisa.getText();
+        if (entrada.length() >= 3) {
+            this.criarTabelaNome(entrada);
+        } else {
+            this.limparTabela();
+        }
+    }//GEN-LAST:event_txtPesquisaKeyReleased
 
     public static void main(String args[]) {
         try {
@@ -346,5 +337,3 @@ public class GerenciadorClientes extends javax.swing.JFrame {
     private javax.swing.JTextField txtPesquisa;
     // End of variables declaration//GEN-END:variables
 }
-
-

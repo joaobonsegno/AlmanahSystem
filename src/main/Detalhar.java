@@ -45,16 +45,16 @@ public class Detalhar extends javax.swing.JDialog {
     public void formatarTabela() {
         jtCarteiras.setRowHeight(27);
         jtCarteiras.getColumnModel().getColumn(0).setPreferredWidth(300);
-        jtCarteiras.getColumnModel().getColumn(1).setPreferredWidth(150);
-        jtCarteiras.getColumnModel().getColumn(2).setPreferredWidth(180);
+        jtCarteiras.getColumnModel().getColumn(1).setPreferredWidth(130);
+        jtCarteiras.getColumnModel().getColumn(2).setPreferredWidth(200);
         
         jtCarteiras.getColumnModel().getColumn(0).setMinWidth(300);
-        jtCarteiras.getColumnModel().getColumn(1).setMinWidth(150);
-        jtCarteiras.getColumnModel().getColumn(2).setMinWidth(180);
+        jtCarteiras.getColumnModel().getColumn(1).setMinWidth(130);
+        jtCarteiras.getColumnModel().getColumn(2).setMinWidth(200);
 
         jtCarteiras.getColumnModel().getColumn(0).setMaxWidth(300);
-        jtCarteiras.getColumnModel().getColumn(1).setMaxWidth(150);
-        jtCarteiras.getColumnModel().getColumn(2).setMaxWidth(180);
+        jtCarteiras.getColumnModel().getColumn(1).setMaxWidth(130);
+        jtCarteiras.getColumnModel().getColumn(2).setMaxWidth(200);
     }
     
     @SuppressWarnings("unchecked")
@@ -102,7 +102,7 @@ public class Detalhar extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Funcionário", "Valor (R$)", "Data"
+                "Funcionário", "Valor", "Data"
             }
         ) {
             boolean[] canEdit = new boolean [] {

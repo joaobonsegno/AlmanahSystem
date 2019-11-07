@@ -1,5 +1,7 @@
 package main;
 
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
@@ -7,7 +9,9 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.Phrase;
 import java.awt.Component;
 import java.awt.Desktop;
@@ -48,7 +52,8 @@ public class RelatorioProdutos extends javax.swing.JFrame {
             //Variáveis para criação do relatório       
             ProdutoDAO pDao = new ProdutoDAO();
             lista = new ArrayList<>();
-            for (RelatorioProduto p : pDao.relatorio(GerenciadorRelatorios.dMaior, GerenciadorRelatorios.dMenor, Integer.parseInt((String)cbLimite.getSelectedItem()))) {
+            int ordem = cbOrdem.getSelectedIndex();
+            for (RelatorioProduto p : pDao.relatorio(GerenciadorRelatorios.dMaior, GerenciadorRelatorios.dMenor, Integer.parseInt((String)cbLimite.getSelectedItem()),ordem)){
                 lista.add(p);
             }
             this.criarTabela();
@@ -116,26 +121,116 @@ public class RelatorioProdutos extends javax.swing.JFrame {
         cbLimite.addItem("30");
         cbLimite.addItem("40");
         cbLimite.addItem("50");
+        cbLimite.addItem("60");
+        cbLimite.addItem("70");
+        cbLimite.addItem("80");
+        cbLimite.addItem("90");
+        cbLimite.addItem("100");
+        
+        cbOrdem.removeAllItems();
+        cbOrdem.addItem("Decrescente");
+        cbOrdem.addItem("Crescente");
     }
     
     // ----------------------- MÉTODOS PARA CRIAR RELATÓRIOS -----------------------
-    public PdfPTable criarCabecalho() throws DocumentException {
-        PdfPTable table = new PdfPTable(new float[]{1f, 6f, 3f, 4f, 3f});
-        PdfPCell celulaNo = new PdfPCell(new Phrase("No"));
-        celulaNo.setHorizontalAlignment(Element.ALIGN_CENTER);
-        
-        PdfPCell celulaNome = new PdfPCell(new Phrase("Nome"));
-        celulaNome.setHorizontalAlignment(Element.ALIGN_CENTER);
+    public PdfPTable criarCabecalho() throws DocumentException {      
+        PdfPTable table = new PdfPTable(new float[]{5f,10f});
+        table.setWidthPercentage(100.0f);
+        PdfPCell cabecalho = new PdfPCell();
+        cabecalho.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        Paragraph espaco = new Paragraph(new Phrase("\n", FontFactory.getFont(FontFactory.HELVETICA, 20F)));
 
-        PdfPCell celulaPreco = new PdfPCell(new Phrase("Preço (R$)"));
-        celulaPreco.setHorizontalAlignment(Element.ALIGN_CENTER);
+        // Colocar imagem na tabela
+        Image jpg;
+        try {
+            jpg = Image.getInstance("C:\\Projetos Netbeans\\AlmanahSystem\\images\\logo.png");
+            jpg.scaleAbsoluteWidth(100);
+            jpg.scaleAbsoluteHeight(80);
+            jpg.setAlignment(Element.ALIGN_CENTER);
+
+            PdfPCell imagem = new PdfPCell();
+            // cell.setBorder(PdfPCell.NO_BORDER);;
+            //imagem.addElement(espaco);
+            imagem.addElement(jpg);
+            imagem.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            table.addCell(imagem);
+        } catch (BadElementException ex) {System.err.println("Erro: "+ex);
+        } catch (IOException ex)         {System.err.println("Erro: "+ex);}
         
-        PdfPCell celulaQtd = new PdfPCell(new Phrase("Qtd de Vendas"));
-        celulaQtd.setHorizontalAlignment(Element.ALIGN_CENTER);
+        // Célula do TÍTULO ("Restaurante Almanah")
+        Paragraph pTitulo = new Paragraph(new Phrase(20F, "Restaurante Almanah\n", FontFactory.getFont(FontFactory.HELVETICA, 20F, Font.BOLD)));
+        pTitulo.setAlignment(Element.ALIGN_CENTER);
+        pTitulo.setSpacingBefore(20);
+        pTitulo.setSpacingAfter(20);       
+        cabecalho.addElement(pTitulo);
         
-        PdfPCell celulaTotal = new PdfPCell(new Phrase("Total (R$)"));
-        celulaTotal.setHorizontalAlignment(Element.ALIGN_CENTER);
+        // Célula do SUBTÍTULO ("Relatório de ...")
+        Paragraph pSubtitulo = new Paragraph(new Phrase(20F, "Relatório de Produtos\n", FontFactory.getFont(FontFactory.HELVETICA, 16F)));
+        pSubtitulo.setAlignment(Element.ALIGN_CENTER);
+        pTitulo.setSpacingBefore(20);
+        pTitulo.setSpacingAfter(20);       
+        cabecalho.addElement(pSubtitulo);
+
+        // Célula do DATAS ("Datas inicial e final")
+        Paragraph pSubtituloDatas = new Paragraph(new Phrase(20F, "Data Inicial: " + GerenciadorRelatorios.dMenor + "  Data Final: " + GerenciadorRelatorios.dMaior + "\n\n", FontFactory.getFont(FontFactory.HELVETICA, 12F)));
+        pSubtituloDatas.setAlignment(Element.ALIGN_CENTER);
+        pTitulo.setSpacingBefore(20);
+        pTitulo.setSpacingAfter(20);       
+        cabecalho.addElement(pSubtituloDatas);
         
+        table.addCell(cabecalho);
+        return table;
+    }
+    
+    public PdfPTable criarTabelaPdf() throws DocumentException {
+        PdfPTable table = new PdfPTable(new float[]{1f, 6f, 3f, 4f, 3f});
+        table.setWidthPercentage(100.0f);
+        
+        // Célula do No
+        Paragraph n = new Paragraph(new Phrase(15F, "\nNo", FontFactory.getFont(FontFactory.HELVETICA, 14F)));
+        n.setAlignment(Element.ALIGN_CENTER);
+        n.setSpacingBefore(20);
+        n.setSpacingAfter(20);
+        PdfPCell celulaNo = new PdfPCell();
+        celulaNo.addElement(n);
+        celulaNo.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        
+        // Célula do Nome
+        Paragraph no = new Paragraph(new Phrase(15F, "\nNome", FontFactory.getFont(FontFactory.HELVETICA, 14F)));
+        no.setAlignment(Element.ALIGN_CENTER);
+        no.setSpacingBefore(20);
+        no.setSpacingAfter(20);
+        PdfPCell celulaNome = new PdfPCell();
+        celulaNome.addElement(no);
+        celulaNome.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        
+        // Célula do Preço
+        Paragraph p = new Paragraph(new Phrase(15F, "\nPreço (R$)", FontFactory.getFont(FontFactory.HELVETICA, 14F)));
+        p.setAlignment(Element.ALIGN_CENTER);
+        p.setSpacingBefore(20);
+        p.setSpacingAfter(20);
+        PdfPCell celulaPreco = new PdfPCell();
+        celulaPreco.addElement(p);
+        celulaPreco.setBackgroundColor(BaseColor.LIGHT_GRAY);
+
+        // Célula do Preço
+        Paragraph q = new Paragraph(new Phrase(15F, "\nQtd de Vendas", FontFactory.getFont(FontFactory.HELVETICA, 14F)));
+        q.setAlignment(Element.ALIGN_CENTER);
+        q.setSpacingBefore(20);
+        q.setSpacingAfter(20);
+        PdfPCell celulaQtd = new PdfPCell();
+        celulaQtd.addElement(q);
+        celulaQtd.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        
+        // Célula do Total
+        Paragraph t = new Paragraph(new Phrase(15F, "\nTotal (R$)", FontFactory.getFont(FontFactory.HELVETICA, 14F)));
+        t.setAlignment(Element.ALIGN_CENTER);
+        t.setSpacingBefore(20);
+        t.setSpacingAfter(20);
+        PdfPCell celulaTotal = new PdfPCell();
+        celulaTotal.addElement(t);
+        celulaTotal.setBackgroundColor(BaseColor.LIGHT_GRAY);
+
         table.addCell(celulaNo);
         table.addCell(celulaNome);
         table.addCell(celulaPreco);
@@ -190,28 +285,6 @@ public class RelatorioProdutos extends javax.swing.JFrame {
         }
     };
     
-    /*class Renderer extends JLabel{
-        JTableHeader header = jtVendas.getTableHeader();
-        int maxHeaderHeight;
-
-        public Renderer(JTable table) {
-            super();
-            maxHeaderHeight = 22; //Tamanho do Header
-        }
-        //header.getDefaultRenderer();
-        ((DefaultTableCellRenderer)header.getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER));
-        
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            setText((String) value);
-            setHorizontalAlignment(jtVendas.get(column).alinhamento);
-
-            Dimension d = new Dimension(table.getTableHeader().getPreferredSize().width, maxHeaderHeight);
-            table.getTableHeader().setPreferredSize(d);
-            return this;
-        }
-    }*/
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -222,29 +295,35 @@ public class RelatorioProdutos extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jtVendas = new javax.swing.JTable();
         btnExportar = new javax.swing.JButton();
-        lblString3 = new javax.swing.JLabel();
-        cbLimite = new javax.swing.JComboBox<>();
-        lblString4 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         lblString1 = new javax.swing.JLabel();
         lblDataInicial = new javax.swing.JLabel();
         lblString2 = new javax.swing.JLabel();
         lblDataFinal = new javax.swing.JLabel();
         linha2 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
+        jPanel2 = new javax.swing.JPanel();
+        lblString4 = new javax.swing.JLabel();
+        cbLimite = new javax.swing.JComboBox<>();
+        lblString3 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        cbOrdem = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Relatório de Produtos");
         setMaximumSize(new java.awt.Dimension(743, 625));
         setMinimumSize(new java.awt.Dimension(743, 625));
         setResizable(false);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnStringProdutos.setBackground(new java.awt.Color(0, 102, 204));
         btnStringProdutos.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
         btnStringProdutos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btnStringProdutos.setText("Relatório de Produtos");
+        getContentPane().add(btnStringProdutos, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 30, -1, -1));
 
         linha1.setBackground(new java.awt.Color(0, 0, 0));
         linha1.setOpaque(true);
+        getContentPane().add(linha1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 67, 743, -1));
 
         btnLancador.setFont(new java.awt.Font("Century Gothic", 0, 17)); // NOI18N
         btnLancador.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\voltar (1).png")); // NOI18N
@@ -254,6 +333,7 @@ public class RelatorioProdutos extends javax.swing.JFrame {
                 btnLancadorActionPerformed(evt);
             }
         });
+        getContentPane().add(btnLancador, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 25, -1, 36));
 
         jtVendas.setBorder(new javax.swing.border.MatteBorder(null));
         jtVendas.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
@@ -283,6 +363,8 @@ public class RelatorioProdutos extends javax.swing.JFrame {
             jtVendas.getColumnModel().getColumn(4).setResizable(false);
         }
 
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 678, 381));
+
         btnExportar.setBackground(new java.awt.Color(204, 204, 0));
         btnExportar.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
         btnExportar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\pdf png 2.png")); // NOI18N
@@ -294,20 +376,7 @@ public class RelatorioProdutos extends javax.swing.JFrame {
                 btnExportarActionPerformed(evt);
             }
         });
-
-        lblString3.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblString3.setText("Limite de");
-
-        cbLimite.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        cbLimite.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cbLimite.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cbLimiteItemStateChanged(evt);
-            }
-        });
-
-        lblString4.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblString4.setText("produtos");
+        getContentPane().add(btnExportar, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 100, 182, 59));
 
         jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
@@ -350,67 +419,82 @@ public class RelatorioProdutos extends javax.swing.JFrame {
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 550, -1, -1));
+
         linha2.setBackground(new java.awt.Color(0, 0, 0));
         linha2.setOpaque(true);
+        getContentPane().add(linha2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 11, 743, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 678, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnLancador)
-                        .addGap(121, 121, 121)
-                        .addComponent(btnStringProdutos))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addComponent(lblString3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbLimite, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblString4)
-                        .addGap(199, 199, 199)
-                        .addComponent(btnExportar, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(93, 93, 93)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(37, Short.MAX_VALUE))
-            .addComponent(linha1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(linha2, javax.swing.GroupLayout.DEFAULT_SIZE, 743, Short.MAX_VALUE))
+        jPanel2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+
+        lblString4.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
+        lblString4.setText("produtos");
+
+        cbLimite.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        cbLimite.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbLimite.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbLimiteItemStateChanged(evt);
+            }
+        });
+
+        lblString3.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
+        lblString3.setText("Limite de");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblString3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cbLimite, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblString4)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnLancador, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnStringProdutos))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblString3)
-                        .addComponent(cbLimite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblString4))
-                    .addComponent(btnExportar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblString4)
+                    .addComponent(cbLimite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblString3))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, -1, 46));
+
+        jPanel3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+
+        cbOrdem.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        cbOrdem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Descrescente", " " }));
+        cbOrdem.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbOrdemItemStateChanged(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(cbOrdem, 0, 148, Short.MAX_VALUE)
                 .addContainerGap())
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(linha2, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(611, Short.MAX_VALUE)))
         );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(cbOrdem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 110, 170, 46));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -423,30 +507,21 @@ public class RelatorioProdutos extends javax.swing.JFrame {
     private void btnExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportarActionPerformed
 
         //Cria a estrutura inicial do relatório de VENDAS       
-        Paragraph pTitulo = new Paragraph(new Phrase(20F, "Restaurante Almanah\n", FontFactory.getFont(FontFactory.HELVETICA, 20F)));
-        pTitulo.setAlignment(Element.ALIGN_CENTER);
-
-        Paragraph pSubtitulo = new Paragraph(new Phrase(20F, "Relatório de Produtos\n", FontFactory.getFont(FontFactory.HELVETICA, 16F)));
-        pSubtitulo.setAlignment(Element.ALIGN_CENTER);
-
-        Paragraph pSubtituloDatas = new Paragraph(new Phrase(20F, "Data Inicial: " + GerenciadorRelatorios.dMenor + "  Data Final: " + GerenciadorRelatorios.dMaior + "\n\n", FontFactory.getFont(FontFactory.HELVETICA, 12F)));
-        pSubtituloDatas.setAlignment(Element.ALIGN_CENTER);
-
-        Paragraph pData = new Paragraph(new Phrase(20F, "Data de Emissão: " + GerenciadorComandas.getDataAtualComHoraFormatoBr() + "\n\n", FontFactory.getFont(FontFactory.HELVETICA, 11F)));
+        Paragraph pData = new Paragraph(new Phrase(20F, "Data de Emissão: " + GerenciadorComandas.getDataAtualComHoraFormatoBr(), FontFactory.getFont(FontFactory.HELVETICA, 11F)));
         pData.setAlignment(Element.ALIGN_RIGHT);
+        pData.setSpacingBefore(2);
+        pData.setSpacingAfter(2);
         Document documento = new Document();
         try {
             PdfWriter pdf = PdfWriter.getInstance(documento, new FileOutputStream("C:\\Projetos Netbeans\\AlmanahSystem\\relatorios\\produtos\\Produtos.pdf"));
 
             //Adiciona ao documento as estruturas de cabeçalho
             documento.open();
-            documento.add(pTitulo);
-            documento.add(pSubtitulo);
-            documento.add(pSubtituloDatas);
+            documento.add(criarCabecalho());
             documento.add(pData);
 
             //Cria a tabela e adiciona seu conteúdo
-            PdfPTable table = this.criarCabecalho();
+            PdfPTable table = this.criarTabelaPdf();
             this.preencherDados(documento, table, lista);
 
         } catch (FileNotFoundException | DocumentException ex) {
@@ -465,6 +540,10 @@ public class RelatorioProdutos extends javax.swing.JFrame {
     private void cbLimiteItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbLimiteItemStateChanged
         this.getInfo();
     }//GEN-LAST:event_cbLimiteItemStateChanged
+
+    private void cbOrdemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbOrdemItemStateChanged
+        this.getInfo();
+    }//GEN-LAST:event_cbOrdemItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -494,35 +573,6 @@ public class RelatorioProdutos extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -537,7 +587,10 @@ public class RelatorioProdutos extends javax.swing.JFrame {
     private javax.swing.JButton btnLancador;
     private javax.swing.JLabel btnStringProdutos;
     private static javax.swing.JComboBox<String> cbLimite;
+    private static javax.swing.JComboBox<String> cbOrdem;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private static javax.swing.JTable jtVendas;
     private javax.swing.JLabel lblDataFinal;

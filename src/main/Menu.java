@@ -30,7 +30,7 @@ public class Menu extends javax.swing.JFrame {
         }
         
         setPromocao();
-        //setFuncionario();      
+        setFuncionario();      
     }
     
     public void setFuncionario(){
@@ -267,7 +267,7 @@ public class Menu extends javax.swing.JFrame {
         lblNome2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblNome2.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\usuario (2).png")); // NOI18N
 
-        pdv.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\lancador (6).png")); // NOI18N
+        pdv.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\carrinho (3).png")); // NOI18N
         pdv.setText("PDV");
         pdv.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
 
@@ -319,7 +319,7 @@ public class Menu extends javax.swing.JFrame {
 
         jMenuBar1.add(estoque);
 
-        produtos.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\produtos icon (3).png")); // NOI18N
+        produtos.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\cesta (2).png")); // NOI18N
         produtos.setText(" Produtos ");
         produtos.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
 
@@ -354,7 +354,7 @@ public class Menu extends javax.swing.JFrame {
         produtos.add(produtos_gerenciarPratos);
 
         produtos_cadastrarPratos.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
-        produtos_cadastrarPratos.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\manage meal (1) (1).png")); // NOI18N
+        produtos_cadastrarPratos.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\talher (2).png")); // NOI18N
         produtos_cadastrarPratos.setText("Cadastrar Prato");
         produtos_cadastrarPratos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

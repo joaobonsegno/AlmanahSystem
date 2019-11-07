@@ -179,9 +179,7 @@ public class ClienteDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;       
         ArrayList<Cliente> clientes = new ArrayList<>();
-        cpf = cpf.replace(".", "");
-        cpf = cpf.replace(" ", "");
-        cpf = cpf.replace("-", "");
+
         try{
             String sql = "SELECT * FROM cliente WHERE cpf LIKE '"+cpf+"%' AND status = 1";
             stmt = con.prepareStatement(sql);
@@ -222,6 +220,44 @@ public class ClienteDAO {
         
         try{
             stmt = con.prepareStatement("SELECT * FROM cliente WHERE saldo > 0 AND status = 1");
+            rs = stmt.executeQuery();
+            while (rs.next()){   
+                Cliente c = new Cliente();
+                c.setId(rs.getInt("idCliente"));
+                c.setNome(rs.getString("nome")); 
+                c.setCpf(rs.getString("cpf"));
+                c.setEmail(rs.getString("email"));
+                c.setSexo(rs.getString("sexo"));
+                c.setTelefone(rs.getString("telefone"));
+                c.setCelular(rs.getString("celular"));
+                c.setLogradouro(rs.getString("logradouro"));
+                c.setBairro(rs.getString("bairro"));
+                c.setNumero(rs.getInt("numero"));
+                c.setCidade(rs.getString("cidade"));
+                c.setCep(rs.getString("cep"));
+                c.setComplemento(rs.getString("complemento"));
+                c.setDataNasc(rs.getString("dataNasc"));
+                c.setSaldo(rs.getDouble("saldo"));
+                c.setSaldoPendente(rs.getDouble("saldoPendente"));
+                clientes.add(c);
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return clientes;
+    }
+    
+    public ArrayList<Cliente> readForNome(String nome){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;       
+        ArrayList<Cliente> clientes = new ArrayList<>();
+
+        try{
+            String sql = "SELECT * FROM cliente WHERE nome LIKE '"+nome+"%' AND status = 1";
+            stmt = con.prepareStatement(sql);
             rs = stmt.executeQuery();
             while (rs.next()){   
                 Cliente c = new Cliente();

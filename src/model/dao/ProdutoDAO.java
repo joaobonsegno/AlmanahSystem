@@ -7,7 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import main.Login;
 import model.bean.Categoria;
 import model.bean.Produto;
 import relatorio.RelatorioProduto;
@@ -294,10 +293,6 @@ public class ProdutoDAO {
         return prods;
     }
     
-    public void setAtivo(){
-        
-    }
-    
     public void setInativo(int c){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -337,14 +332,16 @@ public class ProdutoDAO {
     }
     
     //Métodos para relatórios
-    public ArrayList<RelatorioProduto> relatorio(String dataMaior, String dataMenor, Integer limite){
+    public ArrayList<RelatorioProduto> relatorio(String dataMaior, String dataMenor, Integer limite, int ordem){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         ArrayList<RelatorioProduto> produtos = new ArrayList<>();
         
         try{
-            String sql = "SELECT p.idProduto AS 'id', "
+            String sql = "";
+            if (ordem == 0){
+                sql = "SELECT p.idProduto AS 'id', "
                     +    "p.nome AS 'nome', "
                     +    "p.preco AS 'preco', "
                     +    "SUM(i.quantidade) AS 'qtdVendas', "
@@ -356,6 +353,20 @@ public class ProdutoDAO {
                     +    "AND   str_to_date(v.data, '%d/%m/%Y') <= str_to_date('"+dataMaior+"','%d/%m/%Y') "
                     +    "GROUP BY p.idProduto "
                     +    "ORDER BY qtdVendas DESC LIMIT "+limite;
+            }else{
+                sql = "SELECT p.idProduto AS 'id', "
+                    +    "p.nome AS 'nome', "
+                    +    "p.preco AS 'preco', "
+                    +    "SUM(i.quantidade) AS 'qtdVendas', "
+                    +    "SUM(i.quantidade)*p.preco AS 'total' "
+                    +    "FROM produto p "
+                    +    "INNER JOIN item_venda i ON 	p.idProduto = i.idProduto "
+                    +    "INNER JOIN venda v 	  ON  v.idVenda = i.idVenda "
+                    +    "WHERE str_to_date(v.data, '%d/%m/%Y') >= str_to_date('"+dataMenor+"','%d/%m/%Y') "
+                    +    "AND   str_to_date(v.data, '%d/%m/%Y') <= str_to_date('"+dataMaior+"','%d/%m/%Y') "
+                    +    "GROUP BY p.idProduto "
+                    +    "ORDER BY qtdVendas ASC LIMIT "+limite;
+            }
             stmt = con.prepareStatement(sql);
             rs = stmt.executeQuery();
             while (rs.next()){

@@ -170,8 +170,8 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Gerenciador de Cardápios");
-        setMaximumSize(new java.awt.Dimension(567, 581));
-        setMinimumSize(new java.awt.Dimension(567, 581));
+        setMaximumSize(new java.awt.Dimension(567, 579));
+        setMinimumSize(new java.awt.Dimension(567, 579));
         setResizable(false);
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
             public void windowGainedFocus(java.awt.event.WindowEvent evt) {
@@ -180,14 +180,17 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
             public void windowLostFocus(java.awt.event.WindowEvent evt) {
             }
         });
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnStringGerenciadorCardapios.setBackground(new java.awt.Color(0, 102, 204));
         btnStringGerenciadorCardapios.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
         btnStringGerenciadorCardapios.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btnStringGerenciadorCardapios.setText("Gerenciador de Cardápios");
+        getContentPane().add(btnStringGerenciadorCardapios, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 30, -1, -1));
 
         linha1.setBackground(new java.awt.Color(0, 0, 0));
         linha1.setOpaque(true);
+        getContentPane().add(linha1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 69, 575, -1));
 
         btnMenu.setFont(new java.awt.Font("Century Gothic", 0, 17)); // NOI18N
         btnMenu.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\voltar (1).png")); // NOI18N
@@ -197,6 +200,7 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
                 btnMenuActionPerformed(evt);
             }
         });
+        getContentPane().add(btnMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 27, -1, 36));
 
         btnAdicionar.setBackground(new java.awt.Color(204, 204, 0));
         btnAdicionar.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
@@ -287,6 +291,8 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
                     .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 183, -1, -1));
 
         lblAtualizar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblAtualizar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\update (1) (1).png")); // NOI18N
@@ -380,48 +386,11 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
                         .addComponent(calendarData, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
 
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 81, -1, -1));
+
         linha2.setBackground(new java.awt.Color(0, 0, 0));
         linha2.setOpaque(true);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnMenu)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnStringGerenciadorCardapios))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(26, Short.MAX_VALUE))
-            .addComponent(linha1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(linha2, javax.swing.GroupLayout.DEFAULT_SIZE, 567, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 26, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnStringGerenciadorCardapios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(linha2, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(567, Short.MAX_VALUE)))
-        );
+        getContentPane().add(linha2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 19, 575, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

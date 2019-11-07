@@ -1,5 +1,7 @@
 package main;
 
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
@@ -7,7 +9,9 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.Phrase;
 import java.awt.Component;
 import java.awt.Desktop;
@@ -119,16 +123,84 @@ public class RelatorioVendas extends javax.swing.JFrame {
     }
     
     // ----------------------- MÉTODOS PARA CRIAR RELATÓRIOS -----------------------
-    public PdfPTable criarCabecalho() throws DocumentException {
+    public PdfPTable criarCabecalho() throws DocumentException {      
+        PdfPTable table = new PdfPTable(new float[]{5f,10f});
+        table.setWidthPercentage(100.0f);
+        PdfPCell cabecalho = new PdfPCell();
+        cabecalho.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        Paragraph espaco = new Paragraph(new Phrase("\n", FontFactory.getFont(FontFactory.HELVETICA, 20F)));
+
+        // Colocar imagem na tabela
+        Image jpg;
+        try {
+            jpg = Image.getInstance("C:\\Projetos Netbeans\\AlmanahSystem\\images\\logo.png");
+            jpg.scaleAbsoluteWidth(100);
+            jpg.scaleAbsoluteHeight(80);
+            jpg.setAlignment(Element.ALIGN_CENTER);
+
+            PdfPCell imagem = new PdfPCell();
+            // cell.setBorder(PdfPCell.NO_BORDER);;
+            //imagem.addElement(espaco);
+            imagem.addElement(jpg);
+            imagem.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            table.addCell(imagem);
+        } catch (BadElementException ex) {System.err.println("Erro: "+ex);
+        } catch (IOException ex)         {System.err.println("Erro: "+ex);}
+        
+        // Célula do TÍTULO ("Restaurante Almanah")
+        Paragraph pTitulo = new Paragraph(new Phrase(20F, "Restaurante Almanah\n", FontFactory.getFont(FontFactory.HELVETICA, 20F, Font.BOLD)));
+        pTitulo.setAlignment(Element.ALIGN_CENTER);
+        pTitulo.setSpacingBefore(20);
+        pTitulo.setSpacingAfter(20);       
+        cabecalho.addElement(pTitulo);
+        
+        // Célula do SUBTÍTULO ("Relatório de ...")
+        Paragraph pSubtitulo = new Paragraph(new Phrase(20F, "Relatório de Vendas\n", FontFactory.getFont(FontFactory.HELVETICA, 16F)));
+        pSubtitulo.setAlignment(Element.ALIGN_CENTER);
+        pTitulo.setSpacingBefore(20);
+        pTitulo.setSpacingAfter(20);       
+        cabecalho.addElement(pSubtitulo);
+
+        // Célula do DATAS ("Datas inicial e final")
+        Paragraph pSubtituloDatas = new Paragraph(new Phrase(20F, "Data Inicial: " + GerenciadorRelatorios.dMenor + "  Data Final: " + GerenciadorRelatorios.dMaior + "\n\n", FontFactory.getFont(FontFactory.HELVETICA, 12F)));
+        pSubtituloDatas.setAlignment(Element.ALIGN_CENTER);
+        pTitulo.setSpacingBefore(20);
+        pTitulo.setSpacingAfter(20);       
+        cabecalho.addElement(pSubtituloDatas);
+        
+        table.addCell(cabecalho);
+        return table;
+    }
+    
+    public PdfPTable criarTabelaPdf() throws DocumentException {
         PdfPTable table = new PdfPTable(new float[]{1f, 4f, 6f});
-        PdfPCell celulaNo = new PdfPCell(new Phrase("No"));
-        celulaNo.setHorizontalAlignment(Element.ALIGN_CENTER);
-
-        PdfPCell celulaValor = new PdfPCell(new Phrase("Valor (R$)"));
-        celulaValor.setHorizontalAlignment(Element.ALIGN_CENTER);
-
-        PdfPCell celulaData = new PdfPCell(new Phrase("Data"));
-        celulaData.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.setWidthPercentage(100.0f);
+        // Célula do No
+        Paragraph n = new Paragraph(new Phrase(15F, "\nNo", FontFactory.getFont(FontFactory.HELVETICA, 14F)));
+        n.setAlignment(Element.ALIGN_CENTER);
+        n.setSpacingBefore(20);
+        n.setSpacingAfter(20);
+        PdfPCell celulaNo = new PdfPCell();
+        celulaNo.addElement(n);
+        celulaNo.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        
+        // Célula do Valor
+        Paragraph v = new Paragraph(new Phrase(15F, "  \nValor", FontFactory.getFont(FontFactory.HELVETICA, 14F)));
+        v.setAlignment(Element.ALIGN_CENTER);
+        v.setSpacingBefore(20);
+        v.setSpacingAfter(20);
+        PdfPCell celulaValor = new PdfPCell();
+        celulaValor.addElement(v);
+        celulaValor.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        
+        // Célula da Data
+        Paragraph d = new Paragraph(new Phrase(15F, "  \nData", FontFactory.getFont(FontFactory.HELVETICA, 14F)));
+        d.setAlignment(Element.ALIGN_CENTER);
+        d.setSpacingBefore(20);
+        d.setSpacingAfter(20);
+        PdfPCell celulaData = new PdfPCell();
+        celulaData.addElement(d);
+        celulaData.setBackgroundColor(BaseColor.LIGHT_GRAY);
 
         table.addCell(celulaNo);
         table.addCell(celulaValor);
@@ -144,7 +216,7 @@ public class RelatorioVendas extends javax.swing.JFrame {
             for (Venda venda : lista) {
                 c = contador.toString();
                 PdfPCell celula1 = new PdfPCell(new Phrase(c));
-                PdfPCell celula2 = new PdfPCell(new Phrase(GerenciadorComandas.valorMonetario(venda.getTotal())));
+                PdfPCell celula2 = new PdfPCell(new Phrase("R$ "+GerenciadorComandas.valorMonetario(venda.getTotal())));
                 PdfPCell celula3 = new PdfPCell(new Phrase(venda.getData()));
                 celula1.setHorizontalAlignment(Element.ALIGN_CENTER);
                 celula2.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -173,28 +245,6 @@ public class RelatorioVendas extends javax.swing.JFrame {
             super.setValue(value);
         }
     };
-    
-    /*class Renderer extends JLabel{
-        JTableHeader header = jtVendas.getTableHeader();
-        int maxHeaderHeight;
-
-        public Renderer(JTable table) {
-            super();
-            maxHeaderHeight = 22; //Tamanho do Header
-        }
-        //header.getDefaultRenderer();
-        ((DefaultTableCellRenderer)header.getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER));
-        
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            setText((String) value);
-            setHorizontalAlignment(jtVendas.get(column).alinhamento);
-
-            Dimension d = new Dimension(table.getTableHeader().getPreferredSize().width, maxHeaderHeight);
-            table.getTableHeader().setPreferredSize(d);
-            return this;
-        }
-    }*/
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -476,31 +526,22 @@ public class RelatorioVendas extends javax.swing.JFrame {
 
     private void btnExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportarActionPerformed
 
-        //Cria a estrutura inicial do relatório de VENDAS       
-        Paragraph pTitulo = new Paragraph(new Phrase(20F, "Restaurante Almanah\n", FontFactory.getFont(FontFactory.HELVETICA, 20F)));
-        pTitulo.setAlignment(Element.ALIGN_CENTER);
 
-        Paragraph pSubtitulo = new Paragraph(new Phrase(20F, "Relatório de Vendas\n", FontFactory.getFont(FontFactory.HELVETICA, 16F)));
-        pSubtitulo.setAlignment(Element.ALIGN_CENTER);
-
-        Paragraph pSubtituloDatas = new Paragraph(new Phrase(20F, "Data Inicial: " + GerenciadorRelatorios.dMenor + "  Data Final: " + GerenciadorRelatorios.dMaior + "\n\n", FontFactory.getFont(FontFactory.HELVETICA, 12F)));
-        pSubtituloDatas.setAlignment(Element.ALIGN_CENTER);
-
-        Paragraph pData = new Paragraph(new Phrase(20F, "Data de Emissão: " + GerenciadorComandas.getDataAtualComHoraFormatoBr() + "\n\n", FontFactory.getFont(FontFactory.HELVETICA, 11F)));
+        Paragraph pData = new Paragraph(new Phrase(20F, "Data de Emissão: " + GerenciadorComandas.getDataAtualComHoraFormatoBr(), FontFactory.getFont(FontFactory.HELVETICA, 11F)));
         pData.setAlignment(Element.ALIGN_RIGHT);
+        pData.setSpacingBefore(2);
+        pData.setSpacingAfter(2);
         Document documento = new Document();
         try {
             PdfWriter pdf = PdfWriter.getInstance(documento, new FileOutputStream("C:\\Projetos Netbeans\\AlmanahSystem\\relatorios\\vendas\\Vendas.pdf"));
 
             //Adiciona ao documento as estruturas de cabeçalho
             documento.open();
-            documento.add(pTitulo);
-            documento.add(pSubtitulo);
-            documento.add(pSubtituloDatas);
+            documento.add(criarCabecalho());
             documento.add(pData);
 
             //Cria a tabela e adiciona seu conteúdo
-            PdfPTable table = this.criarCabecalho();
+            PdfPTable table = this.criarTabelaPdf();
 
             this.preencherDados(documento, table, lista);
 
@@ -516,9 +557,9 @@ public class RelatorioVendas extends javax.swing.JFrame {
             pVoucher.setAlignment(Element.ALIGN_RIGHT);
             Paragraph pCarteira = new Paragraph(new Phrase(20F, "Carteira: R$ " + GerenciadorComandas.valorMonetario(carteira) + "\n", FontFactory.getFont(FontFactory.HELVETICA, 12F)));
             pCarteira.setAlignment(Element.ALIGN_RIGHT);
-            Paragraph pLinha = new Paragraph(new Phrase(20F, "______________\n\n", FontFactory.getFont(FontFactory.HELVETICA, 12F)));
+            Paragraph pLinha = new Paragraph(new Phrase(20F, "________________\n\n", FontFactory.getFont(FontFactory.HELVETICA, 12F)));
             pLinha.setAlignment(Element.ALIGN_RIGHT);            
-            Paragraph pTotal = new Paragraph(new Phrase(20F, "Total:  R$ " + GerenciadorComandas.valorMonetario(total), FontFactory.getFont(FontFactory.HELVETICA, 14F)));
+            Paragraph pTotal = new Paragraph(new Phrase(20F, "Total:  R$ " + GerenciadorComandas.valorMonetario(total), FontFactory.getFont(FontFactory.HELVETICA, 14F,Font.BOLD)));
             pTotal.setAlignment(Element.ALIGN_RIGHT);
 
             documento.add(pDinheiro);

@@ -1,13 +1,10 @@
 package main;
 
-import ArrumarString.SoNumeros;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Cliente;
-import model.bean.Produto;
 import model.dao.ClienteDAO;
-import model.dao.ProdutoDAO;
 
 public class GerenciadorCarteira extends javax.swing.JFrame {
     public static int idSelecionado;
@@ -288,10 +285,21 @@ public class GerenciadorCarteira extends javax.swing.JFrame {
 
     public boolean isDigit(String c) {
         try {
-            Integer.parseInt(c);
+            boolean podeDarParse = true;
+            if (c.equals(".")){
+                podeDarParse = false;
+            }
+            if (c.equals("-")){
+                podeDarParse = false;
+            }   
+            if (podeDarParse){
+                Integer.parseInt(c);
+            }
         } catch (NumberFormatException ex) {
+            //System.out.println("String: "+c+" => Retornando FALSE - NÃO é número");
             return false;
         }
+        //System.out.println("String: "+c+" => Retornando TRUE - É número (ou ponto)");
         return true;
     }
 
@@ -300,6 +308,16 @@ public class GerenciadorCarteira extends javax.swing.JFrame {
         Character c = e.charAt(2);
         String cString = c.toString();
         if (this.isDigit(cString)){
+            int contador = 0;
+            for (int i = 0; i < e.length(); i++){
+                c = e.charAt(i);
+                cString = c.toString();
+                if (!this.isDigit(cString)){
+                    break;
+                }
+                contador += 1;
+            }
+            e = e.substring(0, contador);
             this.criarTabelaCpf(e);
         } else {
             this.criarTabela();
@@ -317,7 +335,7 @@ public class GerenciadorCarteira extends javax.swing.JFrame {
 
     private void txtCpfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCpfFocusGained
         btnPagamento.setEnabled(false);
-        btnDetalhar.setEnabled(true);
+        btnDetalhar.setEnabled(false);
     }//GEN-LAST:event_txtCpfFocusGained
 
     private void btnDetalharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetalharActionPerformed
@@ -352,19 +370,6 @@ public class GerenciadorCarteira extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(GerenciadorCarteira.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>

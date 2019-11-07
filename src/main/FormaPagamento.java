@@ -681,7 +681,7 @@ public class FormaPagamento extends javax.swing.JDialog {
         
         for (Forma f : v.getFormasPagamento()){
             // Atualiza o caixa caso a forma de pagamento seja em dinheiro
-            if (f.getFormaPagamento().equals("Dinheiro")){
+            if (!f.getFormaPagamento().equals("Carteira")){
                 LogCaixa l = new LogCaixa(1); 
                 l.setCategoria("Caixa");
                 l.setData(l.dataAtual());
@@ -924,31 +924,6 @@ public class FormaPagamento extends javax.swing.JDialog {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(FormaPagamento.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>

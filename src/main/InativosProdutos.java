@@ -98,6 +98,7 @@ public class InativosProdutos extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Produtos Inativos");
+        setMaximumSize(new java.awt.Dimension(519, 420));
         setMinimumSize(new java.awt.Dimension(519, 420));
         setResizable(false);
 

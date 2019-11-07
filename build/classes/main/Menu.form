@@ -7,7 +7,7 @@
         <Menu class="javax.swing.JMenu" name="pdv">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Projetos Netbeans\AlmanahSystem\images\lancador (6).png"/>
+              <Image iconType="2" name="C:\Projetos Netbeans\AlmanahSystem\images\carrinho (3).png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="PDV"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -89,7 +89,7 @@
         <Menu class="javax.swing.JMenu" name="produtos">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Projetos Netbeans\AlmanahSystem\images\produtos icon (3).png"/>
+              <Image iconType="2" name="C:\Projetos Netbeans\AlmanahSystem\images\cesta (2).png"/>
             </Property>
             <Property name="text" type="java.lang.String" value=" Produtos "/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -145,7 +145,7 @@
                   <Font name="Century Gothic" size="15" style="0"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="2" name="C:\Projetos Netbeans\AlmanahSystem\images\manage meal (1) (1).png"/>
+                  <Image iconType="2" name="C:\Projetos Netbeans\AlmanahSystem\images\talher (2).png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Cadastrar Prato"/>
               </Properties>

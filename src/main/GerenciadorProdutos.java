@@ -10,29 +10,30 @@ import model.dao.CategoriaDAO;
 import model.dao.ProdutoDAO;
 
 public class GerenciadorProdutos extends javax.swing.JFrame {
+
     public static ArrayList<Produto> listaProdutos = new ArrayList<>();
     ProdutoDAO pDao;
     public static Produto prodSelecionado;
-    
-    public GerenciadorProdutos() {        
+
+    public GerenciadorProdutos() {
         initComponents();
-       
+
         jtProdutos.setRowHeight(27);
         this.setLocationRelativeTo(null);
-        jtProdutos.getColumnModel().getColumn(0).setPreferredWidth(500); 
+        jtProdutos.getColumnModel().getColumn(0).setPreferredWidth(500);
         jtProdutos.getColumnModel().getColumn(1).setPreferredWidth(150);
         jtProdutos.getColumnModel().getColumn(2).setPreferredWidth(400);
-         
+
         jtProdutos.getColumnModel().getColumn(0).setMinWidth(500);
         jtProdutos.getColumnModel().getColumn(1).setMinWidth(150);
         jtProdutos.getColumnModel().getColumn(2).setMinWidth(400);
-         
+
         jtProdutos.getColumnModel().getColumn(0).setMaxWidth(500);
         jtProdutos.getColumnModel().getColumn(1).setMaxWidth(150);
         jtProdutos.getColumnModel().getColumn(2).setMaxWidth(400);
         pDao = new ProdutoDAO();
         listaProdutos.removeAll(listaProdutos);
-        for (Produto p: pDao.read()){
+        for (Produto p : pDao.read()) {
             listaProdutos.add(p);
         }
         CadastrarMateriaPrima.materiasSelecionadas.removeAll(CadastrarMateriaPrima.materiasSelecionadas);
@@ -40,85 +41,85 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
         btnAlterar.setEnabled(false);
         btnInativar.setEnabled(false);
     }
-    
-    public void criarTabelaNome(String nome){
+
+    public void criarTabelaNome(String nome) {
         ArrayList<Produto> ordenador = new ArrayList<>();
-        
-        for (Produto prod : pDao.readForNome(nome)){
+
+        for (Produto prod : pDao.readForNome(nome)) {
             ordenador.add(prod);
         }
         Collections.sort(ordenador);
-        
+
         DefaultTableModel dtmBebidas = (DefaultTableModel) jtProdutos.getModel();
         limparTabela();
-        for (Produto p: ordenador){
-            if (p.getPreco() == 0.0){
+        for (Produto p : ordenador) {
+            if (p.getPreco() == 0.0) {
                 dtmBebidas.addRow(
-                    new Object[]{
-                        p.getNome(),
-                        "X",
-                        p.getIdProduto()}
+                        new Object[]{
+                            p.getNome(),
+                            "X",
+                            p.getIdProduto()}
                 );
-            }else{
+            } else {
                 String valor = GerenciadorComandas.valorMonetario(p.getPreco());
                 dtmBebidas.addRow(
-                    new Object[]{
-                        p.getNome(),
-                        valor,
-                        p.getIdProduto()}
+                        new Object[]{
+                            p.getNome(),
+                            valor,
+                            p.getIdProduto()}
                 );
             }
         }
     }
-    
-    public void criarTabelaCategoria(String nome){
+
+    public void criarTabelaCategoria(String nome) {
         ArrayList<Produto> ordenador = new ArrayList<>();
-        
-        for (Produto prod : pDao.readForCategoria(nome)){
+
+        for (Produto prod : pDao.readForCategoria(nome)) {
             ordenador.add(prod);
         }
         Collections.sort(ordenador);
-        
+
         DefaultTableModel dtmBebidas = (DefaultTableModel) jtProdutos.getModel();
         limparTabela();
-        for (Produto p: ordenador){
-            if (p.getPreco() == 0.0){
+        for (Produto p : ordenador) {
+            if (p.getPreco() == 0.0) {
                 dtmBebidas.addRow(
-                    new Object[]{
-                        p.getNome(),
-                        "X",
-                        p.getIdProduto()}
+                        new Object[]{
+                            p.getNome(),
+                            "X",
+                            p.getIdProduto()}
                 );
-            }else{
+            } else {
                 String valor = GerenciadorComandas.valorMonetario(p.getPreco());
                 dtmBebidas.addRow(
-                    new Object[]{
-                        p.getNome(),
-                        valor,
-                        p.getIdProduto()}
+                        new Object[]{
+                            p.getNome(),
+                            valor,
+                            p.getIdProduto()}
                 );
             }
         }
     }
-    
-    public void limparTabela(){
+
+    public void limparTabela() {
         DefaultTableModel dtmBebidas = (DefaultTableModel) jtProdutos.getModel();
         int i = dtmBebidas.getRowCount();
-        
-        for (int j = 0; j < i; j++){
+
+        for (int j = 0; j < i; j++) {
             dtmBebidas.removeRow(0);
-        }       
+        }
     }
-    
-    public void criarComboBox(){
+
+    public void criarComboBox() {
         cbCategorias.removeAllItems();
         cbCategorias.addItem("");
         CategoriaDAO catDao = new CategoriaDAO();
-        for (Categoria c:catDao.read()){
+        for (Categoria c : catDao.read()) {
             cbCategorias.addItem(c.getNome());
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -339,77 +340,81 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLancadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLancadorActionPerformed
-        new Menu().setVisible(true); 
+        new Menu().setVisible(true);
         dispose();
     }//GEN-LAST:event_btnLancadorActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
-        try{
+        try {
             Menu.acaoEscolhida = 2;
-            Integer idSelecionado = (Integer)jtProdutos.getValueAt(jtProdutos.getSelectedRow(), 2);
+            Integer idSelecionado = (Integer) jtProdutos.getValueAt(jtProdutos.getSelectedRow(), 2);
 
-            for(Produto p:listaProdutos){
-                if(p.getIdProduto().equals(idSelecionado)){
+            for (Produto p : listaProdutos) {
+                if (p.getIdProduto().equals(idSelecionado)) {
                     prodSelecionado = p;
-                    new AlterarProduto().setVisible(true); 
+                    new AlterarProduto().setVisible(true);
                     dispose();
                 }
             }
-        }catch(java.lang.ArrayIndexOutOfBoundsException ex){
+        } catch (java.lang.ArrayIndexOutOfBoundsException ex) {
             JOptionPane.showMessageDialog(null, "Selecione O produto que deseja alterar");
         }
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void btnInativarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInativarActionPerformed
-        try{
-            int reply = JOptionPane.showConfirmDialog(null, "Deseja realmente inativar o produto?","Inativação de Produto", JOptionPane.YES_NO_OPTION);
+        try {
+            if (jtProdutos.getSelectedRowCount() > 1) {
+                JOptionPane.showMessageDialog(null, "Selecione somente 1 (um) produto");
+            } else {
+                int reply = JOptionPane.showConfirmDialog(null, "Deseja realmente inativar o produto?", "Inativação de Produto", JOptionPane.YES_NO_OPTION);
                 if (reply == JOptionPane.YES_OPTION) {
-                    Integer idSelecionado = (Integer)jtProdutos.getValueAt(jtProdutos.getSelectedRow(), 2); 
+                    Integer idSelecionado = (Integer) jtProdutos.getValueAt(jtProdutos.getSelectedRow(), 2);
 
-                for(Produto p:listaProdutos){
-                    if(p.getIdProduto().equals(idSelecionado)){
-                        ProdutoDAO cDao = new ProdutoDAO();
-                        cDao.setInativo(p.getIdProduto());
-                        this.limparTabela();
-                        btnAlterar.setEnabled(false);
-                        btnInativar.setEnabled(false);
-                        jtProdutos.clearSelection();
+                    for (Produto p : listaProdutos) {
+                        if (p.getIdProduto().equals(idSelecionado)) {
+                            ProdutoDAO cDao = new ProdutoDAO();
+                            cDao.setInativo(p.getIdProduto());
+                            this.limparTabela();
+                            btnAlterar.setEnabled(false);
+                            btnInativar.setEnabled(false);
+                            jtProdutos.clearSelection();
+                        }
                     }
-                }  
-            }  
-        }catch(java.util.ConcurrentModificationException ex){
+                }
+            }
+        } catch (java.util.ConcurrentModificationException ex) {
             System.out.println("Deu a exceção");
-        }catch(java.lang.ArrayIndexOutOfBoundsException ex){
+        } catch (java.lang.ArrayIndexOutOfBoundsException ex) {
             JOptionPane.showMessageDialog(null, "Selecione O produto que deseja inativar");
         }
     }//GEN-LAST:event_btnInativarActionPerformed
 
     private void cbCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCategoriasActionPerformed
-        
+
     }//GEN-LAST:event_cbCategoriasActionPerformed
 
     private void cbCategoriasItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbCategoriasItemStateChanged
-        String escolhido = (String)cbCategorias.getSelectedItem();
+        String escolhido = (String) cbCategorias.getSelectedItem();
         txtPesquisa.setText("");
-        try{
-            if (!escolhido.equals("")){
+        try {
+            if (!escolhido.equals("")) {
                 criarTabelaCategoria(escolhido);
-            }else{
+            } else {
                 limparTabela();
             }
-        }catch(java.lang.NullPointerException ex){
-            
+        } catch (java.lang.NullPointerException ex) {
+
         }
     }//GEN-LAST:event_cbCategoriasItemStateChanged
 
     private void txtPesquisaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPesquisaKeyReleased
         String entrada = txtPesquisa.getText();
-        if (entrada.length() >= 3){
+        if (entrada.length() >= 3) {
             this.criarTabelaNome(entrada);
-        }else{
+        } else {
             this.limparTabela();
         }
-        
+
     }//GEN-LAST:event_txtPesquisaKeyReleased
 
     private void txtPesquisaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPesquisaFocusGained
@@ -440,7 +445,6 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAlterarFocusGained
 
-    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -492,5 +496,3 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
     private javax.swing.JTextField txtPesquisa;
     // End of variables declaration//GEN-END:variables
 }
-
-

@@ -33,6 +33,7 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
     public static Produto prodSelecionado;
     public static String dMaior;
     public static String dMenor;
+
     public GerenciadorRelatorios() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -54,8 +55,6 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
         cbCategorias.addItem("Fluxo de Caixa");
         //cbCategorias.addItem("");
     }
-
-    
 
     // -----------------------------------------------------------------------------
     @SuppressWarnings("unchecked")
@@ -226,82 +225,56 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
     }//GEN-LAST:event_cbCategoriasItemStateChanged
 
     private void btnOk1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOk1ActionPerformed
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        dMaior = sdf.format(dataMaior.getDate());
-        dMenor = sdf.format(dataMenor.getDate());
-        Integer selecionado = (Integer) cbCategorias.getSelectedIndex();
-        VendaDAO v = new VendaDAO();
-        switch (selecionado) {
-            case 0:
-                JOptionPane.showMessageDialog(null, "Selecione o tipo de relatório desejado");
-                break;
-            case 1:
-                try{
-                    if (v.diferencaDatas(GerenciadorRelatorios.dMaior, GerenciadorRelatorios.dMenor) >= 0) {
-                        new RelatorioVendas().setVisible(true);
-                        dispose();
-                    }else {
-                        JOptionPane.showMessageDialog(null, "A data inicial deve ser maior ou igual à data final");
-                    }
-                }catch (java.lang.NullPointerException ex) {
-                    JOptionPane.showMessageDialog(null, "Informe as datas inicial e final");
-                } break;         
-            case 2:
-                try{
-                    if (v.diferencaDatas(GerenciadorRelatorios.dMaior, GerenciadorRelatorios.dMenor) >= 0) {
-                        new RelatorioProdutos().setVisible(true);
-                        dispose();
-                    }else {
-                        JOptionPane.showMessageDialog(null, "A data inicial deve ser maior ou igual à data final");
-                    }
-                }catch (java.lang.NullPointerException ex) {
-                    JOptionPane.showMessageDialog(null, "Informe as datas inicial e final");
-                } break;
-            case 3:
-                try{
-                    if (v.diferencaDatas(GerenciadorRelatorios.dMaior, GerenciadorRelatorios.dMenor) >= 0) {
-                        new RelatorioFluxoDeCaixa().setVisible(true);
-                        dispose();
-                    }else {
-                        JOptionPane.showMessageDialog(null, "A data inicial deve ser maior ou igual à data final");
-                    }
-                }catch (java.lang.NullPointerException ex) {
-                    JOptionPane.showMessageDialog(null, "Informe as datas inicial e final");
-                } break;
-        }
-
-        /*
-        // ----------------------------- Com iReport -------------------------------
-        Connection con = ConnectionFactory.getConnection();
-        String src = "C:\\Projetos Netbeans\\AlmanahSystem\\arquivos\\Produtos.jasper";
-        JasperPrint jasperPrint = null;
         try {
-            jasperPrint = JasperFillManager.fillReport(src, null, con);           
-        } catch (JRException ex) {
-            System.out.println("Erro: "+ex);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            dMaior = sdf.format(dataMaior.getDate());
+            dMenor = sdf.format(dataMenor.getDate());
+            Integer selecionado = (Integer) cbCategorias.getSelectedIndex();
+            VendaDAO v = new VendaDAO();
+            switch (selecionado) {
+                case 0:
+                    JOptionPane.showMessageDialog(null, "Selecione o tipo de relatório desejado");
+                    break;
+                case 1:
+                    try {
+                        if (v.diferencaDatas(GerenciadorRelatorios.dMaior, GerenciadorRelatorios.dMenor) >= 0) {
+                            new RelatorioVendas().setVisible(true);
+                            dispose();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "A data inicial deve ser maior ou igual à data final");
+                        }
+                    } catch (java.lang.NullPointerException ex) {
+                        JOptionPane.showMessageDialog(null, "Informe as datas inicial e final");
+                    }
+                    break;
+                case 2:
+                    try {
+                        if (v.diferencaDatas(GerenciadorRelatorios.dMaior, GerenciadorRelatorios.dMenor) >= 0) {
+                            new RelatorioProdutos().setVisible(true);
+                            dispose();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "A data inicial deve ser maior ou igual à data final");
+                        }
+                    } catch (java.lang.NullPointerException ex) {
+                        JOptionPane.showMessageDialog(null, "Informe as datas inicial e final");
+                    }
+                    break;
+                case 3:
+                    try {
+                        if (v.diferencaDatas(GerenciadorRelatorios.dMaior, GerenciadorRelatorios.dMenor) >= 0) {
+                            new RelatorioFluxoDeCaixa().setVisible(true);
+                            dispose();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "A data inicial deve ser maior ou igual à data final");
+                        }
+                    } catch (java.lang.NullPointerException ex) {
+                        JOptionPane.showMessageDialog(null, "Informe as datas inicial e final");
+                    }
+                    break;
+            }
+        } catch (java.lang.NullPointerException ex) {
+            JOptionPane.showMessageDialog(null, "Informe as datas inicial e final");
         }
-        
-        JasperViewer viewer = new JasperViewer(jasperPrint, false);
-        viewer.setVisible(true);                 
-        
-        // -------------------------- Gerar PDF "vazio" ----------------------------
-        Document documento = new Document();
-        try {
-            PdfWriter.getInstance(documento, new FileOutputStream("C:\\Projetos Netbeans\\AlmanahSystem\\arquivos\\Documento.pdf"));
-            documento.open();
-            documento.add(new Paragraph("Oi, nenê"));
-
-        } catch (FileNotFoundException | DocumentException ex) {
-            System.out.println("Erro: " + ex);
-        } finally {
-            documento.close();
-        }
-
-        try {
-            Desktop.getDesktop().open(new File("C:\\Projetos Netbeans\\AlmanahSystem\\arquivos\\Documento.pdf"));
-        } catch (IOException ex) {
-            System.out.println("Erro: " + ex);
-        }*/
     }//GEN-LAST:event_btnOk1ActionPerformed
 
     /**
@@ -329,11 +302,6 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(GerenciadorRelatorios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>

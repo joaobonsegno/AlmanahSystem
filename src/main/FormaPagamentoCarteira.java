@@ -543,8 +543,7 @@ public class FormaPagamentoCarteira extends javax.swing.JDialog {
                             .addComponent(jpFormas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(17, 17, 17)
-                                .addComponent(jpValores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))))
+                                .addComponent(jpValores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(338, 338, 338)
                         .addComponent(lblStringNovoPrato)))
@@ -641,19 +640,18 @@ public class FormaPagamentoCarteira extends javax.swing.JDialog {
 
         // Seta o ID da venda, que acabou de vir do banco, dentro das formas de pagamento
         for (FormaCarteira forma : formas){                    
-            if (forma.getFormaPagamento().equals("Dinheiro")){
-                l.setCategoria("Caixa");
-                l.setData(l.dataAtual());
-                l.setTipo("Crédito");
-                l.setDescricao(Login.funcAtual.getNome()+" fez uma venda no valor de R$ "+GerenciadorComandas.valorMonetario(forma.getValor()));
-                l.setValor(forma.getValor());
-                Double dinheiroCaixa = Login.caixaAtual.getDinheiro();
-                dinheiroCaixa += forma.getValor();
-                Login.caixaAtual.setDinheiro(dinheiroCaixa);
-                l.setSaldo(dinheiroCaixa);
-                logDao.create(l);
-                caixaDao.update(Login.caixaAtual);
-            }                   
+            l.setCategoria("Caixa");
+            l.setData(l.dataAtual());
+            l.setTipo("Crédito");
+            l.setDescricao(Login.funcAtual.getNome()+" fez uma venda no valor de R$ "+GerenciadorComandas.valorMonetario(forma.getValor()));
+            l.setValor(forma.getValor());
+            Double dinheiroCaixa = Login.caixaAtual.getDinheiro();
+            dinheiroCaixa += forma.getValor();
+            Login.caixaAtual.setDinheiro(dinheiroCaixa);
+            l.setSaldo(dinheiroCaixa);
+            logDao.create(l);
+            caixaDao.update(Login.caixaAtual);
+                             
             forma.setVenda(venda);
             formaDao.updateVenda(forma);                                        
         }
@@ -792,67 +790,6 @@ public class FormaPagamentoCarteira extends javax.swing.JDialog {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(FormaPagamentoCarteira.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>

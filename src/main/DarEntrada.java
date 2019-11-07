@@ -2,6 +2,7 @@ package main;
 
 import ArrumarString.SoNumeros;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import model.bean.Comanda;
 import model.bean.Log;
 import model.bean.Produto;
@@ -18,10 +19,12 @@ public class DarEntrada extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
-        txtEntrada.setDocument(new SoNumeros());
+        getRootPane().setDefaultButton(btnConfirmar);
         idSelecionado = id;
         encontraProd();
-        getRootPane().setDefaultButton(btnConfirmar);
+        if (!prod.getUnidadeDeMedida().equals("Kg")){
+            txtEntrada.setDocument(new SoNumeros());
+        } 
     }
     
     private void encontraProd(){
@@ -36,6 +39,9 @@ public class DarEntrada extends javax.swing.JDialog {
     public void arrumarLabels(){
         lblId.setText(" "+Integer.toString(prod.getIdProduto()));
         lblNome.setText(" "+prod.getNome());
+        if (!prod.getUnidadeDeMedida().equals("Unidade")){
+            lblUnidade.setText(prod.getUnidadeDeMedida());
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -45,7 +51,7 @@ public class DarEntrada extends javax.swing.JDialog {
         grupo1 = new javax.swing.ButtonGroup();
         lblStringNovoPrato = new javax.swing.JLabel();
         linha = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
-        lblStringQuantidade = new javax.swing.JLabel();
+        lblUnidade = new javax.swing.JLabel();
         txtEntrada = new javax.swing.JTextField();
         btnCancelar = new javax.swing.JButton();
         btnConfirmar = new javax.swing.JButton();
@@ -54,6 +60,7 @@ public class DarEntrada extends javax.swing.JDialog {
         lblId = new javax.swing.JLabel();
         lblNome = new javax.swing.JLabel();
         linha1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
+        lblStringQuantidade1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Entrada no Estoque");
@@ -69,10 +76,18 @@ public class DarEntrada extends javax.swing.JDialog {
         linha.setBackground(new java.awt.Color(0, 0, 0));
         linha.setOpaque(true);
 
-        lblStringQuantidade.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        lblStringQuantidade.setText("Quantidade a ser adicionada:");
+        lblUnidade.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        lblUnidade.setText("unid.");
 
         txtEntrada.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        txtEntrada.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtEntradaKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEntradaKeyTyped(evt);
+            }
+        });
 
         btnCancelar.setBackground(new java.awt.Color(204, 0, 0));
         btnCancelar.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
@@ -115,70 +130,74 @@ public class DarEntrada extends javax.swing.JDialog {
         linha1.setBackground(new java.awt.Color(0, 0, 0));
         linha1.setOpaque(true);
 
+        lblStringQuantidade1.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        lblStringQuantidade1.setText("Quantidade a ser adicionada:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(52, 52, 52)
+                .addComponent(lblStringQuantidade1)
+                .addGap(10, 10, 10)
+                .addComponent(txtEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblUnidade, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, 487, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(176, 176, 176)
+                        .addComponent(lblStringNovoPrato, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(linha, javax.swing.GroupLayout.PREFERRED_SIZE, 487, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(lblStringId)
+                        .addGap(6, 6, 6)
+                        .addComponent(lblId, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(lblStringNome)
+                        .addGap(10, 10, 10)
+                        .addComponent(lblNome, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(52, 52, 52)
                         .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(53, 53, 53)
-                        .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(62, 62, 62)
-                        .addComponent(lblStringQuantidade)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lblStringId)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblId, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lblStringNome)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lblNome, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(176, 176, 176)
-                        .addComponent(lblStringNovoPrato, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(24, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(linha, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(linha1, javax.swing.GroupLayout.DEFAULT_SIZE, 487, Short.MAX_VALUE))
+                        .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
+                .addGap(11, 11, 11)
+                .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(9, 9, 9)
                 .addComponent(lblStringNovoPrato)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblStringId)
-                    .addComponent(lblStringNome)
+                .addGap(7, 7, 7)
+                .addComponent(linha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblId)
-                    .addComponent(lblNome))
-                .addGap(38, 38, 38)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblStringQuantidade)
-                    .addComponent(txtEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(56, 56, 56)
-                    .addComponent(linha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(228, Short.MAX_VALUE)))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(271, Short.MAX_VALUE)))
+                    .addComponent(lblNome)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblStringId)
+                            .addComponent(lblStringNome))))
+                .addGap(40, 40, 40)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addComponent(lblStringQuantidade1))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblUnidade)))
+                .addGap(34, 34, 34)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         pack();
@@ -190,29 +209,61 @@ public class DarEntrada extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        LogDAO logDao = new LogDAO();
-        Log l = new Log();
-        l.setCategoria("Estoque");
-        l.setData(l.dataAtual());
-        
-        String qtdAtualS = prod.getQtdEstoque();
-        String qtdAdicionadaS = txtEntrada.getText();
-        l.setDescricao(Login.funcAtual.getNome()+" entrou "+qtdAdicionadaS+" de \""+prod.getNome()+"\" no estoque");
-        Integer qtdAtual = Integer.parseInt(qtdAtualS);
-        Integer qtdAdicionada = Integer.parseInt(qtdAdicionadaS);
-        qtdAtual += qtdAdicionada;
-        qtdAtualS = Integer.toString(qtdAtual);
-        prod.setQtdEstoque(qtdAtualS);
-        pDao.updateEstoque(prod);
-        
-        logDao.create(l);
-        new GerenciadorEstoque().setVisible(true);
-        dispose();
+        try{
+            LogDAO logDao = new LogDAO();
+            Log l = new Log();
+            l.setCategoria("Estoque");
+            l.setData(l.dataAtual());
+
+            String qtdAtualS = prod.getQtdEstoque();
+            String qtdAdicionadaS = txtEntrada.getText();
+            l.setDescricao(Login.funcAtual.getNome()+" entrou "+qtdAdicionadaS+" de \""+prod.getNome()+"\" no estoque");
+
+            if (prod.getUnidadeDeMedida().equals("Kg")){
+                qtdAdicionadaS = qtdAdicionadaS.replace(",", ".");
+                Double qtdAtual = Double.parseDouble(qtdAtualS);
+                Double qtdAdicionada = Double.parseDouble(qtdAdicionadaS);
+                qtdAtual += qtdAdicionada;
+                qtdAtualS = Double.toString(qtdAtual);
+            }else{
+                Integer qtdAtual = Integer.parseInt(qtdAtualS);
+                Integer qtdAdicionada = Integer.parseInt(qtdAdicionadaS);
+                qtdAtual += qtdAdicionada;
+                qtdAtualS = Integer.toString(qtdAtual);
+            }
+
+            prod.setQtdEstoque(qtdAtualS);
+            pDao.updateEstoque(prod);
+
+            logDao.create(l);
+            new GerenciadorEstoque().setVisible(true);
+            dispose();
+        }catch(java.lang.NumberFormatException ex){
+            JOptionPane.showMessageDialog(null, "Insira um valor válido");
+        }
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void txtEntradaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEntradaKeyReleased
+        Character c = evt.getKeyChar();
+        int n = evt.getKeyCode();
+        if (c.isAlphabetic(n)){
+            System.out.println("Alfabético");
+            evt.consume();
+        }else if (c.isSpaceChar(c)){
+            System.out.println("Espaço");
+            evt.consume();
+        }else{
+            System.out.println("Não Alfabético");
+        }
+        
+        
+    }//GEN-LAST:event_txtEntradaKeyReleased
+
+    private void txtEntradaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEntradaKeyTyped
+        
+    }//GEN-LAST:event_txtEntradaKeyTyped
+
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -268,7 +319,8 @@ public class DarEntrada extends javax.swing.JDialog {
     private javax.swing.JLabel lblStringId;
     private javax.swing.JLabel lblStringNome;
     private javax.swing.JLabel lblStringNovoPrato;
-    private javax.swing.JLabel lblStringQuantidade;
+    private javax.swing.JLabel lblStringQuantidade1;
+    private javax.swing.JLabel lblUnidade;
     private javax.swing.Box.Filler linha;
     private javax.swing.Box.Filler linha1;
     private javax.swing.JTextField txtEntrada;

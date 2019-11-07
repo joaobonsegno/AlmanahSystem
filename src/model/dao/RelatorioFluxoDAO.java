@@ -6,12 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import model.bean.Despesa;
-import model.bean.Forma;
-import model.bean.FormaCarteira;
 import relatorio.RelatorioFluxo;
-import relatorio.RelatorioForma;
-import relatorio.RelatorioFormaCarteira;
 
 
 public class RelatorioFluxoDAO {    

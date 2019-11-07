@@ -19,13 +19,14 @@ public class PratoDAO {
         
         try{
             //Criar registro do prato
-            String sql = "INSERT INTO prato (nome, descricao, idCategoriaPrato)VALUES(?,?,?)";
+            String sql = "INSERT INTO prato (nome, descricao, idCategoriaPrato, status)VALUES(?,?,?,?)";
             stmt = con.prepareStatement(sql);
             stmt.setString(1, prato.getNome());
             stmt.setString(2, prato.getDescricao());
             stmt.setInt(3, prato.getCategoria().getId());
+            stmt.setInt(4, 1);
             stmt.executeUpdate();
-            System.out.println("Salvo com sucesso!");
+            //System.out.println("Salvo com sucesso!");
             
             //Pegar do banco o ID gerado para o prato
             prato.setId(readForNomeExato(prato.getNome()).getId());
@@ -81,6 +82,7 @@ public class PratoDAO {
         }
     }
     
+    // <editor-fold defaultstate="collapsed" desc="READS DOS ATIVOS">  
     public ArrayList<Prato> read(){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -89,7 +91,7 @@ public class PratoDAO {
         CategoriaPratoDAO cDao = new CategoriaPratoDAO();
         
         try{
-            stmt = con.prepareStatement("SELECT * FROM prato");
+            stmt = con.prepareStatement("SELECT * FROM prato WHERE status = 1");
             rs = stmt.executeQuery();
             while (rs.next()){
                 Prato p = new Prato();
@@ -122,7 +124,7 @@ public class PratoDAO {
         Prato p = new Prato();
         CategoriaPratoDAO cDao = new CategoriaPratoDAO();
         try{
-            stmt = con.prepareStatement("SELECT * FROM prato WHERE nome LIKE ?");
+            stmt = con.prepareStatement("SELECT * FROM prato WHERE status = 1 AND nome LIKE ?");
             stmt.setString(1, "%"+nome+"%");
             
             rs = stmt.executeQuery();
@@ -151,7 +153,7 @@ public class PratoDAO {
         ArrayList<Prato> pratos = new ArrayList<>();
         CategoriaPratoDAO cDao = new CategoriaPratoDAO();     
         try{
-            stmt = con.prepareStatement("SELECT * FROM prato WHERE nome LIKE ?");
+            stmt = con.prepareStatement("SELECT * FROM prato WHERE status = 1 AND nome LIKE ?");
             stmt.setString(1, "%"+nome+"%");
             rs = stmt.executeQuery();
             while (rs.next()){   
@@ -181,7 +183,7 @@ public class PratoDAO {
         Prato p = new Prato();
         CategoriaPratoDAO cDao = new CategoriaPratoDAO();     
         try{
-            stmt = con.prepareStatement("SELECT * FROM prato WHERE idPrato = "+id);
+            stmt = con.prepareStatement("SELECT * FROM prato WHERE status = 1 AND idPrato = "+id);
             rs = stmt.executeQuery();
             while (rs.next()){   
                 
@@ -220,7 +222,7 @@ public class PratoDAO {
                 cat.setDescricao(rs.getString("descricao"));
             }
             
-            stmt = con.prepareStatement("SELECT * FROM prato WHERE idCategoriaPrato LIKE ?");
+            stmt = con.prepareStatement("SELECT * FROM prato WHERE status = 1 AND idCategoriaPrato LIKE ?");
             stmt.setInt(1, cat.getId());
             rs = stmt.executeQuery();
             while (rs.next()){               
@@ -242,6 +244,7 @@ public class PratoDAO {
         }
         return pratos;
     }
+    // </editor-fold> 
     
     public void deleteSubprodutos(Prato p){
         Connection con = ConnectionFactory.getConnection();
@@ -280,6 +283,78 @@ public class PratoDAO {
             System.err.println("Erro no READ MySQL: "+ex);
         }finally{
             ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+    }
+    
+    // PRATO INATIVO
+    public ArrayList<Prato> readInativos(){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ArrayList<Prato> pratos = new ArrayList<>();
+        CategoriaPratoDAO cDao = new CategoriaPratoDAO();
+        
+        try{
+            stmt = con.prepareStatement("SELECT * FROM prato WHERE status = 0");
+            rs = stmt.executeQuery();
+            while (rs.next()){
+                Prato p = new Prato();
+                
+                p.setId(rs.getInt("idPrato"));
+                p.setNome(rs.getString("nome"));
+                p.setDescricao(rs.getString("descricao"));
+                for (CategoriaPrato c:cDao.read()){
+                    if (c.getId() == rs.getInt("idCategoriaPrato")){
+                        p.setCategoria(c);
+                    }
+                }
+                this.setSubprodutos(p);
+                
+                pratos.add(p);
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return pratos;
+    }
+    
+    public void setInativo(int c){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        
+        try{
+            String sql = "UPDATE prato SET status=? WHERE idPrato = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, 0);
+            stmt.setInt(2, c);
+            
+            stmt.executeUpdate();
+            //System.out.println("Atualizado com sucesso!");
+        }catch(SQLException ex){
+            System.err.println("Erro ao atualizar: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+    }
+    
+    public void setAtivo(int c){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        
+        try{
+            String sql = "UPDATE prato SET status=? WHERE idPrato = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, 1);
+            stmt.setInt(2, c);
+            
+            stmt.executeUpdate();
+            //System.out.println("Atualizado com sucesso!");
+        }catch(SQLException ex){
+            System.err.println("Erro ao atualizar: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt);
         }
     }
 }

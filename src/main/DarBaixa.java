@@ -1,39 +1,46 @@
 package main;
 
 import ArrumarString.SoNumeros;
+import javax.swing.JOptionPane;
 import model.bean.Log;
 import model.bean.Produto;
 import model.dao.LogDAO;
 import model.dao.ProdutoDAO;
 
 public class DarBaixa extends javax.swing.JDialog {
+
     private static Integer idSelecionado;
     ProdutoDAO pDao = new ProdutoDAO();
     //ArrayList<Produto> prods = new ArrayList<>();
     private Produto prod;
-    
+
     public DarBaixa(java.awt.Frame parent, boolean modal, Integer id) {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
-        txtEntrada.setDocument(new SoNumeros());
+        getRootPane().setDefaultButton(btnConfirmar);
         idSelecionado = id;
         encontraProd();
-        getRootPane().setDefaultButton(btnConfirmar);
+        if (!prod.getUnidadeDeMedida().equals("Kg")) {
+            txtEntrada.setDocument(new SoNumeros());
+        }
     }
-    
-    private void encontraProd(){
-        for(Produto p:pDao.read()){
-            if(p.getIdProduto().equals(idSelecionado)){
+
+    private void encontraProd() {
+        for (Produto p : pDao.read()) {
+            if (p.getIdProduto().equals(idSelecionado)) {
                 prod = p;
             }
         }
         arrumarLabels();
     }
-    
-    public void arrumarLabels(){
-        lblId.setText(" "+Integer.toString(prod.getIdProduto()));
-        lblNome.setText(" "+prod.getNome());
+
+    public void arrumarLabels() {
+        lblId.setText(" " + Integer.toString(prod.getIdProduto()));
+        lblNome.setText(" " + prod.getNome());
+        if (!prod.getUnidadeDeMedida().equals("Unidade")) {
+            lblUnidade.setText(prod.getUnidadeDeMedida());
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -52,6 +59,7 @@ public class DarBaixa extends javax.swing.JDialog {
         lblId = new javax.swing.JLabel();
         lblNome = new javax.swing.JLabel();
         linha1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
+        lblUnidade = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Baixa no Estoque");
@@ -74,6 +82,14 @@ public class DarBaixa extends javax.swing.JDialog {
         txtEntrada.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtEntradaActionPerformed(evt);
+            }
+        });
+        txtEntrada.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtEntradaKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEntradaKeyTyped(evt);
             }
         });
 
@@ -118,22 +134,15 @@ public class DarBaixa extends javax.swing.JDialog {
         linha1.setBackground(new java.awt.Color(0, 0, 0));
         linha1.setOpaque(true);
 
+        lblUnidade.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        lblUnidade.setText("unid.");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(53, 53, 53)
-                        .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(62, 62, 62)
-                        .addComponent(lblStringQuantidade)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(lblStringId)
@@ -144,8 +153,21 @@ public class DarBaixa extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblStringNovoPrato, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblNome, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(24, Short.MAX_VALUE))
+                            .addComponent(lblNome, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblStringQuantidade)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblUnidade, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(53, 53, 53)
+                                .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(31, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(linha, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -156,17 +178,18 @@ public class DarBaixa extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addComponent(lblStringNovoPrato)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblStringId)
                     .addComponent(lblStringNome)
                     .addComponent(lblId)
                     .addComponent(lblNome))
-                .addGap(38, 38, 38)
+                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblStringQuantidade)
-                    .addComponent(txtEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
+                    .addComponent(txtEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblUnidade))
+                .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -188,33 +211,79 @@ public class DarBaixa extends javax.swing.JDialog {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         new GerenciadorEstoque().setVisible(true);
-        dispose();   
+        dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        LogDAO logDao = new LogDAO();
-        Log l = new Log();
-        l.setCategoria("Estoque");
-        l.setData(l.dataAtual());
-        
-        String qtdAtualS = prod.getQtdEstoque();
-        String qtdRetiradaS = txtEntrada.getText();
-        l.setDescricao(Login.funcAtual.getNome()+" retirou "+qtdRetiradaS+" de \""+prod.getNome()+"\" do estoque");
-        Integer qtdAtual = Integer.parseInt(qtdAtualS);
-        Integer qtdRetirada = Integer.parseInt(qtdRetiradaS);
-        qtdAtual -= qtdRetirada;
-        qtdAtualS = Integer.toString(qtdAtual);
-        prod.setQtdEstoque(qtdAtualS);
-        pDao.updateEstoque(prod);
-        
-        logDao.create(l);
-        new GerenciadorEstoque().setVisible(true);
-        dispose();
+        try {
+            boolean flagProsseguir = true;
+            LogDAO logDao = new LogDAO();
+            Log l = new Log();
+            l.setCategoria("Estoque");
+            l.setData(l.dataAtual());
+
+            String qtdAtualS = prod.getQtdEstoque();
+            String qtdRetiradaS = txtEntrada.getText();
+
+            if (prod.getUnidadeDeMedida().equals("Kg")) {
+                qtdRetiradaS = qtdRetiradaS.replace(",", ".");
+                Double qtdAtual = Double.parseDouble(qtdAtualS);
+                Double qtdAdicionada = Double.parseDouble(qtdRetiradaS);
+                qtdAtual -= qtdAdicionada;
+                if (qtdAtual < 0) {
+                    JOptionPane.showMessageDialog(null, "Não foi possível dar baixa, pois a quantidade\n inserida é maior do que o estoque atual");
+                    flagProsseguir = false;
+                } else {
+                    qtdAtualS = Double.toString(qtdAtual);
+                }
+            } else {
+                Integer qtdAtual = Integer.parseInt(qtdAtualS);
+                Integer qtdAdicionada = Integer.parseInt(qtdRetiradaS);
+                qtdAtual -= qtdAdicionada;
+                if (qtdAtual < 0) {
+                    JOptionPane.showMessageDialog(null, "Não foi possível dar baixa, pois a quantidade\n inserida é maior do que o estoque atual");
+                    flagProsseguir = false;
+                } else {
+                    qtdAtualS = Integer.toString(qtdAtual);
+                }
+            }
+            
+            if (flagProsseguir) {
+                l.setDescricao(Login.funcAtual.getNome() + " retirou " + qtdRetiradaS + " de \"" + prod.getNome() + "\" do estoque");
+                prod.setQtdEstoque(qtdAtualS);
+                pDao.updateEstoque(prod);
+
+                logDao.create(l);
+                new GerenciadorEstoque().setVisible(true);
+                dispose();
+            }
+        } catch (java.lang.AbstractMethodError ex) {
+            JOptionPane.showMessageDialog(null, "Insira um valor válido");
+        }
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void txtEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEntradaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtEntradaActionPerformed
+
+    private void txtEntradaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEntradaKeyReleased
+        
+    }//GEN-LAST:event_txtEntradaKeyReleased
+
+    private void txtEntradaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEntradaKeyTyped
+        /*evt.consume();
+        Character c = evt.getKeyChar();
+        int n = evt.getKeyCode();
+        if (c.isAlphabetic(n)){
+
+        }else if (c.isSpaceChar(c)){
+            
+        }else{
+            String e = txtEntrada.getText();
+            e += c.toString();
+            txtEntrada.setText(e);
+        }*/
+    }//GEN-LAST:event_txtEntradaKeyTyped
 
     /**
      * @param args the command line arguments
@@ -244,19 +313,6 @@ public class DarBaixa extends javax.swing.JDialog {
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -283,6 +339,7 @@ public class DarBaixa extends javax.swing.JDialog {
     private javax.swing.JLabel lblStringNome;
     private javax.swing.JLabel lblStringNovoPrato;
     private javax.swing.JLabel lblStringQuantidade;
+    private javax.swing.JLabel lblUnidade;
     private javax.swing.Box.Filler linha;
     private javax.swing.Box.Filler linha1;
     private javax.swing.JTextField txtEntrada;

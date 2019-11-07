@@ -20,7 +20,7 @@ public class FuncionarioDAO {
         
         try{
             String sql = "INSERT INTO funcionario (nome, cpf, sexo, dataNasc, telefone, celular, email, salario, usuario, senha, logradouro, bairro, "+
-                         "cidade, numero, complemento, cep, idEstado, idCargo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                         "cidade, numero, complemento, cep, idEstado, idCargo, status) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             stmt = con.prepareStatement(sql);
             stmt.setString(1, f.getNome());
             stmt.setString(2, f.getCpf());
@@ -40,6 +40,7 @@ public class FuncionarioDAO {
             stmt.setString(16, f.getCep());
             stmt.setInt(17, f.getEstado().getId());
             stmt.setInt(18, f.getCargo().getId());
+            stmt.setInt(19, 1);
             stmt.executeUpdate();
             //System.out.println("Salvo com sucesso!");
         }catch(SQLException ex){
@@ -49,6 +50,7 @@ public class FuncionarioDAO {
         }
     }
     
+    // <editor-fold defaultstate="collapsed" desc="READS DOS ATIVOS">  
     public ArrayList<Funcionario> read(){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -56,7 +58,7 @@ public class FuncionarioDAO {
         ArrayList<Funcionario> funcionarios = new ArrayList<>();
         
         try{
-            stmt = con.prepareStatement("SELECT * FROM funcionario");
+            stmt = con.prepareStatement("SELECT * FROM funcionario WHERE status = 1");
             rs = stmt.executeQuery();
             while (rs.next()){
                 Funcionario f = new Funcionario();               
@@ -110,7 +112,7 @@ public class FuncionarioDAO {
         Funcionario f = new Funcionario();
         
         try{
-            String sql = "SELECT * FROM funcionario WHERE usuario = \""+user+"\"";
+            String sql = "SELECT * FROM funcionario WHERE status = 1 AND usuario = \""+user+"\"";
             stmt = con.prepareStatement(sql);
             rs = stmt.executeQuery();
             while (rs.next()){
@@ -162,7 +164,7 @@ public class FuncionarioDAO {
         EstadoDAO eDao = new EstadoDAO();
         
         try{
-            String sql = "SELECT * FROM funcionario WHERE idFuncionario = "+id;
+            String sql = "SELECT * FROM funcionario WHERE status = 1 AND idFuncionario = "+id;
             stmt = con.prepareStatement(sql);
             rs = stmt.executeQuery();
             while (rs.next()){                        
@@ -223,7 +225,7 @@ public class FuncionarioDAO {
                 cargo.setDescricao(rs.getString("descricao"));
             }
             
-            stmt = con.prepareStatement("SELECT * FROM funcionario WHERE idCargo LIKE ?");
+            stmt = con.prepareStatement("SELECT * FROM funcionario WHERE status = 1 AND idCargo LIKE ?");
             stmt.setInt(1, cargo.getId());
             rs = stmt.executeQuery();
             while (rs.next()){
@@ -271,7 +273,7 @@ public class FuncionarioDAO {
         CategoriaDAO cDao = new CategoriaDAO();
         
         try{
-            stmt = con.prepareStatement("SELECT * FROM funcionario WHERE nome LIKE ?");
+            stmt = con.prepareStatement("SELECT * FROM funcionario WHERE status = 1 AND nome LIKE ?");
             stmt.setString(1, "%"+nome+"%");
             
             rs = stmt.executeQuery();
@@ -314,6 +316,7 @@ public class FuncionarioDAO {
         }
         return funcs;
     }
+    // </editor-fold> 
     
     public void update(Funcionario f){
         Connection con = ConnectionFactory.getConnection();
@@ -342,6 +345,98 @@ public class FuncionarioDAO {
             stmt.setString(17, f.getSenha());
             stmt.setInt(18, f.getCargo().getId());
             stmt.setInt(19, f.getIdFuncionario());
+            
+            stmt.executeUpdate();
+            //System.out.println("Atualizado com sucesso!");
+        }catch(SQLException ex){
+            System.err.println("Erro ao atualizar: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+    }
+    
+    // PRATO INATIVO
+    public ArrayList<Funcionario> readInativos(){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ArrayList<Funcionario> funcionarios = new ArrayList<>();
+        
+        try{
+            stmt = con.prepareStatement("SELECT * FROM funcionario WHERE status = 0");
+            rs = stmt.executeQuery();
+            while (rs.next()){
+                Funcionario f = new Funcionario();               
+                
+                f.setIdFuncionario(rs.getInt("idFuncionario"));
+                f.setUsuario(rs.getString("usuario"));
+                f.setSenha(rs.getString("senha"));
+                f.setNome(rs.getString("nome")); 
+                f.setCpf(rs.getString("cpf"));
+                f.setEmail(rs.getString("email"));
+                f.setSexo(rs.getString("sexo"));
+                f.setSalario(rs.getDouble("salario"));
+                f.setTelefone(rs.getString("telefone"));
+                f.setCelular(rs.getString("celular"));
+                f.setLogradouro(rs.getString("logradouro"));
+                f.setBairro(rs.getString("bairro"));
+                f.setNumero(rs.getInt("numero"));
+                f.setCidade(rs.getString("cidade"));
+                f.setCep(rs.getString("cep"));
+                f.setComplemento(rs.getString("complemento"));
+                f.setDataNasc(rs.getString("dataNasc"));
+                
+                for (Cargo c:cargoDao.read()){
+                    System.out.println("Cargo "+c.getId());
+                    if (c.getId() == rs.getInt("idCargo")){
+                        f.setCargo(c);
+                    }
+                }
+                
+                for (Estado e:eDao.read()){
+                    if (e.getId() == rs.getInt("idEstado")){
+                        f.setEstado(e);
+                    }
+                }               
+
+                funcionarios.add(f);
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return funcionarios;
+    }
+    
+    public void setInativo(int c){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        
+        try{
+            String sql = "UPDATE funcionario SET status=? WHERE idFuncionario = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, 0);
+            stmt.setInt(2, c);
+            
+            stmt.executeUpdate();
+            //System.out.println("Atualizado com sucesso!");
+        }catch(SQLException ex){
+            System.err.println("Erro ao atualizar: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt);
+        }
+    }
+    
+    public void setAtivo(int c){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        
+        try{
+            String sql = "UPDATE funcionario SET status=? WHERE idFuncionario = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, 1);
+            stmt.setInt(2, c);
             
             stmt.executeUpdate();
             //System.out.println("Atualizado com sucesso!");

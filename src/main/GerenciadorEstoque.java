@@ -2,6 +2,8 @@ package main;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import javax.swing.JLabel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Produto;
 import model.dao.ProdutoDAO;
@@ -31,13 +33,14 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
         DefaultTableModel dtmProdutos = (DefaultTableModel) jtProdutos.getModel();
 
         for (Produto p: ordenador){
-            if(!p.getQtdMinima().equals("X")){
+            if(!p.getQtdMinima().equals("X")){               
                 dtmProdutos.addRow(
                     new Object[]{
                         p.getIdProduto(),
                         p.getQtdEstoque(),
+                        p.getUnidadeDeMedida(),
                         p.getNome()}
-                );
+                );  
             }
         }
     }
@@ -58,8 +61,9 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
                     new Object[]{
                         p.getIdProduto(),
                         p.getQtdEstoque(),
+                        p.getUnidadeDeMedida(),
                         p.getNome()}
-                );
+                ); 
             }
         }
     }
@@ -74,25 +78,46 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
     }
     
     public GerenciadorEstoque() {
-       initComponents();
-       jtProdutos.setRowHeight(22);
-       this.setLocationRelativeTo(null);
-       jtProdutos.getColumnModel().getColumn(0).setPreferredWidth(0); 
-       jtProdutos.getColumnModel().getColumn(1).setPreferredWidth(100);
-       jtProdutos.getColumnModel().getColumn(2).setPreferredWidth(550);
-        
-       jtProdutos.getColumnModel().getColumn(0).setMinWidth(0);
-       jtProdutos.getColumnModel().getColumn(1).setMinWidth(100);
-       jtProdutos.getColumnModel().getColumn(2).setMinWidth(550);
-        
-       jtProdutos.getColumnModel().getColumn(0).setMaxWidth(0);
-       jtProdutos.getColumnModel().getColumn(1).setMaxWidth(100);
-       jtProdutos.getColumnModel().getColumn(2).setMaxWidth(550);
-       criarTabela();
-       
+        initComponents();     
+        this.setLocationRelativeTo(null);
+        formatarTabela();
+        criarTabela();   
+        btnDarEntrada.setEnabled(false);
+        btnDarBaixa.setEnabled(false);    
     }
 
+    public void formatarTabela(){
+        jtProdutos.setRowHeight(25);
+        jtProdutos.getColumn("Qtd").setCellRenderer(direita);
+        jtProdutos.getColumnModel().getColumn(0).setPreferredWidth(0); 
+        jtProdutos.getColumnModel().getColumn(1).setPreferredWidth(60);
+        jtProdutos.getColumnModel().getColumn(2).setPreferredWidth(100);
+        jtProdutos.getColumnModel().getColumn(3).setPreferredWidth(550);
 
+        jtProdutos.getColumnModel().getColumn(0).setMinWidth(0);
+        jtProdutos.getColumnModel().getColumn(1).setMinWidth(60);
+        jtProdutos.getColumnModel().getColumn(2).setMinWidth(100);
+        jtProdutos.getColumnModel().getColumn(3).setMinWidth(550);
+
+        jtProdutos.getColumnModel().getColumn(0).setMaxWidth(0);
+        jtProdutos.getColumnModel().getColumn(1).setMaxWidth(60);
+        jtProdutos.getColumnModel().getColumn(2).setMaxWidth(100);
+        jtProdutos.getColumnModel().getColumn(3).setMaxWidth(550);
+    }
+    
+    // MÉTODOS PARA ARRUMAR CÉLULAS DA TABELA
+    DefaultTableCellRenderer centro = new DefaultTableCellRenderer() {
+        public void setValue(Object value) {
+            setHorizontalAlignment(JLabel.CENTER);
+            super.setValue(value);
+        }
+    };
+    DefaultTableCellRenderer direita = new DefaultTableCellRenderer() {
+        public void setValue(Object value) {
+            setHorizontalAlignment(JLabel.RIGHT);
+            super.setValue(value);
+        }
+    };
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -105,7 +130,7 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
         btnDarEntrada = new javax.swing.JButton();
         lblStringNomeProduto = new javax.swing.JLabel();
         txtPesquisa = new javax.swing.JTextField();
-        btnDarEntrada1 = new javax.swing.JButton();
+        btnDarBaixa = new javax.swing.JButton();
         linha2 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -138,11 +163,11 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Qtd", "Nome"
+                "ID", "Qtd", "Medida", "Nome"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -150,11 +175,17 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
             }
         });
         jtProdutos.getTableHeader().setReorderingAllowed(false);
+        jtProdutos.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtProdutosFocusGained(evt);
+            }
+        });
         jScrollPane1.setViewportView(jtProdutos);
         if (jtProdutos.getColumnModel().getColumnCount() > 0) {
             jtProdutos.getColumnModel().getColumn(0).setResizable(false);
             jtProdutos.getColumnModel().getColumn(1).setResizable(false);
             jtProdutos.getColumnModel().getColumn(2).setResizable(false);
+            jtProdutos.getColumnModel().getColumn(3).setResizable(false);
         }
 
         btnDarEntrada.setBackground(new java.awt.Color(0, 153, 0));
@@ -173,16 +204,21 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
         lblStringNomeProduto.setText("Nome do Produto:");
 
         txtPesquisa.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
+        txtPesquisa.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtPesquisaFocusGained(evt);
+            }
+        });
 
-        btnDarEntrada1.setBackground(new java.awt.Color(255, 0, 0));
-        btnDarEntrada1.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
-        btnDarEntrada1.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\entrada.png")); // NOI18N
-        btnDarEntrada1.setText("   Dar Baixa");
-        btnDarEntrada1.setBorder(new javax.swing.border.MatteBorder(null));
-        btnDarEntrada1.setBorderPainted(false);
-        btnDarEntrada1.addActionListener(new java.awt.event.ActionListener() {
+        btnDarBaixa.setBackground(new java.awt.Color(255, 0, 0));
+        btnDarBaixa.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        btnDarBaixa.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\entrada.png")); // NOI18N
+        btnDarBaixa.setText("   Dar Baixa");
+        btnDarBaixa.setBorder(new javax.swing.border.MatteBorder(null));
+        btnDarBaixa.setBorderPainted(false);
+        btnDarBaixa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDarEntrada1ActionPerformed(evt);
+                btnDarBaixaActionPerformed(evt);
             }
         });
 
@@ -212,7 +248,7 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
                                     .addGap(88, 88, 88)))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(77, 77, 77)
-                                .addComponent(btnDarEntrada1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnDarBaixa, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(31, 31, 31)
                                 .addComponent(btnDarEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(76, 76, 76)))))
@@ -238,7 +274,7 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDarEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDarEntrada1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnDarBaixa, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(21, 21, 21))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -264,13 +300,24 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnDarEntradaActionPerformed
 
-    private void btnDarEntrada1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDarEntrada1ActionPerformed
+    private void btnDarBaixaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDarBaixaActionPerformed
         Integer idSelecionado = (Integer)jtProdutos.getValueAt(jtProdutos.getSelectedRow(), 0);
 
         DarBaixa baixa = new DarBaixa(new javax.swing.JFrame(), true, idSelecionado);
         baixa.setVisible(true); 
         dispose();
-    }//GEN-LAST:event_btnDarEntrada1ActionPerformed
+    }//GEN-LAST:event_btnDarBaixaActionPerformed
+
+    private void jtProdutosFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtProdutosFocusGained
+        btnDarEntrada.setEnabled(true);
+        btnDarBaixa.setEnabled(true);
+    }//GEN-LAST:event_jtProdutosFocusGained
+
+    private void txtPesquisaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPesquisaFocusGained
+        btnDarEntrada.setEnabled(false);
+        btnDarBaixa.setEnabled(false);
+        jtProdutos.clearSelection();
+    }//GEN-LAST:event_txtPesquisaFocusGained
 
     /**
      * @param args the command line arguments
@@ -315,8 +362,8 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDarBaixa;
     private javax.swing.JButton btnDarEntrada;
-    private javax.swing.JButton btnDarEntrada1;
     private javax.swing.JButton btnLancador;
     private javax.swing.JLabel btnStringProdutos;
     private javax.swing.JScrollPane jScrollPane1;
