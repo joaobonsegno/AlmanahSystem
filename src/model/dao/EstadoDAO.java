@@ -33,4 +33,27 @@ public class EstadoDAO {
         }
         return estados;
     }
+    
+    public Estado readForId(int id){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Estado e = new Estado();
+        
+        try{
+            stmt = con.prepareStatement("SELECT * FROM estado WHERE idEstado = "+id);
+            rs = stmt.executeQuery();
+            while (rs.next()){
+                
+                e.setId(rs.getInt("idEstado"));
+                e.setNome(rs.getString("nome"));
+
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return e;
+    }
 }

@@ -341,9 +341,8 @@ public class AdicionarPrato extends javax.swing.JDialog {
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
         //materiasSelecionadas.removeAll(materiasSelecionadas);
         ItemCardapioDAO itemCDao = new ItemCardapioDAO();
-        int quantidadeDeSelecionados = jtPratos.getSelectedRows().length;
 
-        for (int i = 0; i < quantidadeDeSelecionados; i++){
+        for (int i = 0; i < jtPratos.getSelectedRowCount(); i++){
             Integer idSelecionado = (Integer)jtPratos.getValueAt(jtPratos.getSelectedRows()[i], 0);
             for (Prato p:listaPratos){
                 if (p.getId() == idSelecionado){

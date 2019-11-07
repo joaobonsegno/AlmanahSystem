@@ -1,23 +1,16 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.Random;
-import javax.swing.JOptionPane;
-import static main.GerenciadorProdutos.listaProdutos;
+import ArrumarString.ManipuladorArquivos;
+import java.io.IOException;
 import model.bean.Caixa;
-import model.bean.Categoria;
-import model.bean.CategoriaPrato;
 import model.bean.Comanda;
 import model.bean.Funcionario;
-import model.bean.Produto;
 import model.dao.CaixaDAO;
 import model.dao.CategoriaDAO;
 import model.dao.CategoriaPratoDAO;
 import model.dao.ComandaDAO;
 import model.dao.FuncionarioDAO;
 import model.dao.ItemComandaDAO;
-import model.dao.LogDAO;
-import model.dao.ProdutoDAO;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -47,6 +40,11 @@ public class Login extends javax.swing.JFrame {
         ComandaDAO comandaDao = new ComandaDAO();
         ItemComandaDAO itemDao = new ItemComandaDAO();
         
+        try {
+            ManipuladorArquivos.leitor();
+        } catch (IOException ex) {
+            
+        }
        
         //Criar as despesas do dia ou dos dias passados
         Calendar calendario = Calendar.getInstance();
@@ -136,7 +134,6 @@ public class Login extends javax.swing.JFrame {
         btnLogin = new javax.swing.JButton();
         lblStringAlmanah = new javax.swing.JLabel();
         linha1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Almanah System");
@@ -186,13 +183,6 @@ public class Login extends javax.swing.JFrame {
         linha1.setBackground(new java.awt.Color(153, 153, 0));
         linha1.setBorder(javax.swing.BorderFactory.createMatteBorder(5, 5, 5, 5, new java.awt.Color(0, 0, 0)));
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -201,16 +191,13 @@ public class Login extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(166, 166, 166)
-                        .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1))
+                        .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(139, 139, 139)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtUsuario)
-                            .addComponent(txtSenha, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                            .addComponent(txtSenha, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE))))
+                .addContainerGap(137, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -232,9 +219,7 @@ public class Login extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
@@ -299,10 +284,6 @@ public class Login extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtSenhaFocusLost
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        new Menu().setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -338,7 +319,6 @@ public class Login extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogin;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel lblStringAlmanah;
     private javax.swing.Box.Filler linha1;
     private javax.swing.JPasswordField txtSenha;

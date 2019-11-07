@@ -182,6 +182,7 @@ public class Menu extends javax.swing.JFrame {
         lblFuncao = new javax.swing.JLabel();
         lblNome1 = new javax.swing.JLabel();
         lblNome2 = new javax.swing.JLabel();
+        lblNome3 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         pdv = new javax.swing.JMenu();
         pdv_caixa = new javax.swing.JMenuItem();
@@ -195,6 +196,7 @@ public class Menu extends javax.swing.JFrame {
         produtos_gerenciarPratos = new javax.swing.JMenuItem();
         produtos_cadastrarPratos = new javax.swing.JMenuItem();
         produtos_cardapio = new javax.swing.JMenuItem();
+        produtos_cardapio1 = new javax.swing.JMenuItem();
         funcionarios = new javax.swing.JMenu();
         funcionarios_gerenciar = new javax.swing.JMenuItem();
         funcionarios_cadastrar = new javax.swing.JMenuItem();
@@ -266,6 +268,17 @@ public class Menu extends javax.swing.JFrame {
         lblNome2.setFont(new java.awt.Font("Century Gothic", 0, 21)); // NOI18N
         lblNome2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblNome2.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\usuario (2).png")); // NOI18N
+
+        lblNome3.setBackground(new java.awt.Color(0, 102, 204));
+        lblNome3.setFont(new java.awt.Font("Century Gothic", 0, 21)); // NOI18N
+        lblNome3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblNome3.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\engrenagem (1).png")); // NOI18N
+        lblNome3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblNome3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblNome3MouseClicked(evt);
+            }
+        });
 
         pdv.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\carrinho (3).png")); // NOI18N
         pdv.setText("PDV");
@@ -372,6 +385,16 @@ public class Menu extends javax.swing.JFrame {
             }
         });
         produtos.add(produtos_cardapio);
+
+        produtos_cardapio1.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        produtos_cardapio1.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\fornecedor (2).png")); // NOI18N
+        produtos_cardapio1.setText("Fornecedores");
+        produtos_cardapio1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                produtos_cardapio1ActionPerformed(evt);
+            }
+        });
+        produtos.add(produtos_cardapio1);
 
         jMenuBar1.add(produtos);
 
@@ -504,7 +527,8 @@ public class Menu extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblNome1)
                                     .addComponent(lblNome2)))
-                            .addComponent(lblHora, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(lblHora, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblNome3, javax.swing.GroupLayout.Alignment.TRAILING)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -541,6 +565,8 @@ public class Menu extends javax.swing.JFrame {
                             .addComponent(lblFuncao)
                             .addComponent(lblNome1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblNome3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblHora, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
 
@@ -647,6 +673,16 @@ public class Menu extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_financeiro_despesas1ActionPerformed
 
+    private void produtos_cardapio1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_produtos_cardapio1ActionPerformed
+        new GerenciadorFornecedores().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_produtos_cardapio1ActionPerformed
+
+    private void lblNome3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblNome3MouseClicked
+        Configuracoes suprimento = new Configuracoes(new javax.swing.JFrame(), true);
+        suprimento.setVisible(true); 
+    }//GEN-LAST:event_lblNome3MouseClicked
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -704,6 +740,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblNome1;
     private javax.swing.JLabel lblNome2;
+    private javax.swing.JLabel lblNome3;
     private javax.swing.JLabel lblStringMenu1;
     private javax.swing.Box.Filler linha1;
     private javax.swing.JMenu pdv;
@@ -713,6 +750,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JMenuItem produtos_cadastrar;
     private javax.swing.JMenuItem produtos_cadastrarPratos;
     private javax.swing.JMenuItem produtos_cardapio;
+    private javax.swing.JMenuItem produtos_cardapio1;
     private javax.swing.JMenuItem produtos_gerenciar;
     private javax.swing.JMenuItem produtos_gerenciarPratos;
     // End of variables declaration//GEN-END:variables

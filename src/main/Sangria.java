@@ -1,5 +1,6 @@
 package main;
 
+import ArrumarString.Monetarios;
 import javax.swing.JOptionPane;
 import model.bean.LogCaixa;
 import model.dao.CaixaDAO;
@@ -13,6 +14,8 @@ public class Sangria extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
         getRootPane().setDefaultButton(btnConfirmar);
         LogCaixaDAO logDao = new LogCaixaDAO();
+        txtEntradaSangria.setDocument(new Monetarios(7,2));
+        
         if (Login.caixaAtual != null){
             lblValor.setText(" R$ "+GerenciadorComandas.valorMonetario(Login.caixaAtual.getDinheiro()));
         }else{
@@ -28,7 +31,7 @@ public class Sangria extends javax.swing.JDialog {
         txtStringSuprimento = new javax.swing.JLabel();
         linha = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
         lblInsiraSuprimento = new javax.swing.JLabel();
-        txtEntradaSuprimento = new javax.swing.JTextField();
+        txtEntradaSangria = new javax.swing.JTextField();
         btnCancelar = new javax.swing.JButton();
         btnConfirmar = new javax.swing.JButton();
         lblInsiraSuprimento1 = new javax.swing.JLabel();
@@ -54,7 +57,7 @@ public class Sangria extends javax.swing.JDialog {
         lblInsiraSuprimento.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
         lblInsiraSuprimento.setText("Insira o valor da sangria:");
 
-        txtEntradaSuprimento.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        txtEntradaSangria.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
 
         btnCancelar.setBackground(new java.awt.Color(255, 0, 51));
         btnCancelar.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
@@ -114,7 +117,7 @@ public class Sangria extends javax.swing.JDialog {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(lblInsiraSuprimento)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtEntradaSuprimento, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtEntradaSangria, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(1, 1, 1))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(lblInsiraSuprimento2)
@@ -152,7 +155,7 @@ public class Sangria extends javax.swing.JDialog {
                             .addComponent(lblInsiraSuprimento1)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(txtEntradaSuprimento, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtEntradaSangria, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -188,8 +191,13 @@ public class Sangria extends javax.swing.JDialog {
             l.setData(l.dataAtual());
             l.setTipo("Débito");
             
-            String valor = txtEntradaSuprimento.getText();
-            valor = GerenciadorComandas.tornarCompativel(valor);
+            String valor = txtEntradaSangria.getText();
+            if (valor.equals("")){
+                valor = "0.0";
+            }else{
+                valor = valor.replace(".", "");
+                valor = valor.replace(",", ".");
+            }
             
             l.setDescricao(Login.funcAtual.getNome()+" retirou R$ "+valor+" do caixa");
             l.setValor(Double.parseDouble(valor));
@@ -202,14 +210,14 @@ public class Sangria extends javax.swing.JDialog {
                     cDao.update(Login.caixaAtual);
                     l.setSaldo(dinheiroAtual);
                     logDao.create(l);
+                    new GerenciadorCaixa().setVisible(true);
+                    dispose();
                 }else{
                     JOptionPane.showMessageDialog(null, "Saldo em caixa insuficiente");
                 }
-            }
-            
-            
-            new GerenciadorCaixa().setVisible(true);
-            dispose();
+            }else{
+                JOptionPane.showMessageDialog(null, "Insira um valor válido");
+            }   
         }catch(java.lang.NumberFormatException ex){
             JOptionPane.showMessageDialog(null, "Insira um valor válido");
         }
@@ -270,7 +278,7 @@ public class Sangria extends javax.swing.JDialog {
     private javax.swing.JLabel lblValor;
     private javax.swing.Box.Filler linha;
     private javax.swing.Box.Filler linha1;
-    private javax.swing.JTextField txtEntradaSuprimento;
+    private javax.swing.JTextField txtEntradaSangria;
     private javax.swing.JLabel txtStringSuprimento;
     // End of variables declaration//GEN-END:variables
 }

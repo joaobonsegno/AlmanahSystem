@@ -169,6 +169,44 @@ public class ProdutoDAO {
         return prods;
     }
     
+    public Produto readForId(int id){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        cDao = new CategoriaDAO();
+        Produto p = new Produto();
+        
+        try{
+            stmt = con.prepareStatement("SELECT * FROM produto WHERE status = 1 AND idProduto = "+id);
+            
+            rs = stmt.executeQuery();
+            while (rs.next()){
+                p.setIdProduto(rs.getInt("idProduto"));
+                p.setNome(rs.getString("nome"));
+                p.setDescricao(rs.getString("descricao"));
+                p.setNcm(rs.getString("ncm"));
+                p.setEan(rs.getString("ean"));
+                p.setPreco(rs.getDouble("preco"));
+                p.setQtdMinima(rs.getString("qtdMinima"));
+                p.setQtdEstoque(rs.getString("qtdEstoque"));
+                p.setUnidadeDeMedida(rs.getString("unidadeDeMedida"));
+                p.setPrecoComDesconto(rs.getDouble("precoComDesconto"));
+                
+                Integer categoriaProduto = (rs.getInt("idCategoria"));
+                for (Categoria c:cDao.read()){
+                    if (c.getId() == categoriaProduto){
+                        p.setCategoria(c);
+                    }
+                }
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return p;
+    }
+    
     // UPDATES 
     public void update(Produto p){
         Connection con = ConnectionFactory.getConnection();

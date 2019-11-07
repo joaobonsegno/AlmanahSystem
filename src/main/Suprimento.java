@@ -194,9 +194,13 @@ public class Suprimento extends javax.swing.JDialog {
             l.setTipo("Crédito");
             
             String valor = txtEntradaSuprimento.getText();
-            valor = valor.replace(".", "");
-            valor = valor.replace(",", ".");
-            
+            if (valor.equals("")){
+                valor = "0.0";
+            }else{
+                valor = valor.replace(".", "");
+                valor = valor.replace(",", ".");
+            }
+
             l.setDescricao(Login.funcAtual.getNome()+" inseriu R$ "+valor+" no caixa");
             l.setValor(Double.parseDouble(valor));
             

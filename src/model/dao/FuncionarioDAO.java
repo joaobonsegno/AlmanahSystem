@@ -82,7 +82,6 @@ public class FuncionarioDAO {
                 f.setDataNasc(rs.getString("dataNasc"));
                 
                 for (Cargo c:cargoDao.read()){
-                    System.out.println("Cargo "+c.getId());
                     if (c.getId() == rs.getInt("idCargo")){
                         f.setCargo(c);
                     }

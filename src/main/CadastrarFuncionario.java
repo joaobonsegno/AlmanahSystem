@@ -4,19 +4,13 @@ import ArrumarString.Monetarios;
 import ArrumarString.SoNumeros;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 import model.bean.Cargo;
-import model.bean.Categoria;
 import model.bean.Estado;
 import model.bean.Funcionario;
-import model.bean.Produto;
 import model.dao.CargoDAO;
 import model.dao.EstadoDAO;
 import model.dao.FuncionarioDAO;
-import model.dao.ProdutoDAO;
 
 public class CadastrarFuncionario extends javax.swing.JFrame {
     ArrayList<Cargo> listaCargos = new ArrayList<>();
@@ -299,6 +293,7 @@ public class CadastrarFuncionario extends javax.swing.JFrame {
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
+        txtCpf.setToolTipText("");
         txtCpf.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
 
         linha2.setBackground(new java.awt.Color(0, 0, 0));
@@ -362,15 +357,10 @@ public class CadastrarFuncionario extends javax.swing.JFrame {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(lblStringFuncao, javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(lblStringCep, javax.swing.GroupLayout.Alignment.TRAILING)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
-                                        .addComponent(lblStringNumero))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(lblStringUsuario, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(lblStringSexo, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(lblStringCpf, javax.swing.GroupLayout.Alignment.TRAILING)))))
+                                    .addComponent(lblStringNumero)
+                                    .addComponent(lblStringUsuario, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblStringSexo, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblStringCpf, javax.swing.GroupLayout.Alignment.TRAILING)))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)

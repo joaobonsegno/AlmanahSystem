@@ -4,10 +4,12 @@ import ArrumarString.Monetarios;
 import javax.swing.JOptionPane;
 import static main.GerenciadorComandas.idsAbertos;
 import model.dao.ComandaDAO;
+import model.dao.ConfDAO;
 import model.dao.ItemComandaDAO;
 
 public class NovaRefeicao extends javax.swing.JDialog {
-
+    ConfDAO cDao = new ConfDAO();
+    Double valorAVontade;
     
     public void alterarCheckBox(){
         if (cbPeso.isSelected()){
@@ -18,7 +20,7 @@ public class NovaRefeicao extends javax.swing.JDialog {
         }
         else if (cbBuffet.isSelected()){
             cbPeso.setSelected(false);
-            lblStringPeso.setText("Valor fixo: R$ 24,90");
+            lblStringPeso.setText("Valor fixo: R$ "+GerenciadorComandas.valorMonetario(valorAVontade));
             txtEntradaPreco.setVisible(false);
             lblStringkg.setVisible(false);
         }  
@@ -30,6 +32,14 @@ public class NovaRefeicao extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
         cbPeso.setSelected(true);       
         txtEntradaPreco.setDocument(new Monetarios(7,2));
+        
+        //Verifica se a configuração de buffet à vontade está ativa
+        Double p = cDao.readPreco();
+        if (p == 0.0){
+            cbBuffet.setEnabled(false);
+        }else{
+            valorAVontade = p;
+        }
     }
     
     @SuppressWarnings("unchecked")
@@ -244,7 +254,14 @@ public class NovaRefeicao extends javax.swing.JDialog {
     private void txtNumeroComandaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumeroComandaKeyReleased
         if (evt.getKeyCode() == 10){
             ComandaDAO comDao = new ComandaDAO();
-            int cod = comDao.codComanda(txtNumeroComanda.getText());
+            int cod;
+            
+            if (cDao.readCod() == 1){
+                cod = Integer.parseInt(txtNumeroComanda.getText());
+            }else{
+                cod = comDao.codComanda(txtNumeroComanda.getText());
+            }
+            
             if (cod == 0){
                 if (!txtNumeroComanda.getText().equals(""))
                     JOptionPane.showMessageDialog(null, "Código de comanda inválido");
@@ -277,8 +294,8 @@ public class NovaRefeicao extends javax.swing.JDialog {
                         }                      
                     }
                     else{
-                        GerenciadorComandas.comandasAbertas.get(indice).setPratos(24.90);
-                        item.create(GerenciadorComandas.comandasAbertas.get(indice), 24.90);
+                        GerenciadorComandas.comandasAbertas.get(indice).setPratos(valorAVontade);
+                        item.create(GerenciadorComandas.comandasAbertas.get(indice), valorAVontade);
                     }
                     dispose();
                 }catch(java.lang.NumberFormatException ex){
