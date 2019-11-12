@@ -13,14 +13,13 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Phrase;
-import java.awt.Component;
 import java.awt.Desktop;
-import java.awt.Dimension;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import manual.Manual;
 import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -307,6 +306,7 @@ public class RelatorioProdutos extends javax.swing.JFrame {
         lblString3 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         cbOrdem = new javax.swing.JComboBox<>();
+        lblManual2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Relatório de Produtos");
@@ -496,6 +496,17 @@ public class RelatorioProdutos extends javax.swing.JFrame {
 
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 110, 170, 46));
 
+        lblManual2.setFont(new java.awt.Font("Century Gothic", 1, 20)); // NOI18N
+        lblManual2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblManual2.setText("?");
+        lblManual2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblManual2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblManual2MouseClicked(evt);
+            }
+        });
+        getContentPane().add(lblManual2, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 590, -1, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -529,6 +540,7 @@ public class RelatorioProdutos extends javax.swing.JFrame {
         } finally {
             documento.close();
         }
+        
         try {
             Desktop.getDesktop().open(new File("C:\\Projetos Netbeans\\AlmanahSystem\\relatorios\\produtos\\Produtos.pdf"));
         } catch (IOException ex) {
@@ -544,6 +556,10 @@ public class RelatorioProdutos extends javax.swing.JFrame {
     private void cbOrdemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbOrdemItemStateChanged
         this.getInfo();
     }//GEN-LAST:event_cbOrdemItemStateChanged
+
+    private void lblManual2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblManual2MouseClicked
+        Manual.abrirManual("login.html");
+    }//GEN-LAST:event_lblManual2MouseClicked
 
     /**
      * @param args the command line arguments
@@ -595,6 +611,7 @@ public class RelatorioProdutos extends javax.swing.JFrame {
     private static javax.swing.JTable jtVendas;
     private javax.swing.JLabel lblDataFinal;
     private javax.swing.JLabel lblDataInicial;
+    private javax.swing.JLabel lblManual2;
     private javax.swing.JLabel lblString1;
     private javax.swing.JLabel lblString2;
     private javax.swing.JLabel lblString3;

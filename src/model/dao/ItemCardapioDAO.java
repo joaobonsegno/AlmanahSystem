@@ -21,7 +21,7 @@ public class ItemCardapioDAO {
             stmt.setInt(2, p.getId());           
             
             stmt.executeUpdate();
-            System.out.println("Salvo com sucesso!");
+            //System.out.println("Salvo com sucesso!");
         }catch(SQLException ex){
             System.err.println("Erro SQL (ItemCardapioDAO): "+ex);
         }finally{
@@ -135,7 +135,7 @@ public class ItemCardapioDAO {
             stmt.setInt(5, idItem);
             
             stmt.executeUpdate();
-            System.out.println("Atualizado com sucesso!");
+            //System.out.println("Atualizado com sucesso!");
         }catch(SQLException ex){
             System.err.println("Erro ao atualizar (ItemCardapioDAO): "+ex);
         }finally{

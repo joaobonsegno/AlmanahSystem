@@ -7,6 +7,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -16,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import model.bean.Comanda;
 import model.bean.Produto;
 import model.dao.ComandaDAO;
+import manual.Manual;
 
 public class GerenciadorComandas extends javax.swing.JFrame {
     public static ArrayList<Comanda> comandasAbertas = new ArrayList<>();
@@ -82,7 +84,12 @@ public class GerenciadorComandas extends javax.swing.JFrame {
     }
     
     public static String getDataAtualFormatoUSA(){
-        Calendar data = new GregorianCalendar();
+        Calendar data = new GregorianCalendar();     
+        // Subtrair 1 hora por causa do horário de verão
+        Date teste = new Date();
+        data.setTime(teste);
+        data.set(Calendar.HOUR, data.get(Calendar.HOUR)-1);
+        // --------------------------------------------
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String dataFormatada = sdf.format(data.getTime());
         return dataFormatada;
@@ -90,6 +97,11 @@ public class GerenciadorComandas extends javax.swing.JFrame {
     
     public static String getDataAtualComHoraFormatoBr(){
         Calendar data = new GregorianCalendar();
+        // Subtrair 1 hora por causa do horário de verão
+        Date teste = new Date();
+        data.setTime(teste);
+        data.set(Calendar.HOUR, data.get(Calendar.HOUR)-1);
+        // --------------------------------------------
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy   HH:mm:ss");
         String dataFormatada = sdf.format(data.getTime());
         return dataFormatada;
@@ -97,6 +109,11 @@ public class GerenciadorComandas extends javax.swing.JFrame {
     
     public static String getDataAtualSemHoraFormatoBr(){
         Calendar data = new GregorianCalendar();
+        // Subtrair 1 hora por causa do horário de verão
+        Date teste = new Date();
+        data.setTime(teste);
+        data.set(Calendar.HOUR, data.get(Calendar.HOUR)-1);
+        // --------------------------------------------
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String dataFormatada = sdf.format(data.getTime());
         return dataFormatada;
@@ -161,6 +178,16 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         return valorString;
     }
 
+    public static String valorKg(Double valor){
+        /*
+        OUTRA MANEIRA:
+        DecimalFormat df = new DecimalFormat("#.00");
+        String teste = df.format(novoValor);
+        */
+        String valorString = String.format("%.1f", valor);
+        return valorString;
+    }
+    
     public static String arredondarValor(String valor){
         Integer flag = 0;
         StringBuilder builderValor = new StringBuilder(valor);
@@ -421,6 +448,11 @@ public class GerenciadorComandas extends javax.swing.JFrame {
 
         public void actionPerformed(ActionEvent e) {
             Calendar now = Calendar.getInstance();
+            // Subtrair 1 hora por causa do horário de verão
+            Date teste = new Date();
+            now.setTime(teste);
+            now.set(Calendar.HOUR, now.get(Calendar.HOUR)-1);
+            // --------------------------------------------
             lblHora.setText(String.format("%1$tH:%1$tM:%1$tS", now));
         }
     }
@@ -447,6 +479,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         btnBebida = new javax.swing.JButton();
         btnSobremesa = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
+        lblManual = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gerenciador de Comandas");
@@ -667,6 +700,11 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Adicionar Itens");
 
+        lblManual.setFont(new java.awt.Font("Century Gothic", 1, 20)); // NOI18N
+        lblManual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblManual.setText("?");
+        lblManual.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -698,7 +736,9 @@ public class GerenciadorComandas extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnEncerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(49, 49, 49)))
-                        .addGap(42, 42, 42))
+                        .addGap(21, 21, 21)
+                        .addComponent(lblManual)
+                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(144, 144, 144))))
@@ -725,7 +765,9 @@ public class GerenciadorComandas extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnEncerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnEncerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblManual)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
@@ -900,6 +942,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private static javax.swing.JTable jtComandas;
     private javax.swing.JLabel lblHora;
+    private javax.swing.JLabel lblManual;
     private javax.swing.Box.Filler linha1;
     private javax.swing.Box.Filler linha2;
     private javax.swing.JTextField txtNumeroComanda;

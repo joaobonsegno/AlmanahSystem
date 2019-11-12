@@ -5,18 +5,19 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Carteira;
-import model.bean.Cliente;
 import model.bean.Comanda;
 import model.bean.Forma;
 import model.bean.LogCaixa;
 import model.bean.Produto;
 import model.bean.Venda;
+import model.dao.AlertaDAO;
 import model.dao.CaixaDAO;
 import model.dao.CarteiraDAO;
 import model.dao.ClienteDAO;
 import model.dao.ComandaDAO;
 import model.dao.FormaDAO;
 import model.dao.ItemComandaDAO;
+import manual.Manual;
 import model.dao.ItemVendaDAO;
 import model.dao.LogCaixaDAO;
 import model.dao.ProdutoDAO;
@@ -145,6 +146,7 @@ public class FormaPagamento extends javax.swing.JDialog {
         btnVoltar = new javax.swing.JButton();
         btnRemover = new javax.swing.JButton();
         linha1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
+        lblManual = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Forma de Pagamento");
@@ -529,6 +531,11 @@ public class FormaPagamento extends javax.swing.JDialog {
         linha1.setBackground(new java.awt.Color(0, 0, 0));
         linha1.setOpaque(true);
 
+        lblManual.setFont(new java.awt.Font("Century Gothic", 1, 20)); // NOI18N
+        lblManual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblManual.setText("?");
+        lblManual.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -547,7 +554,9 @@ public class FormaPagamento extends javax.swing.JDialog {
                         .addComponent(jScrollPane1)
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(btnRemover, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(33, 33, 33))
+                .addGap(18, 18, 18)
+                .addComponent(lblManual)
+                .addGap(4, 4, 4))
             .addGroup(layout.createSequentialGroup()
                 .addGap(341, 341, 341)
                 .addComponent(lblStringNovoPrato)
@@ -578,8 +587,10 @@ public class FormaPagamento extends javax.swing.JDialog {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(16, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jpTroco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblManual)
+                            .addComponent(jpTroco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap())))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -755,6 +766,13 @@ public class FormaPagamento extends javax.swing.JDialog {
                 Integer qtdEstoqueAtual = Integer.parseInt(p.getQtdEstoque());
                 Integer qtdParaRemover = Integer.parseInt(EncerrarComanda.qtdRemovida.get(i));
                 qtdEstoqueAtual += qtdParaRemover;
+                
+                // TESTE DA REMOÇÃO DO ALARME
+
+                    AlertaDAO aDao = new AlertaDAO();
+                    aDao.delete(p.getIdProduto());
+                
+                //
                 p.setQtdEstoque(qtdEstoqueAtual.toString());
                 pDao.updateEstoque(p);
             }
@@ -964,6 +982,7 @@ public class FormaPagamento extends javax.swing.JDialog {
     private javax.swing.JPanel jpTroco;
     private javax.swing.JPanel jpValores;
     private static javax.swing.JTable jtPagamento;
+    private javax.swing.JLabel lblManual;
     private javax.swing.JLabel lblStringNovoPrato;
     private javax.swing.JLabel lblStringTroco;
     private javax.swing.JLabel lblStringValorCobrado;

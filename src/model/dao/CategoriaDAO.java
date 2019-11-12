@@ -36,7 +36,7 @@ public class CategoriaDAO {
         ArrayList<Categoria> categorias = new ArrayList<>();
         
         try{
-            stmt = con.prepareStatement("SELECT * FROM categoria");
+            stmt = con.prepareStatement("SELECT * FROM categoria ORDER BY nome");
             rs = stmt.executeQuery();
             while (rs.next()){
                 Categoria c = new Categoria();
@@ -53,6 +53,29 @@ public class CategoriaDAO {
             ConnectionFactory.closeConnection(con, stmt, rs);
         }
         return categorias;
+    }
+    
+    public Categoria readForId(int id){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Categoria c = new Categoria();
+        
+        try{
+            stmt = con.prepareStatement("SELECT * FROM categoria WHERE idCategoria = "+id);
+            rs = stmt.executeQuery();
+            while (rs.next()){   
+                c.setId(rs.getInt("idCategoria"));
+                c.setNome(rs.getString("nome"));
+                c.setDescricao(rs.getString("descricao"));
+
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return c;
     }
     
     public void update(Categoria c){

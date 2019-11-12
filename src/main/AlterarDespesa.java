@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
+import manual.Manual;
 import model.bean.AgendaDespesa;
 import model.dao.LogDAO;
 import model.bean.Despesa;
@@ -87,7 +88,6 @@ public class AlterarDespesa extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Alterar Agendamento de Despesa");
-        setMaximumSize(new java.awt.Dimension(498, 468));
         setMinimumSize(new java.awt.Dimension(498, 468));
         setResizable(false);
 

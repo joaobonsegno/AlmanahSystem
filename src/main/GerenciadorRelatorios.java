@@ -1,28 +1,11 @@
 package main;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Phrase;
+import manual.Manual;
 
-import java.awt.Desktop;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import model.bean.Categoria;
-import model.bean.Forma;
 import model.bean.Produto;
-import model.bean.Venda;
-import model.dao.CategoriaDAO;
 import model.dao.ProdutoDAO;
 import model.dao.VendaDAO;
 
@@ -45,15 +28,16 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
         }
         CadastrarMateriaPrima.materiasSelecionadas.removeAll(CadastrarMateriaPrima.materiasSelecionadas);
         criarComboBox();
+        
     }
 
     public void criarComboBox() {
         cbCategorias.removeAllItems();
         cbCategorias.addItem("");
-        cbCategorias.addItem("Vendas");
-        cbCategorias.addItem("Produtos");
+        cbCategorias.addItem("Estoque");
         cbCategorias.addItem("Fluxo de Caixa");
-        //cbCategorias.addItem("");
+        cbCategorias.addItem("Produtos");
+        cbCategorias.addItem("Vendas");
     }
 
     // -----------------------------------------------------------------------------
@@ -72,6 +56,7 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
         lblStringNomeProduto2 = new javax.swing.JLabel();
         lblStringNomeProduto3 = new javax.swing.JLabel();
         linha2 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
+        lblManual = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Gerenciador de Relatórios");
@@ -137,6 +122,11 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
         linha2.setBackground(new java.awt.Color(0, 0, 0));
         linha2.setOpaque(true);
 
+        lblManual.setFont(new java.awt.Font("Century Gothic", 1, 20)); // NOI18N
+        lblManual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblManual.setText("?");
+        lblManual.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -163,12 +153,15 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
                                 .addGap(113, 113, 113)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblStringNomeProduto2)
-                                    .addComponent(dataMaior, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(dataMaior, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                        .addComponent(lblManual))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnLancador)
                         .addGap(18, 18, 18)
-                        .addComponent(btnStringProdutos)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnStringProdutos)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(linha1, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -176,26 +169,29 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnLancador, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnStringProdutos))
-                .addGap(38, 38, 38)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblStringNomeProduto1))
-                .addGap(19, 19, 19)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblStringNomeProduto2)
-                    .addComponent(lblStringNomeProduto3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(dataMenor, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dataMaior, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(34, 34, 34)
-                .addComponent(btnOk1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblManual)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnLancador, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnStringProdutos))
+                        .addGap(38, 38, 38)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cbCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblStringNomeProduto1))
+                        .addGap(19, 19, 19)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblStringNomeProduto2)
+                            .addComponent(lblStringNomeProduto3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(dataMenor, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dataMaior, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(34, 34, 34)
+                        .addComponent(btnOk1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(14, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(60, 60, 60)
@@ -221,46 +217,33 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
     }//GEN-LAST:event_cbCategoriasActionPerformed
 
     private void cbCategoriasItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbCategoriasItemStateChanged
-
+        if (cbCategorias.getSelectedIndex() == 0 || cbCategorias.getSelectedIndex() == 1){
+            dataMaior.setEnabled(false);
+            dataMenor.setEnabled(false);
+        }else{
+            dataMaior.setEnabled(true);
+            dataMenor.setEnabled(true);
+        }
     }//GEN-LAST:event_cbCategoriasItemStateChanged
 
     private void btnOk1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOk1ActionPerformed
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            dMaior = sdf.format(dataMaior.getDate());
-            dMenor = sdf.format(dataMenor.getDate());
+        //try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");           
             Integer selecionado = (Integer) cbCategorias.getSelectedIndex();
             VendaDAO v = new VendaDAO();
             switch (selecionado) {
                 case 0:
                     JOptionPane.showMessageDialog(null, "Selecione o tipo de relatório desejado");
                     break;
-                case 1:
-                    try {
-                        if (v.diferencaDatas(GerenciadorRelatorios.dMaior, GerenciadorRelatorios.dMenor) >= 0) {
-                            new RelatorioVendas().setVisible(true);
-                            dispose();
-                        } else {
-                            JOptionPane.showMessageDialog(null, "A data inicial deve ser maior ou igual à data final");
-                        }
-                    } catch (java.lang.NullPointerException ex) {
-                        JOptionPane.showMessageDialog(null, "Informe as datas inicial e final");
-                    }
+                case 1: // ESTOQUE
+                    new RelatorioEstoque().setVisible(true);
+                    dispose();
                     break;
-                case 2:
+ //---------------------------------------------- FLUXO DE CAIXA ----------------------------------------------------                      
+                case 2: // FLUXO DE CAIXA
                     try {
-                        if (v.diferencaDatas(GerenciadorRelatorios.dMaior, GerenciadorRelatorios.dMenor) >= 0) {
-                            new RelatorioProdutos().setVisible(true);
-                            dispose();
-                        } else {
-                            JOptionPane.showMessageDialog(null, "A data inicial deve ser maior ou igual à data final");
-                        }
-                    } catch (java.lang.NullPointerException ex) {
-                        JOptionPane.showMessageDialog(null, "Informe as datas inicial e final");
-                    }
-                    break;
-                case 3:
-                    try {
+                        dMaior = sdf.format(dataMaior.getDate());
+                        dMenor = sdf.format(dataMenor.getDate());
                         if (v.diferencaDatas(GerenciadorRelatorios.dMaior, GerenciadorRelatorios.dMenor) >= 0) {
                             new RelatorioFluxoDeCaixa().setVisible(true);
                             dispose();
@@ -271,10 +254,41 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(null, "Informe as datas inicial e final");
                     }
                     break;
+ //----------------------------------------------------- PRODUTOS ----------------------------------------------------   
+                case 3: // PRODUTOS
+                    try {
+                        dMaior = sdf.format(dataMaior.getDate());
+                        dMenor = sdf.format(dataMenor.getDate());
+                        if (v.diferencaDatas(GerenciadorRelatorios.dMaior, GerenciadorRelatorios.dMenor) >= 0) {
+                            new RelatorioProdutos().setVisible(true);
+                            dispose();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "A data inicial deve ser maior ou igual à data final");
+                        }
+                    } catch (java.lang.NullPointerException ex) {
+                        JOptionPane.showMessageDialog(null, "Informe as datas inicial e final");
+                    }
+                    break;
+//----------------------------------------------------- VENDAS ------------------------------------------------------                     
+                case 4: // VENDAS
+                    try {
+                        dMaior = sdf.format(dataMaior.getDate());
+                        dMenor = sdf.format(dataMenor.getDate());
+                        if (v.diferencaDatas(GerenciadorRelatorios.dMaior, GerenciadorRelatorios.dMenor) >= 0) {
+                            new RelatorioVendas().setVisible(true);
+                            dispose();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "A data inicial deve ser maior ou igual à data final");
+                        }
+                    } catch (java.lang.NullPointerException ex) {
+                        JOptionPane.showMessageDialog(null, "Informe as datas inicial e final");
+                    }
+                    break;
             }
-        } catch (java.lang.NullPointerException ex) {
+    
+        /*} catch (java.lang.NullPointerException ex) {
             JOptionPane.showMessageDialog(null, "Informe as datas inicial e final");
-        }
+        }*/
     }//GEN-LAST:event_btnOk1ActionPerformed
 
     /**
@@ -321,6 +335,7 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cbCategorias;
     private com.toedter.calendar.JDateChooser dataMaior;
     private com.toedter.calendar.JDateChooser dataMenor;
+    private javax.swing.JLabel lblManual;
     private javax.swing.JLabel lblStringNomeProduto1;
     private javax.swing.JLabel lblStringNomeProduto2;
     private javax.swing.JLabel lblStringNomeProduto3;

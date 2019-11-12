@@ -1,5 +1,7 @@
 package model.bean;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import model.dao.ClienteDAO;
 
 public class Cliente implements Comparable<Cliente>{
@@ -18,15 +20,21 @@ public class Cliente implements Comparable<Cliente>{
     }
     
     public void reduzirSaldoPendente(Double valor){
+        BigDecimal totalPendente = new BigDecimal(this.saldoPendente);
+        BigDecimal reduzir = new BigDecimal(valor);
         ClienteDAO cDao = new ClienteDAO();
-        this.saldoPendente -= valor;
+        totalPendente = totalPendente.subtract(reduzir, MathContext.DECIMAL32);
+        this.saldoPendente = totalPendente.doubleValue();
         cDao.updatePendente(this);
     }
     
     public void reduzirSaldo(Double valor){
+        BigDecimal totalPendente = new BigDecimal(this.saldo);
+        BigDecimal reduzir = new BigDecimal(valor);
         ClienteDAO cDao = new ClienteDAO();
-        this.saldo -= valor;
-        cDao.updateSaldo(this);
+        totalPendente = totalPendente.subtract(reduzir, MathContext.DECIMAL32);
+        this.saldo = totalPendente.doubleValue();
+        cDao.updatePendente(this);
     }
     
     public void aumentarSaldo(Double valor){

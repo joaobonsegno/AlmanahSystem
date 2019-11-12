@@ -11,6 +11,7 @@ import model.bean.Produto;
 import model.bean.PromocaoUm;
 import model.dao.ProdutoDAO;
 import model.dao.PromocaoUmDAO;
+import model.dao.AlertaDAO;
 
 //Inserir horário
 public class Menu extends javax.swing.JFrame {
@@ -30,7 +31,7 @@ public class Menu extends javax.swing.JFrame {
         }
         
         setPromocao();
-        setFuncionario();      
+        //setFuncionario();      
     }
     
     public void setFuncionario(){
@@ -165,6 +166,11 @@ public class Menu extends javax.swing.JFrame {
 
         public void actionPerformed(ActionEvent e) {
             Calendar now = Calendar.getInstance();
+            // Subtrair 1 hora por causa do horário de verão
+            Date teste = new Date();
+            now.setTime(teste);
+            now.set(Calendar.HOUR, now.get(Calendar.HOUR)-1);
+            // --------------------------------------------
             lblHora.setText(String.format("%1$tH:%1$tM:%1$tS", now));
         }
     }
@@ -176,7 +182,7 @@ public class Menu extends javax.swing.JFrame {
         btnSair = new javax.swing.JButton();
         lblLogo = new javax.swing.JLabel();
         lblHora = new javax.swing.JLabel();
-        btnLancador1 = new javax.swing.JButton();
+        btnAlerta = new javax.swing.JButton();
         lblStringMenu1 = new javax.swing.JLabel();
         lblNome = new javax.swing.JLabel();
         lblFuncao = new javax.swing.JLabel();
@@ -216,6 +222,13 @@ public class Menu extends javax.swing.JFrame {
         setMaximumSize(new java.awt.Dimension(953, 518));
         setMinimumSize(new java.awt.Dimension(953, 518));
         setResizable(false);
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+                formWindowGainedFocus(evt);
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+            }
+        });
 
         linha1.setBackground(new java.awt.Color(0, 0, 0));
         linha1.setOpaque(true);
@@ -235,12 +248,12 @@ public class Menu extends javax.swing.JFrame {
         lblHora.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblHora.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        btnLancador1.setFont(new java.awt.Font("Corbel", 0, 14)); // NOI18N
-        btnLancador1.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\sino (1).png")); // NOI18N
-        btnLancador1.setBorder(null);
-        btnLancador1.addActionListener(new java.awt.event.ActionListener() {
+        btnAlerta.setFont(new java.awt.Font("Corbel", 0, 14)); // NOI18N
+        btnAlerta.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\sino (1).png")); // NOI18N
+        btnAlerta.setBorder(null);
+        btnAlerta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLancador1ActionPerformed(evt);
+                btnAlertaActionPerformed(evt);
             }
         });
 
@@ -532,7 +545,7 @@ public class Menu extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnLancador1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAlerta, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(lblStringMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(349, 349, 349)
@@ -555,7 +568,7 @@ public class Menu extends javax.swing.JFrame {
                         .addComponent(lblLogo)
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnLancador1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAlerta, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lblNome)
@@ -598,9 +611,11 @@ public class Menu extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_produtos_gerenciarActionPerformed
 
-    private void btnLancador1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLancador1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnLancador1ActionPerformed
+    private void btnAlertaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlertaActionPerformed
+        Alertas suprimento = new Alertas(new javax.swing.JFrame(), true);
+        suprimento.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnAlertaActionPerformed
 
     private void funcionarios_gerenciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_funcionarios_gerenciarActionPerformed
         new GerenciadorFuncionario().setVisible(true); 
@@ -683,6 +698,16 @@ public class Menu extends javax.swing.JFrame {
         suprimento.setVisible(true); 
     }//GEN-LAST:event_lblNome3MouseClicked
 
+    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+        AlertaDAO aDao = new AlertaDAO();
+        if (aDao.existeNoBanco()){
+            btnAlerta.setBackground(new java.awt.Color(255, 153, 153));
+        }else{
+            btnAlerta.setBackground(new java.awt.Color(240, 240, 240));
+            btnAlerta.setEnabled(false);
+        }
+    }//GEN-LAST:event_formWindowGainedFocus
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -716,7 +741,7 @@ public class Menu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnLancador1;
+    private javax.swing.JButton btnAlerta;
     private javax.swing.JButton btnSair;
     private javax.swing.JMenu clientes;
     private javax.swing.JMenuItem clientes_cadastrar;

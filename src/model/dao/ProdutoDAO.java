@@ -88,7 +88,7 @@ public class ProdutoDAO {
         cDao = new CategoriaDAO();
         
         try{
-            stmt = con.prepareStatement("SELECT * FROM produto WHERE status = 1 AND nome LIKE ? ");
+            stmt = con.prepareStatement("SELECT * FROM produto WHERE status = 1 AND nome LIKE ? ORDER BY nome");
             stmt.setString(1, "%"+nome+"%");
             
             rs = stmt.executeQuery();
@@ -131,7 +131,7 @@ public class ProdutoDAO {
         Categoria cat = new Categoria();
         
         try{
-            stmt = con.prepareStatement("SELECT * FROM categoria WHERE nome LIKE ?");
+            stmt = con.prepareStatement("SELECT * FROM categoria WHERE nome LIKE ? ORDER BY nome");
             stmt.setString(1, nome);
             rs = stmt.executeQuery();
             while (rs.next()){               
@@ -426,4 +426,69 @@ public class ProdutoDAO {
         return produtos;
     }
      
+    public ArrayList<Produto> relatorioEstoque(String exibirSomente, Integer ascOrDesc, int ordem){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ArrayList<Produto> produtos = new ArrayList<>();
+        
+        try{
+            String sql = "SELECT p.nome AS 'nome', "
+                    +    "p.qtdEstoque AS 'qtd', "
+                    +    "c.idCategoria AS 'categoria', "
+                    +    "p.idProduto AS 'id', "
+                    +    "p.unidadeDeMedida AS 'unidade' "
+                    +    "FROM produto p "
+                    +    "INNER JOIN categoria c ON c.idCategoria = p.idCategoria "
+                    +    "WHERE p.qtdEstoque NOT LIKE 'X' ";
+            
+            // IF QUE VERIFICA O "EXIBIR SOMENTE"
+            if (!exibirSomente.equals("<Todos>")){
+                sql += "AND c.nome LIKE '"+exibirSomente+"' ";
+            }
+            
+            
+            // IFs QUE VERIFICAM A ORDENAÇÃO DA QUERY
+            if (ordem == 0){ // Ordenar por categoria  
+                if (ascOrDesc == 0){ // Ordenar DESCRESCENTE
+                    sql += "ORDER BY c.nome DESC, p.nome ";
+                }else{
+                    sql += "ORDER BY c.nome ASC, p.nome ";
+                }
+            }else if (ordem == 1){ // Ordenar por nome
+                if (ascOrDesc == 0){ // Ordenar DESCRESCENTE
+                    sql += "ORDER BY p.nome DESC, c.nome ";
+                }else{
+                    sql += "ORDER BY p.nome ASC, c.nome ";
+                }               
+            }else{ // Ordenar por Qtd em estoque
+                if (ascOrDesc == 0){ // Ordenar DESCRESCENTE
+                    sql += "ORDER BY CAST(qtdEstoque AS UNSIGNED) DESC, c.nome ";
+                }else{
+                    sql += "ORDER BY CAST(qtdEstoque AS UNSIGNED) ASC, c.nome ";
+                }
+                
+            } 
+            //System.out.println("SQL: "+sql);
+            stmt = con.prepareStatement(sql);
+            rs = stmt.executeQuery();
+                
+            while (rs.next()){
+                Produto p = new Produto();
+                CategoriaDAO cDao = new CategoriaDAO();
+                p.setCategoria(cDao.readForId(rs.getInt("categoria")));
+                p.setIdProduto(rs.getInt("id"));
+                p.setQtdEstoque(rs.getString("qtd"));
+                p.setNome(rs.getString("nome"));
+                p.setUnidadeDeMedida(rs.getString("unidade"));
+
+                produtos.add(p);
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return produtos;
+    }
 }

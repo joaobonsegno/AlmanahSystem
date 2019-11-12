@@ -15,6 +15,7 @@ import model.bean.Prato;
 import model.dao.CardapioDAO;
 import model.dao.ItemCardapioDAO;
 import model.dao.PratoDAO;
+import manual.Manual;
 
 public class GerenciadorCardapios extends javax.swing.JFrame {
     public static Cardapio cardapio;
@@ -167,11 +168,12 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
         lblImportar = new javax.swing.JLabel();
         lblDiaSemana = new javax.swing.JLabel();
         linha2 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
+        lblManual = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Gerenciador de Cardápios");
-        setMaximumSize(new java.awt.Dimension(567, 579));
-        setMinimumSize(new java.awt.Dimension(567, 579));
+        setMaximumSize(new java.awt.Dimension(575, 586));
+        setMinimumSize(new java.awt.Dimension(575, 586));
         setResizable(false);
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
             public void windowGainedFocus(java.awt.event.WindowEvent evt) {
@@ -313,10 +315,10 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
             }
         });
         calendarData.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 calendarDataInputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
 
@@ -391,6 +393,12 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
         linha2.setBackground(new java.awt.Color(0, 0, 0));
         linha2.setOpaque(true);
         getContentPane().add(linha2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 19, 575, -1));
+
+        lblManual.setFont(new java.awt.Font("Century Gothic", 1, 20)); // NOI18N
+        lblManual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblManual.setText("?");
+        lblManual.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(lblManual, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 560, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -536,6 +544,7 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
     private javax.swing.JLabel lblAtualizar;
     private javax.swing.JLabel lblDiaSemana;
     private javax.swing.JLabel lblImportar;
+    private javax.swing.JLabel lblManual;
     private javax.swing.JLabel lblStringNomeProduto1;
     private javax.swing.Box.Filler linha1;
     private javax.swing.Box.Filler linha2;

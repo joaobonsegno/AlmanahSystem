@@ -1,15 +1,44 @@
 package main;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import model.bean.Alerta;
 import model.bean.Produto;
+import model.dao.AlertaDAO;
 import model.dao.ProdutoDAO;
+import manual.Manual;
 
 public class GerenciadorEstoque extends javax.swing.JFrame {
+    private ArrayList<Alerta> alertas = new ArrayList<>();
+    ProdutoDAO pDao = new ProdutoDAO();
     
+     public GerenciadorEstoque() {
+        initComponents();     
+        this.setLocationRelativeTo(null);
+        formatarTabela();
+        criarTabela();   
+        btnDarEntrada.setEnabled(false);
+        btnDarBaixa.setEnabled(false); 
+        AlertaDAO aDao = new AlertaDAO();
+        ProdutoDAO pDao = new ProdutoDAO();
+        
+        for (Produto prod : pDao.read()){
+            if (!prod.getQtdEstoque().equals("X")){
+                Alerta a = aDao.readForProduto(prod.getIdProduto());
+                if (a.getMensagem() != null){
+                    alertas.add(a);
+                }
+            }
+        }
+    }
+     
     public static void retirarEstoque(Produto prod, Integer qtd){
         ProdutoDAO pDao = new ProdutoDAO();
         String qtdAtualS = prod.getQtdEstoque();
@@ -19,11 +48,20 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
         prod.setQtdEstoque(qtdAtualS);
         pDao.updateEstoque(prod);
         
+        if (qtdAtual <= Integer.parseInt(prod.getQtdMinima())){
+            AlertaDAO aDao = new AlertaDAO();
+            Alerta a = aDao.readForProduto(prod.getIdProduto());
+            if (a.getMensagem() == null){
+                a.setMensagem("O produto \""+prod.getNome()+"\" está com estoque baixo");
+                a.setProduto(prod);
+                aDao.create(a);
+            } 
+        }
     }
         
     public void criarTabela(){
+        limparTabela();
         ArrayList<Produto> ordenador = new ArrayList<>();
-        ProdutoDAO pDao = new ProdutoDAO();
         
         for (Produto prod : pDao.read()){
             ordenador.add(prod);
@@ -33,21 +71,21 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
         DefaultTableModel dtmProdutos = (DefaultTableModel) jtProdutos.getModel();
 
         for (Produto p: ordenador){
-            if(!p.getQtdMinima().equals("X")){               
+            if(!p.getQtdMinima().equals("X")){           
                 dtmProdutos.addRow(
-                    new Object[]{
-                        p.getIdProduto(),
-                        p.getQtdEstoque(),
-                        p.getUnidadeDeMedida(),
-                        p.getNome()}
-                );  
+                new Object[]{
+                    p.getIdProduto(),
+                    p.getQtdEstoque(),
+                    p.getUnidadeDeMedida(),
+                    p.getNome()}
+                ); 
             }
         }
+        //corNaLinhaInteiro();
     }
     
     public void criarTabelaNome(String nome){
         ArrayList<Produto> ordenador = new ArrayList<>();
-        ProdutoDAO pDao = new ProdutoDAO();
         for (Produto prod : pDao.readForNome(nome)){
             ordenador.add(prod);
         }
@@ -56,13 +94,13 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
         DefaultTableModel dtmProdutos = (DefaultTableModel) jtProdutos.getModel();
         limparTabela();
         for (Produto p: ordenador){
-            if(!p.getQtdMinima().equals("X")){
+            if(!p.getQtdMinima().equals("X")){           
                 dtmProdutos.addRow(
-                    new Object[]{
-                        p.getIdProduto(),
-                        p.getQtdEstoque(),
-                        p.getUnidadeDeMedida(),
-                        p.getNome()}
+                new Object[]{
+                    p.getIdProduto(),
+                    p.getQtdEstoque(),
+                    p.getUnidadeDeMedida(),
+                    p.getNome()}
                 ); 
             }
         }
@@ -76,19 +114,9 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
             dtmProdutos.removeRow(0);
         }
     }
-    
-    public GerenciadorEstoque() {
-        initComponents();     
-        this.setLocationRelativeTo(null);
-        formatarTabela();
-        criarTabela();   
-        btnDarEntrada.setEnabled(false);
-        btnDarBaixa.setEnabled(false);    
-    }
 
     public void formatarTabela(){
-        jtProdutos.setRowHeight(25);
-        jtProdutos.getColumn("Qtd").setCellRenderer(direita);
+        jtProdutos.setRowHeight(29);
         jtProdutos.getColumnModel().getColumn(0).setPreferredWidth(0); 
         jtProdutos.getColumnModel().getColumn(1).setPreferredWidth(60);
         jtProdutos.getColumnModel().getColumn(2).setPreferredWidth(100);
@@ -104,20 +132,67 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
         jtProdutos.getColumnModel().getColumn(2).setMaxWidth(100);
         jtProdutos.getColumnModel().getColumn(3).setMaxWidth(550);
     }
-    
+
     // MÉTODOS PARA ARRUMAR CÉLULAS DA TABELA
-    DefaultTableCellRenderer centro = new DefaultTableCellRenderer() {
-        public void setValue(Object value) {
-            setHorizontalAlignment(JLabel.CENTER);
-            super.setValue(value);
-        }
-    };
-    DefaultTableCellRenderer direita = new DefaultTableCellRenderer() {
-        public void setValue(Object value) {
-            setHorizontalAlignment(JLabel.RIGHT);
-            super.setValue(value);
-        }
-    };
+    
+    /*public void corNaLinhaInteiro(){
+        jtProdutos.setDefaultRenderer(Object.class, new DefaultTableCellRenderer(){
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                
+                //String s = (String)table.getValueAt(row, 0);
+                //Integer id = Integer.parseInt(s);
+                Integer id = (Integer)table.getValueAt(row, 0);
+                Produto p = pDao.readForId(id);
+                try{
+                    if (Integer.parseInt(p.getQtdEstoque()) > Integer.parseInt(p.getQtdMinima())){
+                        System.out.println("Entrei no IF");
+                        label.setBackground(new java.awt.Color(255, 153, 153));
+                    }else{
+                        
+                    }
+                }catch(java.lang.NumberFormatException ex){
+                    if (Double.parseDouble(p.getQtdEstoque()) > Double.parseDouble(p.getQtdMinima())){
+                        System.out.println("Entrei no IF do CATCH");
+                        label.setBackground(new java.awt.Color(255, 153, 153));
+                    }
+                }finally{
+                    return label;
+                }
+            }
+        });
+    }*/
+    
+    public void corNaLinhaInteiro(){
+        jtProdutos.setDefaultRenderer(Object.class, new DefaultTableCellRenderer(){
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                Integer id = (Integer)table.getValueAt(row, 0);
+                
+                for (Alerta a : alertas){
+                    if (Objects.equals(a.getProduto().getIdProduto(), id)){
+                        //System.out.println("ID Igual: "+id);
+                        label.setBackground(new java.awt.Color(255, 153, 153));
+                        //label.setForeground(new java.awt.Color(255, 0, 0));
+                    }else{
+                        //System.out.println("ID Dif: "+id);
+                        label.setBackground(Color.WHITE);
+                        //label.setForeground(Color.BLACK);
+                    }
+                }
+                
+                //jtProdutos.setSelectionBackground(new java.awt.Color(0, 153, 0));
+                jtProdutos.setSelectionForeground(new java.awt.Color(0, 153, 0));
+                //jtProdutos.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+                return label;
+                
+            }
+        });
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -132,6 +207,7 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
         txtPesquisa = new javax.swing.JTextField();
         btnDarBaixa = new javax.swing.JButton();
         linha2 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
+        lblManual = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gerenciador de Estoque");
@@ -180,6 +256,11 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
                 jtProdutosFocusGained(evt);
             }
         });
+        jtProdutos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtProdutosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jtProdutos);
         if (jtProdutos.getColumnModel().getColumnCount() > 0) {
             jtProdutos.getColumnModel().getColumn(0).setResizable(false);
@@ -209,6 +290,11 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
                 txtPesquisaFocusGained(evt);
             }
         });
+        txtPesquisa.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPesquisaKeyReleased(evt);
+            }
+        });
 
         btnDarBaixa.setBackground(new java.awt.Color(255, 0, 0));
         btnDarBaixa.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
@@ -225,6 +311,11 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
         linha2.setBackground(new java.awt.Color(0, 0, 0));
         linha2.setOpaque(true);
 
+        lblManual.setFont(new java.awt.Font("Century Gothic", 1, 20)); // NOI18N
+        lblManual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblManual.setText("?");
+        lblManual.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -235,7 +326,8 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnLancador)
                         .addGap(76, 76, 76)
-                        .addComponent(btnStringProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnStringProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(36, 36, 36)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -251,8 +343,10 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
                                 .addComponent(btnDarBaixa, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(31, 31, 31)
                                 .addComponent(btnDarEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(76, 76, 76)))))
-                .addContainerGap(41, Short.MAX_VALUE))
+                                .addGap(76, 76, 76)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                        .addComponent(lblManual)))
+                .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(linha2, javax.swing.GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE))
         );
@@ -265,17 +359,23 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
                     .addComponent(btnLancador, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblStringNomeProduto))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDarEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDarBaixa, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblStringNomeProduto))
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnDarEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDarBaixa, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(21, 21, 21))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblManual)
+                        .addContainerGap())))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
@@ -318,6 +418,19 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
         btnDarBaixa.setEnabled(false);
         jtProdutos.clearSelection();
     }//GEN-LAST:event_txtPesquisaFocusGained
+
+    private void jtProdutosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtProdutosMouseClicked
+        
+    }//GEN-LAST:event_jtProdutosMouseClicked
+
+    private void txtPesquisaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPesquisaKeyReleased
+        String entrada = txtPesquisa.getText();
+        if (entrada.length() >= 3) {
+            this.criarTabelaNome(entrada);
+        } else {
+            this.criarTabela();
+        }
+    }//GEN-LAST:event_txtPesquisaKeyReleased
 
     /**
      * @param args the command line arguments
@@ -368,6 +481,7 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
     private javax.swing.JLabel btnStringProdutos;
     private javax.swing.JScrollPane jScrollPane1;
     private static javax.swing.JTable jtProdutos;
+    private javax.swing.JLabel lblManual;
     private javax.swing.JLabel lblStringNomeProduto;
     private javax.swing.Box.Filler linha1;
     private javax.swing.Box.Filler linha2;

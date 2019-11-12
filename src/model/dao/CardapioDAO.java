@@ -21,7 +21,6 @@ public class CardapioDAO {
             stmt.setString(3, c.getDiaDaSemana());
 
             stmt.executeUpdate();
-            System.out.println("Salvo com sucesso!");
         }catch(SQLException ex){
             System.err.println("Erro SQL: "+ex);
         }finally{
@@ -33,9 +32,6 @@ public class CardapioDAO {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        
-        CardapioDAO cDao = new CardapioDAO();
-        ItemComandaDAO iDao = new ItemComandaDAO();
         
         try{
             stmt = con.prepareStatement("SELECT * FROM cardapio");
@@ -111,11 +107,6 @@ public class CardapioDAO {
                 c.setId(rs.getInt("idCardapio"));
                 c.setData(rs.getString("data"));
                 c.setStatus(rs.getInt("status"));
-                /*for (CategoriaPrato c:Login.categoriasPratos){
-                    if (c.getId() == rs.getInt("idCategoriaPrato")){
-                        p.setCategoria(c);
-                    }
-                }*/
             }
         }catch(SQLException ex){
             System.err.println("Erro no READ MySQL (CardapioDAO - readForData()): "+ex);
@@ -161,66 +152,4 @@ public class CardapioDAO {
         }
         return cardapios;
     }
-    //
-    
-    /*public String formatarData(Cardapio c){
-        Connection con = ConnectionFactory.getConnection();
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        String retorno = "";
-        try{
-            stmt = con.prepareStatement("SELECT str_to_date("+c.getData()+", '%d/%m/%Y') AS \"dataFormatada\" FROM cardapio WHERE idCardapio = ?");
-            stmt.setInt(1, c.getId());
-            
-            rs = stmt.executeQuery();
-            while (rs.next()){     
-                retorno = rs.getString("dataFormatada");
-            }
-        }catch(SQLException ex){
-            System.err.println("Erro no READ MySQL (CardapioDAO - readForData()): "+ex);
-        }finally{
-            ConnectionFactory.closeConnection(con, stmt, rs);
-        }
-        return retorno ;
-    }*/
-    /*
-    public void updatePendente(Comanda c){
-        Connection con = ConnectionFactory.getConnection();
-        PreparedStatement stmt = null;
-        
-        try{
-            String sql = "UPDATE comanda SET valorPendente = ? WHERE idComanda = ?";
-            stmt = con.prepareStatement(sql);
-            stmt.setDouble(1, c.getValorPendente());
-            stmt.setInt(2, c.getIdBanco());
-            
-            stmt.executeUpdate();
-            System.out.println("Atualizado com sucesso!");
-        }catch(SQLException ex){
-            System.err.println("Erro ao atualizar: "+ex);
-        }finally{
-            ConnectionFactory.closeConnection(con, stmt);
-        }
-    }
-    
-    
-    
-    public void deletarItens(Integer c){
-        ItemComandaDAO iDao = new ItemComandaDAO();
-        Connection con = ConnectionFactory.getConnection();
-        PreparedStatement stmt = null;
-        
-        try{
-            String sql = "DELETE FROM item_comanda WHERE idComanda = ?";
-            stmt = con.prepareStatement(sql);
-            stmt.setInt(1, c);
-            
-            stmt.executeUpdate();
-        }catch(SQLException ex){
-            System.err.println("Erro SQL: "+ex);
-        }finally{
-            ConnectionFactory.closeConnection(con, stmt);
-        }
-    }
-    */    
 }

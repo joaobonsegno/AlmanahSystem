@@ -8,6 +8,7 @@ import model.bean.Cargo;
 import model.bean.Funcionario;
 import model.dao.CargoDAO;
 import model.dao.FuncionarioDAO;
+import manual.Manual;
 
 public class GerenciadorFuncionario extends javax.swing.JFrame {
 
@@ -142,6 +143,7 @@ public class GerenciadorFuncionario extends javax.swing.JFrame {
         cbCargos = new javax.swing.JComboBox<>();
         linha2 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
         btnLancador1 = new javax.swing.JButton();
+        lblManual = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Gerenciador de Funcionários");
@@ -288,6 +290,12 @@ public class GerenciadorFuncionario extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnLancador1, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 25, -1, -1));
+
+        lblManual.setFont(new java.awt.Font("Century Gothic", 1, 20)); // NOI18N
+        lblManual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblManual.setText("?");
+        lblManual.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(lblManual, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 610, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -443,6 +451,7 @@ public class GerenciadorFuncionario extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cbCargos;
     private javax.swing.JScrollPane jScrollPane1;
     private static javax.swing.JTable jtFuncionarios;
+    private javax.swing.JLabel lblManual;
     private javax.swing.JLabel lblStringNomeProduto;
     private javax.swing.JLabel lblStringNomeProduto1;
     private javax.swing.Box.Filler linha1;

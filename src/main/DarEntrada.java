@@ -1,11 +1,11 @@
 package main;
 
 import ArrumarString.SoNumeros;
-import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import model.bean.Comanda;
+import model.bean.Alerta;
 import model.bean.Log;
 import model.bean.Produto;
+import model.dao.AlertaDAO;
 import model.dao.LogDAO;
 import model.dao.ProdutoDAO;
 
@@ -210,6 +210,7 @@ public class DarEntrada extends javax.swing.JDialog {
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         try{
+            boolean excluirAlerta = false;
             LogDAO logDao = new LogDAO();
             Log l = new Log();
             l.setCategoria("Estoque");
@@ -224,14 +225,24 @@ public class DarEntrada extends javax.swing.JDialog {
                 Double qtdAtual = Double.parseDouble(qtdAtualS);
                 Double qtdAdicionada = Double.parseDouble(qtdAdicionadaS);
                 qtdAtual += qtdAdicionada;
+                if (qtdAtual > Double.parseDouble(prod.getQtdMinima())){
+                    excluirAlerta = true;
+                }
                 qtdAtualS = Double.toString(qtdAtual);
             }else{
                 Integer qtdAtual = Integer.parseInt(qtdAtualS);
                 Integer qtdAdicionada = Integer.parseInt(qtdAdicionadaS);
                 qtdAtual += qtdAdicionada;
+                if (qtdAtual > Integer.parseInt(prod.getQtdMinima())){
+                    excluirAlerta = true;
+                }
                 qtdAtualS = Integer.toString(qtdAtual);
             }
-
+            
+            if (excluirAlerta){
+                AlertaDAO aDao = new AlertaDAO();
+                aDao.delete(prod.getIdProduto());
+            }
             prod.setQtdEstoque(qtdAtualS);
             pDao.updateEstoque(prod);
 
@@ -244,23 +255,15 @@ public class DarEntrada extends javax.swing.JDialog {
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void txtEntradaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEntradaKeyReleased
-        Character c = evt.getKeyChar();
-        int n = evt.getKeyCode();
-        if (c.isAlphabetic(n)){
-            System.out.println("Alfabético");
-            evt.consume();
-        }else if (c.isSpaceChar(c)){
-            System.out.println("Espaço");
-            evt.consume();
-        }else{
-            System.out.println("Não Alfabético");
-        }
         
         
     }//GEN-LAST:event_txtEntradaKeyReleased
 
     private void txtEntradaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEntradaKeyTyped
-        
+        Character c = evt.getKeyChar();
+        if (c.isSpaceChar(c) || c.isAlphabetic(c)){
+            evt.consume();
+        }
     }//GEN-LAST:event_txtEntradaKeyTyped
 
 
@@ -286,9 +289,6 @@ public class DarEntrada extends javax.swing.JDialog {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(DarEntrada.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>

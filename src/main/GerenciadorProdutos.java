@@ -2,12 +2,15 @@ package main;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Categoria;
 import model.bean.Produto;
 import model.dao.CategoriaDAO;
 import model.dao.ProdutoDAO;
+import manual.Manual;
 
 public class GerenciadorProdutos extends javax.swing.JFrame {
 
@@ -17,20 +20,9 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
 
     public GerenciadorProdutos() {
         initComponents();
-
-        jtProdutos.setRowHeight(27);
         this.setLocationRelativeTo(null);
-        jtProdutos.getColumnModel().getColumn(0).setPreferredWidth(500);
-        jtProdutos.getColumnModel().getColumn(1).setPreferredWidth(150);
-        jtProdutos.getColumnModel().getColumn(2).setPreferredWidth(400);
-
-        jtProdutos.getColumnModel().getColumn(0).setMinWidth(500);
-        jtProdutos.getColumnModel().getColumn(1).setMinWidth(150);
-        jtProdutos.getColumnModel().getColumn(2).setMinWidth(400);
-
-        jtProdutos.getColumnModel().getColumn(0).setMaxWidth(500);
-        jtProdutos.getColumnModel().getColumn(1).setMaxWidth(150);
-        jtProdutos.getColumnModel().getColumn(2).setMaxWidth(400);
+        formatarTabela();
+        
         pDao = new ProdutoDAO();
         listaProdutos.removeAll(listaProdutos);
         for (Produto p : pDao.read()) {
@@ -43,60 +35,50 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
     }
 
     public void criarTabelaNome(String nome) {
-        ArrayList<Produto> ordenador = new ArrayList<>();
-
-        for (Produto prod : pDao.readForNome(nome)) {
-            ordenador.add(prod);
-        }
-        Collections.sort(ordenador);
-
         DefaultTableModel dtmBebidas = (DefaultTableModel) jtProdutos.getModel();
         limparTabela();
-        for (Produto p : ordenador) {
+        for (Produto p : pDao.readForNome(nome)) {
             if (p.getPreco() == 0.0) {
                 dtmBebidas.addRow(
                         new Object[]{
+                            p.getIdProduto(),
                             p.getNome(),
-                            "X",
-                            p.getIdProduto()}
+                            "X"
+                            }
                 );
             } else {
                 String valor = GerenciadorComandas.valorMonetario(p.getPreco());
                 dtmBebidas.addRow(
                         new Object[]{
+                            p.getIdProduto(),
                             p.getNome(),
-                            valor,
-                            p.getIdProduto()}
+                            "R$ "+valor
+                            }
                 );
             }
         }
     }
 
     public void criarTabelaCategoria(String nome) {
-        ArrayList<Produto> ordenador = new ArrayList<>();
-
-        for (Produto prod : pDao.readForCategoria(nome)) {
-            ordenador.add(prod);
-        }
-        Collections.sort(ordenador);
-
         DefaultTableModel dtmBebidas = (DefaultTableModel) jtProdutos.getModel();
         limparTabela();
-        for (Produto p : ordenador) {
+        for (Produto p : pDao.readForCategoria(nome)) {
             if (p.getPreco() == 0.0) {
                 dtmBebidas.addRow(
                         new Object[]{
+                            p.getIdProduto(),
                             p.getNome(),
-                            "X",
-                            p.getIdProduto()}
+                            "X"
+                            }
                 );
             } else {
                 String valor = GerenciadorComandas.valorMonetario(p.getPreco());
                 dtmBebidas.addRow(
                         new Object[]{
+                            p.getIdProduto(),
                             p.getNome(),
-                            valor,
-                            p.getIdProduto()}
+                            "R$ "+valor
+                            }
                 );
             }
         }
@@ -120,6 +102,37 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
         }
     }
 
+    public void formatarTabela(){
+        jtProdutos.setRowHeight(27);
+        jtProdutos.getColumn("Valor de Venda").setCellRenderer(centro);
+        jtProdutos.getColumnModel().getColumn(0).setPreferredWidth(0);
+        jtProdutos.getColumnModel().getColumn(1).setPreferredWidth(520);
+        jtProdutos.getColumnModel().getColumn(2).setPreferredWidth(110);
+
+        jtProdutos.getColumnModel().getColumn(0).setMinWidth(0);
+        jtProdutos.getColumnModel().getColumn(1).setMinWidth(520);
+        jtProdutos.getColumnModel().getColumn(2).setMinWidth(110);
+
+        jtProdutos.getColumnModel().getColumn(0).setMaxWidth(0);
+        jtProdutos.getColumnModel().getColumn(1).setMaxWidth(520);
+        jtProdutos.getColumnModel().getColumn(2).setMaxWidth(110);
+    }
+    
+    //MÉTODOS PARA ARRUMAR CÉLULAS DA TABELA
+    DefaultTableCellRenderer centro = new DefaultTableCellRenderer() {
+        public void setValue(Object value) {
+            setHorizontalAlignment(JLabel.CENTER);
+            super.setValue(value);
+        }
+    };
+
+    DefaultTableCellRenderer direita = new DefaultTableCellRenderer() {
+        public void setValue(Object value) {
+            setHorizontalAlignment(JLabel.RIGHT);
+            super.setValue(value);
+        }
+    };
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -137,6 +150,7 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
         cbCategorias = new javax.swing.JComboBox<>();
         linha2 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
         btnLancador1 = new javax.swing.JButton();
+        lblManual = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Gerenciador de Produtos");
@@ -168,7 +182,7 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nome", "Valor de Venda (R$)", "ID"
+                "ID", "Nome", "Valor de Venda"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -269,6 +283,11 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
             }
         });
 
+        lblManual.setFont(new java.awt.Font("Century Gothic", 1, 20)); // NOI18N
+        lblManual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblManual.setText("?");
+        lblManual.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -294,13 +313,16 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(cbCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(124, 124, 124))))
+                                .addGap(124, 124, 124)))
+                        .addGap(0, 61, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(176, 176, 176)
                         .addComponent(btnInativar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(67, 67, 67)
-                        .addComponent(btnAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(71, Short.MAX_VALUE))
+                        .addComponent(btnAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblManual)))
+                .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(linha2, javax.swing.GroupLayout.DEFAULT_SIZE, 763, Short.MAX_VALUE))
         );
@@ -314,21 +336,27 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
                     .addComponent(btnStringProdutos))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblStringNomeProduto))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblStringNomeProduto1))
-                .addGap(25, 25, 25)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnInativar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblStringNomeProduto))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cbCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblStringNomeProduto1))
+                        .addGap(25, 25, 25)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnInativar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(25, 25, 25))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblManual)
+                        .addContainerGap())))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
@@ -347,7 +375,7 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
         try {
             Menu.acaoEscolhida = 2;
-            Integer idSelecionado = (Integer) jtProdutos.getValueAt(jtProdutos.getSelectedRow(), 2);
+            Integer idSelecionado = (Integer) jtProdutos.getValueAt(jtProdutos.getSelectedRow(), 0);
 
             for (Produto p : listaProdutos) {
                 if (p.getIdProduto().equals(idSelecionado)) {
@@ -368,13 +396,17 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
             } else {
                 int reply = JOptionPane.showConfirmDialog(null, "Deseja realmente inativar o produto?", "Inativação de Produto", JOptionPane.YES_NO_OPTION);
                 if (reply == JOptionPane.YES_OPTION) {
-                    Integer idSelecionado = (Integer) jtProdutos.getValueAt(jtProdutos.getSelectedRow(), 2);
+                    Integer idSelecionado = (Integer) jtProdutos.getValueAt(jtProdutos.getSelectedRow(), 0);
 
                     for (Produto p : listaProdutos) {
                         if (p.getIdProduto().equals(idSelecionado)) {
                             ProdutoDAO cDao = new ProdutoDAO();
                             cDao.setInativo(p.getIdProduto());
-                            this.limparTabela();
+                            if (cbCategorias.getSelectedIndex() == 0){
+                                this.criarTabelaNome(txtPesquisa.getText());
+                            }else{
+                                this.criarTabelaCategoria((String)cbCategorias.getSelectedItem());
+                            }
                             btnAlterar.setEnabled(false);
                             btnInativar.setEnabled(false);
                             jtProdutos.clearSelection();
@@ -489,6 +521,7 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cbCategorias;
     private javax.swing.JScrollPane jScrollPane1;
     private static javax.swing.JTable jtProdutos;
+    private javax.swing.JLabel lblManual;
     private javax.swing.JLabel lblStringNomeProduto;
     private javax.swing.JLabel lblStringNomeProduto1;
     private javax.swing.Box.Filler linha1;

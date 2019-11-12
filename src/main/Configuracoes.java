@@ -47,7 +47,7 @@ public class Configuracoes extends javax.swing.JDialog {
         lblInsiraSuprimento1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("Suprimento do Caixa");
+        setTitle("Configurações");
         setMinimumSize(new java.awt.Dimension(385, 256));
         setResizable(false);
 
@@ -88,7 +88,7 @@ public class Configuracoes extends javax.swing.JDialog {
         cbComandas.setText("Permitir que comandas sejam manipuladas pelo ID");
 
         cbBuffet.setFont(new java.awt.Font("Century Gothic", 0, 17)); // NOI18N
-        cbBuffet.setText("Permitir buffer à vontade");
+        cbBuffet.setText("Permitir buffet à vontade");
         cbBuffet.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cbBuffetItemStateChanged(evt);

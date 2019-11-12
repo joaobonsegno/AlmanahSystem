@@ -1,8 +1,11 @@
 package model.bean;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import main.EncerrarComanda;
 import model.dao.ProdutoDAO;
@@ -17,7 +20,9 @@ public class Venda {
     private ArrayList<String> qnt = new ArrayList<>();
     private ArrayList<Double> pratos = new ArrayList<>();
     private ArrayList<Forma> formasPagamento = new ArrayList<>();
-
+    private ArrayList<Integer> numComandaPratos = new ArrayList<>();
+    private ArrayList<Integer> numComandaItens = new ArrayList<>();
+    
     public Venda(){}
     
     public Venda(Double valor){
@@ -26,7 +31,8 @@ public class Venda {
     }
     
     // MÉTODOS IMPORTANTES PARA FECHAMENTO DE COMANDAS
-    public void setItem(Produto p, String qtd){
+    public void setItem(Produto p, String qtd, int idComanda){
+        numComandaItens.add(idComanda);
         Integer qtdInt = Integer.parseInt(qtd);
         itens.add(p);
         qnt.add(qtd);
@@ -34,31 +40,47 @@ public class Venda {
         this.totalPendente += p.getPrecoComDesconto()*qtdInt;
     }
     
-    public void setPrato(Double d){
+    public void setPrato(Double d, int id){
+        numComandaPratos.add(id);
         pratos.add(d);
         this.total += d;
         this.totalPendente += d;
     }
     
     public void removerItem(int indice){
+        // Declaração das variáveis
         int qtd = Integer.parseInt(this.qnt.get(indice));
-        Double valor = this.itens.get(indice).getPrecoComDesconto()*qtd;
-        Produto p = this.itens.get(indice);
-        this.total -= valor;
-        this.totalPendente -= valor;
+        BigDecimal tirar = new BigDecimal(this.itens.get(indice).getPrecoComDesconto()*qtd);
+        BigDecimal valorPendente = new BigDecimal(this.totalPendente);
+        BigDecimal valor = new BigDecimal(this.total);
+  
+        // Setar valores dos BigDecimal nas variáveis da venda
+        this.total = valor.subtract(tirar, MathContext.DECIMAL32).doubleValue();
+        this.totalPendente = valorPendente.subtract(tirar, MathContext.DECIMAL32).doubleValue();
+        
+        this.numComandaItens.remove(indice);
         this.itens.remove(indice);
         this.qnt.remove(indice);   
     }
     
     public void removerPrato(int indice){
-        this.total -= this.pratos.get(indice);
-        this.totalPendente -= this.pratos.get(indice);
+        BigDecimal total = new BigDecimal(this.total);
+        BigDecimal totalPendente = new BigDecimal(this.totalPendente);
+        BigDecimal adicionada = new BigDecimal(this.pratos.get(indice));
+        total = total.subtract(adicionada, MathContext.DECIMAL32);
+        this.total = total.doubleValue();
+        totalPendente = totalPendente.subtract(adicionada, MathContext.DECIMAL32);
+        this.totalPendente = totalPendente.doubleValue();
+        this.numComandaPratos.remove(indice);
         this.pratos.remove(indice);  
     }
     
     public void setForma(Forma f){
+        BigDecimal atual = new BigDecimal(this.getTotalPendente());
+        BigDecimal adicionada = new BigDecimal(f.getValor());
+        BigDecimal fim = atual.subtract(adicionada, MathContext.DECIMAL32);
+        this.totalPendente = fim.doubleValue();
         this.formasPagamento.add(f);
-        this.totalPendente -= f.getValor();
     }
     
     public void removerForma(int indice){
@@ -71,6 +93,11 @@ public class Venda {
     // -----------------------------------------------
     public String dataAtual(){
         Calendar data = new GregorianCalendar();
+        // Subtrair 1 hora por causa do horário de verão
+        Date teste = new Date();
+        data.setTime(teste);
+        data.set(Calendar.HOUR, data.get(Calendar.HOUR)-1);
+        // --------------------------------------------
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy   HH:mm:ss");
         String dataFormatada = sdf.format(data.getTime());
         return dataFormatada;
@@ -88,6 +115,14 @@ public class Venda {
         this.formasPagamento = formasPagamento;
     }
 
+    public ArrayList<Integer> getNumComandaItens() {
+        return numComandaItens;
+    }
+
+    public void setNumComandaItens(ArrayList<Integer> numComandaItens) {
+        this.numComandaItens = numComandaItens;
+    }
+
     public void setFormaPagamento(Forma f){
         this.formasPagamento.add(f);
     }
@@ -95,7 +130,15 @@ public class Venda {
     public Forma getFormaPagamento(int indice){
         return this.formasPagamento.get(indice);
     }
-    
+
+    public ArrayList<Integer> getNumComandaPratos() {
+        return numComandaPratos;
+    }
+
+    public void setNumComandaPratos(ArrayList<Integer> numComandaPratos) {
+        this.numComandaPratos = numComandaPratos;
+    }
+   
     public void setTotalPendente(Double totalPendente) {
         this.totalPendente = totalPendente;
     }

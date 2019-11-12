@@ -6,6 +6,7 @@ import static main.GerenciadorComandas.idsAbertos;
 import model.dao.ComandaDAO;
 import model.dao.ConfDAO;
 import model.dao.ItemComandaDAO;
+import manual.Manual;
 
 public class NovaRefeicao extends javax.swing.JDialog {
     ConfDAO cDao = new ConfDAO();
@@ -17,6 +18,7 @@ public class NovaRefeicao extends javax.swing.JDialog {
             lblStringPeso.setText("Valor da Refeição:");
             txtEntradaPreco.setVisible(true);
             lblStringkg.setVisible(true);
+            txtEntradaPreco.requestFocus();
         }
         else if (cbBuffet.isSelected()){
             cbPeso.setSelected(false);
@@ -40,6 +42,7 @@ public class NovaRefeicao extends javax.swing.JDialog {
         }else{
             valorAVontade = p;
         }
+        txtEntradaPreco.requestFocus();
     }
     
     @SuppressWarnings("unchecked")
@@ -59,6 +62,7 @@ public class NovaRefeicao extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         btnLancador = new javax.swing.JButton();
         linha1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
+        lblManual2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Novo Prato");
@@ -166,6 +170,16 @@ public class NovaRefeicao extends javax.swing.JDialog {
         linha1.setBackground(new java.awt.Color(0, 0, 0));
         linha1.setOpaque(true);
 
+        lblManual2.setFont(new java.awt.Font("Century Gothic", 1, 20)); // NOI18N
+        lblManual2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblManual2.setText("?");
+        lblManual2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblManual2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblManual2MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -174,24 +188,28 @@ public class NovaRefeicao extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(138, 138, 138)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(52, 52, 52)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(cbBuffet)
-                                .addComponent(cbPeso)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(lblStringPeso)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(txtEntradaPreco, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(lblStringkg))))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(btnLancador)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblStringNovoPrato))))
-                .addContainerGap(141, Short.MAX_VALUE))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 114, Short.MAX_VALUE)
+                        .addComponent(lblManual2, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(52, 52, 52)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cbBuffet)
+                                    .addComponent(cbPeso)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(lblStringPeso)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtEntradaPreco, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(lblStringkg))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(btnLancador)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblStringNovoPrato)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(linha, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 516, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,6 +234,10 @@ public class NovaRefeicao extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(20, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblManual2)
+                .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(57, 57, 57)
@@ -263,8 +285,10 @@ public class NovaRefeicao extends javax.swing.JDialog {
             }
             
             if (cod == 0){
-                if (!txtNumeroComanda.getText().equals(""))
+                if (!txtNumeroComanda.getText().equals("")){
                     JOptionPane.showMessageDialog(null, "Código de comanda inválido");
+                    txtNumeroComanda.setText("");
+                }
             }else{
                 try{
                     txtNumeroComanda.setText("");
@@ -314,6 +338,10 @@ public class NovaRefeicao extends javax.swing.JDialog {
         if (evt.getKeyCode() == 10)
             txtNumeroComanda.requestFocus();
     }//GEN-LAST:event_txtEntradaPrecoKeyReleased
+
+    private void lblManual2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblManual2MouseClicked
+        Manual.abrirManual("login.html");
+    }//GEN-LAST:event_lblManual2MouseClicked
 
     /**
      * @param args the command line arguments
@@ -371,6 +399,7 @@ public class NovaRefeicao extends javax.swing.JDialog {
     private javax.swing.ButtonGroup grupo1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblManual2;
     private javax.swing.JLabel lblStringNovoPrato;
     private javax.swing.JLabel lblStringPeso;
     private javax.swing.JLabel lblStringkg;

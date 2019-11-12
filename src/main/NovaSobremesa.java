@@ -11,9 +11,11 @@ import model.bean.Comanda;
 import model.bean.Log;
 import model.bean.Produto;
 import model.dao.ComandaDAO;
+import model.dao.ConfDAO;
 import model.dao.ItemComandaDAO;
 import model.dao.LogDAO;
 import model.dao.ProdutoDAO;
+import manual.Manual;
 
 public class NovaSobremesa extends javax.swing.JFrame {
     ArrayList<Produto> listaProdutos = new ArrayList<>();
@@ -125,6 +127,7 @@ public class NovaSobremesa extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         txtNumeroComanda = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        lblManual2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Nova Sobremesa");
@@ -257,6 +260,16 @@ public class NovaSobremesa extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        lblManual2.setFont(new java.awt.Font("Century Gothic", 1, 20)); // NOI18N
+        lblManual2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblManual2.setText("?");
+        lblManual2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblManual2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblManual2MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -276,7 +289,9 @@ public class NovaSobremesa extends javax.swing.JFrame {
                         .addComponent(SpinnerQtd, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(254, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 227, Short.MAX_VALUE)
+                        .addComponent(lblManual2, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1)
@@ -311,6 +326,10 @@ public class NovaSobremesa extends javax.swing.JFrame {
                         .addComponent(lblStringCodigo1))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(18, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblManual2)
+                .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(59, 59, 59)
@@ -380,10 +399,20 @@ public class NovaSobremesa extends javax.swing.JFrame {
         ProdutoDAO pDao = new ProdutoDAO();
         if (evt.getKeyCode() == 10){
             ComandaDAO comDao = new ComandaDAO();
-            int cod = comDao.codComanda(txtNumeroComanda.getText());
+            ConfDAO cDao = new ConfDAO();
+            
+            int cod;            
+            if (cDao.readCod() == 1){
+                cod = Integer.parseInt(txtNumeroComanda.getText());
+            }else{
+                cod = comDao.codComanda(txtNumeroComanda.getText());
+            }
+
             if (cod == 0){
-                if (!txtNumeroComanda.getText().equals(""))
+                if (!txtNumeroComanda.getText().equals("")){
                     JOptionPane.showMessageDialog(null, "Código de comanda inválido");
+                    txtNumeroComanda.setText("");
+                }
             }else{
                 txtNumeroComanda.setText("");
                 boolean flagComandaAberta = false;
@@ -483,6 +512,10 @@ public class NovaSobremesa extends javax.swing.JFrame {
         jtSobremesas.clearSelection();
     }//GEN-LAST:event_txtPesquisaFocusGained
 
+    private void lblManual2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblManual2MouseClicked
+        Manual.abrirManual("login.html");
+    }//GEN-LAST:event_lblManual2MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -529,6 +562,7 @@ public class NovaSobremesa extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private static javax.swing.JTable jtSobremesas;
+    private javax.swing.JLabel lblManual2;
     private javax.swing.JLabel lblStringCodigo1;
     private javax.swing.JLabel lblStringNomeProduto;
     private javax.swing.Box.Filler linha1;

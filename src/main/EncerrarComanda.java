@@ -9,8 +9,9 @@ import model.bean.Comanda;
 import model.bean.Produto;
 import model.bean.Venda;
 import model.dao.ComandaDAO;
+import model.dao.ConfDAO;
+import manual.Manual;
 import model.dao.ItemComandaDAO;
-import model.dao.ProdutoDAO;
 
 public class EncerrarComanda extends javax.swing.JFrame {
     public static boolean flagValor;
@@ -34,20 +35,33 @@ public class EncerrarComanda extends javax.swing.JFrame {
         prodRemovido = new ArrayList<>();
     }
     
-    public void adicionarPratoTabela(Double d, Comanda c){
+    public void criarTabela(){
+        limparTabela();
+        ConfDAO cDao = new ConfDAO();
         DefaultTableModel dtmComandas = (DefaultTableModel) jtItens.getModel();
-        Object[] dados = {c.getId(), "Refeição Geral", "1", "R$ "+GerenciadorComandas.valorMonetario(d), "R$ "+GerenciadorComandas.valorMonetario(d)};
-        dtmComandas.addRow(dados);
+        int contador = 0;
+        for (Double d : venda.getPratos()){
+            Double p = cDao.readPreco();
+            if (p != 0.0 && p.equals(d)){
+                Object[] dados = {venda.getNumComandaPratos().get(contador), "Buffet à vontade", "1", "R$ "+GerenciadorComandas.valorMonetario(d), "R$ "+GerenciadorComandas.valorMonetario(d)};
+                dtmComandas.addRow(dados);
+            }else{
+                Object[] dados = {venda.getNumComandaPratos().get(contador), "Refeição Geral", "1", "R$ "+GerenciadorComandas.valorMonetario(d), "R$ "+GerenciadorComandas.valorMonetario(d)};
+                dtmComandas.addRow(dados);
+            }
+            contador += 1;
+        }
         
+        
+        for (int i = 0; i < venda.getItens().size(); i++){
+            int qtd = Integer.parseInt(venda.getQnt().get(i));
+            Object[] dados = {venda.getNumComandaItens().get(i), venda.getItens().get(i).getNome(), venda.getQnt().get(i), 
+                             "R$ "+GerenciadorComandas.valorMonetario(venda.getItens().get(i).getPrecoComDesconto()), 
+                             "R$ "+GerenciadorComandas.valorMonetario(venda.getItens().get(i).getPrecoComDesconto()*qtd)};
+            dtmComandas.addRow(dados);
+        }
     }
-    
-    public void adicionarProdutoTabela(Produto p, String q, Comanda c){
-        int qtd = Integer.parseInt(q);
-        DefaultTableModel dtmComandas = (DefaultTableModel) jtItens.getModel();
-        Object[] dados = {c.getId(), p.getNome(), q, "R$ "+GerenciadorComandas.valorMonetario(p.getPrecoComDesconto()), "R$ "+GerenciadorComandas.valorMonetario(p.getPrecoComDesconto()*qtd)};
-        dtmComandas.addRow(dados);
-    }
-    
+ 
     public void removerItem(){
         Venda v = EncerrarComanda.venda;
         // Verifica a quantidade de linhas selecionadas. USUÁRIO SÓ PODE REMOVER 1 LINHA (ITEM) POR VEZ
@@ -160,6 +174,7 @@ public class EncerrarComanda extends javax.swing.JFrame {
         lblValorTotal = new javax.swing.JLabel();
         lblStringValorTotal = new javax.swing.JLabel();
         btnPagamento = new javax.swing.JButton();
+        lblManual = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Encerramento de Comanda");
@@ -347,12 +362,21 @@ public class EncerrarComanda extends javax.swing.JFrame {
             }
         });
 
+        lblManual.setFont(new java.awt.Font("Century Gothic", 1, 20)); // NOI18N
+        lblManual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblManual.setText("?");
+        lblManual.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblManual)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lblStringValorTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
@@ -372,7 +396,8 @@ public class EncerrarComanda extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblStringValorTotal))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblManual))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(38, 38, 38)
                         .addComponent(btnPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -392,39 +417,38 @@ public class EncerrarComanda extends javax.swing.JFrame {
                 .addComponent(btnStringGerenciador)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(linha1, javax.swing.GroupLayout.DEFAULT_SIZE, 888, Short.MAX_VALUE))
+                .addComponent(linha1, javax.swing.GroupLayout.DEFAULT_SIZE, 892, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(linha2, javax.swing.GroupLayout.DEFAULT_SIZE, 892, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
+                .addContainerGap(14, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnStringGerenciador)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(67, 67, 67)
                     .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(569, Short.MAX_VALUE)))
+                    .addContainerGap(541, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(linha2, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(623, Short.MAX_VALUE)))
+                    .addContainerGap(597, Short.MAX_VALUE)))
         );
 
         pack();
@@ -485,11 +509,21 @@ public class EncerrarComanda extends javax.swing.JFrame {
 
     private void txtNumeroComandaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumeroComandaKeyReleased
         if (evt.getKeyCode() == 10){
-           ComandaDAO comDao = new ComandaDAO();
-            int cod = comDao.codComanda(txtNumeroComanda.getText());
+            ComandaDAO comDao = new ComandaDAO();
+            ConfDAO cDao = new ConfDAO();
+            
+            int cod;            
+            if (cDao.readCod() == 1){
+                cod = Integer.parseInt(txtNumeroComanda.getText());
+            }else{
+                cod = comDao.codComanda(txtNumeroComanda.getText());
+            }
+
             if (cod == 0){
-                if (!txtNumeroComanda.getText().equals(""))
+                if (!txtNumeroComanda.getText().equals("")){
                     JOptionPane.showMessageDialog(null, "Código de comanda inválido");
+                    txtNumeroComanda.setText("");
+                }
             }else{
                 txtNumeroComanda.setText("");
                 boolean flagComandaAberta = false;
@@ -509,13 +543,12 @@ public class EncerrarComanda extends javax.swing.JFrame {
                             Comanda c = comDao.readForId(cod);
                             itemDao.read(c);
                             for (Double d : c.getPratos()){
-                                venda.setPrato(d);
-                                this.adicionarPratoTabela(d, c);
+                                venda.setPrato(d, c.getId());
                             }
                             for (int j = 0; j < c.getItens().size(); j++){
-                                venda.setItem(c.getItens().get(j), c.getQnt().get(j));
-                                this.adicionarProdutoTabela(c.getItens().get(j), c.getQnt().get(j), c);
+                                venda.setItem(c.getItens().get(j), c.getQnt().get(j), c.getId());
                             }
+                            this.criarTabela();
                             btnPagamento.setEnabled(true);
                             lblValorTotal.setText("R$ "+GerenciadorComandas.valorMonetario(venda.getTotal()));
                             listaIds.add(i);
@@ -584,6 +617,7 @@ public class EncerrarComanda extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private static javax.swing.JTable jtItens;
+    private javax.swing.JLabel lblManual;
     private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblStringValorTotal;
     private javax.swing.JLabel lblValorTotal;

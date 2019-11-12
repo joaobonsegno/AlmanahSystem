@@ -2,9 +2,13 @@ package main;
 
 import ArrumarString.SoNumeros;
 import javax.swing.JOptionPane;
+import model.bean.Alerta;
 import model.bean.Log;
 import model.bean.Produto;
+import model.dao.AlertaDAO;
 import model.dao.LogDAO;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import model.dao.ProdutoDAO;
 
 public class DarBaixa extends javax.swing.JDialog {
@@ -217,6 +221,7 @@ public class DarBaixa extends javax.swing.JDialog {
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         try {
             boolean flagProsseguir = true;
+            boolean criarAlerta = false;
             LogDAO logDao = new LogDAO();
             Log l = new Log();
             l.setCategoria("Estoque");
@@ -226,10 +231,17 @@ public class DarBaixa extends javax.swing.JDialog {
             String qtdRetiradaS = txtEntrada.getText();
 
             if (prod.getUnidadeDeMedida().equals("Kg")) {
+                // Preparando os valores Double e BigDecimal pra fazer a subtração
                 qtdRetiradaS = qtdRetiradaS.replace(",", ".");
                 Double qtdAtual = Double.parseDouble(qtdAtualS);
                 Double qtdAdicionada = Double.parseDouble(qtdRetiradaS);
-                qtdAtual -= qtdAdicionada;
+                BigDecimal atual = new BigDecimal(qtdAtual);
+                BigDecimal adicionada = new BigDecimal(qtdAdicionada);
+                BigDecimal fim = atual.subtract(adicionada, MathContext.DECIMAL32);
+                qtdAtual = fim.doubleValue();
+                if (qtdAtual <= Double.parseDouble(prod.getQtdMinima())){
+                    criarAlerta = true;
+                }
                 if (qtdAtual < 0) {
                     JOptionPane.showMessageDialog(null, "Não foi possível dar baixa, pois a quantidade\n inserida é maior do que o estoque atual");
                     flagProsseguir = false;
@@ -240,6 +252,9 @@ public class DarBaixa extends javax.swing.JDialog {
                 Integer qtdAtual = Integer.parseInt(qtdAtualS);
                 Integer qtdAdicionada = Integer.parseInt(qtdRetiradaS);
                 qtdAtual -= qtdAdicionada;
+                if (qtdAtual <= Integer.parseInt(prod.getQtdMinima())){
+                    criarAlerta = true;
+                }
                 if (qtdAtual < 0) {
                     JOptionPane.showMessageDialog(null, "Não foi possível dar baixa, pois a quantidade\n inserida é maior do que o estoque atual");
                     flagProsseguir = false;
@@ -252,7 +267,16 @@ public class DarBaixa extends javax.swing.JDialog {
                 l.setDescricao(Login.funcAtual.getNome() + " retirou " + qtdRetiradaS + " de \"" + prod.getNome() + "\" do estoque");
                 prod.setQtdEstoque(qtdAtualS);
                 pDao.updateEstoque(prod);
-
+                
+                if (criarAlerta){
+                    AlertaDAO aDao = new AlertaDAO();
+                    Alerta a = aDao.readForProduto(prod.getIdProduto());
+                    if (a.getMensagem() == null){
+                        a.setMensagem("O produto \""+prod.getNome()+"\" está com estoque baixo");
+                        a.setProduto(prod);
+                        aDao.create(a);
+                    }                
+                }
                 logDao.create(l);
                 new GerenciadorEstoque().setVisible(true);
                 dispose();
@@ -271,18 +295,10 @@ public class DarBaixa extends javax.swing.JDialog {
     }//GEN-LAST:event_txtEntradaKeyReleased
 
     private void txtEntradaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEntradaKeyTyped
-        /*evt.consume();
         Character c = evt.getKeyChar();
-        int n = evt.getKeyCode();
-        if (c.isAlphabetic(n)){
-
-        }else if (c.isSpaceChar(c)){
-            
-        }else{
-            String e = txtEntrada.getText();
-            e += c.toString();
-            txtEntrada.setText(e);
-        }*/
+        if (c.isSpaceChar(c) || c.isAlphabetic(c)){
+            evt.consume();
+        }
     }//GEN-LAST:event_txtEntradaKeyTyped
 
     /**
