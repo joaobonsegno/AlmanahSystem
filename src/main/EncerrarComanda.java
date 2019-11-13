@@ -178,7 +178,6 @@ public class EncerrarComanda extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Encerramento de Comanda");
-        setMaximumSize(new java.awt.Dimension(892, 637));
         setMinimumSize(new java.awt.Dimension(892, 637));
         setResizable(false);
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
@@ -188,17 +187,21 @@ public class EncerrarComanda extends javax.swing.JFrame {
             public void windowLostFocus(java.awt.event.WindowEvent evt) {
             }
         });
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnStringGerenciador.setBackground(new java.awt.Color(0, 102, 204));
         btnStringGerenciador.setFont(new java.awt.Font("Century Gothic", 0, 24)); // NOI18N
         btnStringGerenciador.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btnStringGerenciador.setText("Encerrar Comanda");
+        getContentPane().add(btnStringGerenciador, new org.netbeans.lib.awtextra.AbsoluteConstraints(327, 23, -1, -1));
 
         linha1.setBackground(new java.awt.Color(0, 0, 0));
         linha1.setOpaque(true);
+        getContentPane().add(linha1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 67, 892, -1));
 
         linha2.setBackground(new java.awt.Color(0, 0, 0));
         linha2.setOpaque(true);
+        getContentPane().add(linha2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 11, 892, -1));
 
         btnCancelar.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         btnCancelar.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\voltar (2).png")); // NOI18N
@@ -210,6 +213,7 @@ public class EncerrarComanda extends javax.swing.JFrame {
                 btnCancelarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 14, 132, 53));
 
         btnAssociarCliente.setBackground(new java.awt.Color(204, 204, 0));
         btnAssociarCliente.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
@@ -295,6 +299,10 @@ public class EncerrarComanda extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 73, 882, -1));
+
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
         jtItens.setBorder(new javax.swing.border.MatteBorder(null));
         jtItens.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         jtItens.setModel(new javax.swing.table.DefaultTableModel(
@@ -328,6 +336,8 @@ public class EncerrarComanda extends javax.swing.JFrame {
             jtItens.getColumnModel().getColumn(4).setResizable(false);
         }
 
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 868, 345));
+
         btnRemover.setBackground(new java.awt.Color(204, 0, 51));
         btnRemover.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         btnRemover.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\delete.png")); // NOI18N
@@ -340,15 +350,18 @@ public class EncerrarComanda extends javax.swing.JFrame {
                 btnRemoverActionPerformed(evt);
             }
         });
+        jPanel2.add(btnRemover, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 345, 145, 48));
 
         lblValorTotal.setFont(new java.awt.Font("Century Gothic", 1, 29)); // NOI18N
         lblValorTotal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblValorTotal.setText("R$ 0,00");
         lblValorTotal.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(0, 0, 0)));
+        jPanel2.add(lblValorTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(459, 383, 200, 67));
 
         lblStringValorTotal.setFont(new java.awt.Font("Century Gothic", 1, 25)); // NOI18N
         lblStringValorTotal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblStringValorTotal.setText("Valor  Total");
+        jPanel2.add(lblStringValorTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(459, 351, 200, -1));
 
         btnPagamento.setBackground(new java.awt.Color(0, 153, 0));
         btnPagamento.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
@@ -361,95 +374,20 @@ public class EncerrarComanda extends javax.swing.JFrame {
                 btnPagamentoActionPerformed(evt);
             }
         });
+        jPanel2.add(btnPagamento, new org.netbeans.lib.awtextra.AbsoluteConstraints(669, 383, 199, 67));
 
         lblManual.setFont(new java.awt.Font("Century Gothic", 1, 20)); // NOI18N
         lblManual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblManual.setText("?");
         lblManual.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblManual.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblManualMouseClicked(evt);
+            }
+        });
+        jPanel2.add(lblManual, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 424, -1, -1));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lblManual)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblStringValorTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                    .addComponent(lblValorTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 868, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblStringValorTotal))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblManual))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(btnPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(lblValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(203, 203, 203)
-                .addComponent(btnStringGerenciador)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(linha1, javax.swing.GroupLayout.DEFAULT_SIZE, 892, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(linha2, javax.swing.GroupLayout.DEFAULT_SIZE, 892, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(14, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnStringGerenciador)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(67, 67, 67)
-                    .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(541, Short.MAX_VALUE)))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(linha2, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(597, Short.MAX_VALUE)))
-        );
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 159, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -565,6 +503,10 @@ public class EncerrarComanda extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_txtNumeroComandaKeyReleased
+
+    private void lblManualMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblManualMouseClicked
+        Manual.abrirManual("encerrarComanda");
+    }//GEN-LAST:event_lblManualMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

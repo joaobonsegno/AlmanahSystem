@@ -287,6 +287,11 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
         lblManual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblManual.setText("?");
         lblManual.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblManual.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblManualMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -476,6 +481,10 @@ public class GerenciadorProdutos extends javax.swing.JFrame {
     private void btnAlterarFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_btnAlterarFocusGained
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAlterarFocusGained
+
+    private void lblManualMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblManualMouseClicked
+        Manual.abrirManual("gerenciadorProdutos");
+    }//GEN-LAST:event_lblManualMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

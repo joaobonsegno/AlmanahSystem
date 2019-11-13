@@ -580,7 +580,7 @@ public class NovaBebida extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPesquisaFocusGained
 
     private void lblManual2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblManual2MouseClicked
-        Manual.abrirManual("login.html");
+        Manual.abrirManual("novaBebida");
     }//GEN-LAST:event_lblManual2MouseClicked
 
     /**

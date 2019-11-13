@@ -94,7 +94,6 @@ public class AlterarPrato extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Alterar Prato");
-        setMaximumSize(new java.awt.Dimension(772, 617));
         setMinimumSize(new java.awt.Dimension(772, 617));
         setResizable(false);
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
@@ -234,6 +233,11 @@ public class AlterarPrato extends javax.swing.JFrame {
         lblManual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblManual.setText("?");
         lblManual.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblManual.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblManualMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -420,6 +424,10 @@ public class AlterarPrato extends javax.swing.JFrame {
     private void lblStringMateriasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblStringMateriasMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_lblStringMateriasMouseClicked
+
+    private void lblManualMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblManualMouseClicked
+        Manual.abrirManual("alterarPrato");
+    }//GEN-LAST:event_lblManualMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

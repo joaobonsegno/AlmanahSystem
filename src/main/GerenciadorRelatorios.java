@@ -60,7 +60,6 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Gerenciador de Relatórios");
-        setMaximumSize(new java.awt.Dimension(575, 325));
         setMinimumSize(new java.awt.Dimension(575, 325));
         setResizable(false);
 
@@ -126,6 +125,11 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
         lblManual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblManual.setText("?");
         lblManual.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblManual.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblManualMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -290,6 +294,10 @@ public class GerenciadorRelatorios extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Informe as datas inicial e final");
         }*/
     }//GEN-LAST:event_btnOk1ActionPerformed
+
+    private void lblManualMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblManualMouseClicked
+        Manual.abrirManual("gerenciadorRelatorios");
+    }//GEN-LAST:event_lblManualMouseClicked
 
     /**
      * @param args the command line arguments

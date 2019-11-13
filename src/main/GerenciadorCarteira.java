@@ -109,7 +109,6 @@ public class GerenciadorCarteira extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Gerenciador de Carteiras");
-        setMaximumSize(new java.awt.Dimension(734, 532));
         setMinimumSize(new java.awt.Dimension(734, 532));
         setResizable(false);
 
@@ -216,6 +215,11 @@ public class GerenciadorCarteira extends javax.swing.JFrame {
         lblManual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblManual.setText("?");
         lblManual.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblManual.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblManualMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -259,7 +263,6 @@ public class GerenciadorCarteira extends javax.swing.JFrame {
                     .addComponent(btnStringProdutos))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(linha1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -359,6 +362,10 @@ public class GerenciadorCarteira extends javax.swing.JFrame {
         d.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnDetalharActionPerformed
+
+    private void lblManualMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblManualMouseClicked
+        Manual.abrirManual("gerenciadorCarteira");
+    }//GEN-LAST:event_lblManualMouseClicked
 
     /**
      * @param args the command line arguments

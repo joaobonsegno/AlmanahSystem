@@ -340,7 +340,7 @@ public class NovaRefeicao extends javax.swing.JDialog {
     }//GEN-LAST:event_txtEntradaPrecoKeyReleased
 
     private void lblManual2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblManual2MouseClicked
-        Manual.abrirManual("login.html");
+        Manual.abrirManual("novaRefeicao");
     }//GEN-LAST:event_lblManual2MouseClicked
 
     /**

@@ -211,7 +211,6 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gerenciador de Estoque");
-        setMaximumSize(new java.awt.Dimension(681, 535));
         setMinimumSize(new java.awt.Dimension(681, 535));
         setResizable(false);
 
@@ -315,6 +314,11 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
         lblManual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblManual.setText("?");
         lblManual.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblManual.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblManualMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -431,6 +435,10 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
             this.criarTabela();
         }
     }//GEN-LAST:event_txtPesquisaKeyReleased
+
+    private void lblManualMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblManualMouseClicked
+        Manual.abrirManual("gerenciadorEstoque");
+    }//GEN-LAST:event_lblManualMouseClicked
 
     /**
      * @param args the command line arguments

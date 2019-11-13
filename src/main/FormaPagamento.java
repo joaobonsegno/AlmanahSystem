@@ -52,6 +52,7 @@ public class FormaPagamento extends javax.swing.JDialog {
         for (Forma f : EncerrarComanda.venda.getFormasPagamento()){
             adicionarLinha(f, EncerrarComanda.venda);
         }
+        txtValorASerCobrado.requestFocus();
     }
     
     public void panelDinheiro(){
@@ -150,7 +151,6 @@ public class FormaPagamento extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Forma de Pagamento");
-        setMaximumSize(new java.awt.Dimension(924, 644));
         setMinimumSize(new java.awt.Dimension(924, 644));
         setResizable(false);
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
@@ -535,6 +535,11 @@ public class FormaPagamento extends javax.swing.JDialog {
         lblManual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblManual.setText("?");
         lblManual.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblManual.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblManualMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -919,6 +924,10 @@ public class FormaPagamento extends javax.swing.JDialog {
     private void btnAdicionarFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_btnAdicionarFocusGained
         limparSelecao();
     }//GEN-LAST:event_btnAdicionarFocusGained
+
+    private void lblManualMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblManualMouseClicked
+        Manual.abrirManual("formaPagamento");
+    }//GEN-LAST:event_lblManualMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

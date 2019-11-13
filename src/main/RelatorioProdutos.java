@@ -558,7 +558,7 @@ public class RelatorioProdutos extends javax.swing.JFrame {
     }//GEN-LAST:event_cbOrdemItemStateChanged
 
     private void lblManual2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblManual2MouseClicked
-        Manual.abrirManual("login.html");
+        Manual.abrirManual("relatorioProdutos");
     }//GEN-LAST:event_lblManual2MouseClicked
 
     /**

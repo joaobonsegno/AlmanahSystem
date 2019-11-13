@@ -37,7 +37,6 @@ public class Sangria extends javax.swing.JDialog {
         lblInsiraSuprimento1 = new javax.swing.JLabel();
         lblInsiraSuprimento2 = new javax.swing.JLabel();
         lblValor = new javax.swing.JLabel();
-        lblInsiraSuprimento3 = new javax.swing.JLabel();
         linha1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 1), new java.awt.Dimension(2, 32767));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -91,9 +90,6 @@ public class Sangria extends javax.swing.JDialog {
         lblValor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblValor.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        lblInsiraSuprimento3.setFont(new java.awt.Font("Century Gothic", 0, 16)); // NOI18N
-        lblInsiraSuprimento3.setText("R$");
-
         linha1.setBackground(new java.awt.Color(0, 0, 0));
         linha1.setOpaque(true);
 
@@ -124,10 +120,8 @@ public class Sangria extends javax.swing.JDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(lblValor, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblInsiraSuprimento1)
-                            .addComponent(lblInsiraSuprimento3))))
-                .addContainerGap(40, Short.MAX_VALUE))
+                        .addComponent(lblInsiraSuprimento1)))
+                .addContainerGap(42, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(linha, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,10 +137,7 @@ public class Sangria extends javax.swing.JDialog {
                     .addComponent(lblValor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(lblInsiraSuprimento2)
-                        .addGap(8, 8, 8))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lblInsiraSuprimento3)
-                        .addGap(9, 9, 9)))
+                        .addGap(8, 8, 8)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(31, 31, 31)
@@ -274,7 +265,6 @@ public class Sangria extends javax.swing.JDialog {
     private javax.swing.JLabel lblInsiraSuprimento;
     private javax.swing.JLabel lblInsiraSuprimento1;
     private javax.swing.JLabel lblInsiraSuprimento2;
-    private javax.swing.JLabel lblInsiraSuprimento3;
     private javax.swing.JLabel lblValor;
     private javax.swing.Box.Filler linha;
     private javax.swing.Box.Filler linha1;

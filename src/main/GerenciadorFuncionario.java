@@ -147,7 +147,6 @@ public class GerenciadorFuncionario extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Gerenciador de Funcionários");
-        setMaximumSize(new java.awt.Dimension(757, 639));
         setMinimumSize(new java.awt.Dimension(757, 639));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -295,6 +294,11 @@ public class GerenciadorFuncionario extends javax.swing.JFrame {
         lblManual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblManual.setText("?");
         lblManual.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblManual.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblManualMouseClicked(evt);
+            }
+        });
         getContentPane().add(lblManual, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 610, -1, -1));
 
         pack();
@@ -403,6 +407,10 @@ public class GerenciadorFuncionario extends javax.swing.JFrame {
             this.criarTabela();
         }
     }//GEN-LAST:event_txtPesquisaKeyReleased
+
+    private void lblManualMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblManualMouseClicked
+        Manual.abrirManual("gerenciadorFuncionarios");
+    }//GEN-LAST:event_lblManualMouseClicked
 
     /**
      * @param args the command line arguments

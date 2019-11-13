@@ -398,6 +398,11 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
         lblManual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblManual.setText("?");
         lblManual.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblManual.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblManualMouseClicked(evt);
+            }
+        });
         getContentPane().add(lblManual, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 560, -1, -1));
 
         pack();
@@ -490,6 +495,10 @@ public class GerenciadorCardapios extends javax.swing.JFrame {
         ImportarCardapio novoPrato = new ImportarCardapio(new javax.swing.JFrame(), true);
         novoPrato.setVisible(true);
     }//GEN-LAST:event_lblImportarMouseClicked
+
+    private void lblManualMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblManualMouseClicked
+        Manual.abrirManual("gerenciadorCardapios");
+    }//GEN-LAST:event_lblManualMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

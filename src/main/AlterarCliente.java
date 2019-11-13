@@ -527,7 +527,7 @@ public class AlterarCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_cbUfItemStateChanged
 
     private void lblManualMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblManualMouseClicked
-        Manual.abrirManual("alterarCliente.html");
+        Manual.abrirManual("alterarCliente");
     }//GEN-LAST:event_lblManualMouseClicked
 
     /**

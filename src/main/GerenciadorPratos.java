@@ -120,7 +120,6 @@ public class GerenciadorPratos extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Gerenciador de Pratos");
-        setMaximumSize(new java.awt.Dimension(581, 632));
         setMinimumSize(new java.awt.Dimension(581, 632));
         setResizable(false);
 
@@ -248,6 +247,11 @@ public class GerenciadorPratos extends javax.swing.JFrame {
         lblManual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblManual.setText("?");
         lblManual.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblManual.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblManualMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -433,6 +437,10 @@ public class GerenciadorPratos extends javax.swing.JFrame {
         novoPrato.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnLancador1ActionPerformed
+
+    private void lblManualMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblManualMouseClicked
+        Manual.abrirManual("gerenciadorPratos");
+    }//GEN-LAST:event_lblManualMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

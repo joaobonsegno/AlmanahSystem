@@ -283,7 +283,6 @@ public class GerenciadorFornecedores extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Gerenciador de Forencedores");
-        setMaximumSize(new java.awt.Dimension(930, 668));
         setMinimumSize(new java.awt.Dimension(930, 668));
         setResizable(false);
 
@@ -686,6 +685,11 @@ public class GerenciadorFornecedores extends javax.swing.JFrame {
         lblManual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblManual.setText("?");
         lblManual.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblManual.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblManualMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -992,6 +996,10 @@ public class GerenciadorFornecedores extends javax.swing.JFrame {
             criarTabelaProdutosFornecidos();
         }
     }//GEN-LAST:event_jtProdutosFornecidosKeyReleased
+
+    private void lblManualMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblManualMouseClicked
+        Manual.abrirManual("gerenciadorFornecedores");
+    }//GEN-LAST:event_lblManualMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
