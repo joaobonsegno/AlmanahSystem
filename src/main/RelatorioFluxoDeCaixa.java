@@ -24,16 +24,9 @@ import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
-import model.bean.Despesa;
-import model.bean.Forma;
-import model.bean.Venda;
 import model.dao.RelatorioFluxoDAO;
 import relatorio.RelatorioFluxo;
-import relatorio.RelatorioForma;
-import relatorio.RelatorioFormaCarteira;
 
 public class RelatorioFluxoDeCaixa extends javax.swing.JFrame {
     private ArrayList<RelatorioFluxo> listaFluxos;
@@ -262,6 +255,11 @@ public class RelatorioFluxoDeCaixa extends javax.swing.JFrame {
         }
     }
     
+    // --------------------- MÉTODO PARA CRIAR GRÁFICO NO RELATÓRIO --------------------------
+
+
+
+
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -407,7 +405,7 @@ public class RelatorioFluxoDeCaixa extends javax.swing.JFrame {
         );
 
         lblString7.setFont(new java.awt.Font("Century Gothic", 1, 21)); // NOI18N
-        lblString7.setText("Saldo: R$");
+        lblString7.setText("Balanço: R$");
 
         lblSaldo.setFont(new java.awt.Font("Century Gothic", 1, 26)); // NOI18N
         lblSaldo.setText("2150,00");
@@ -526,7 +524,7 @@ public class RelatorioFluxoDeCaixa extends javax.swing.JFrame {
             pCredito.setAlignment(Element.ALIGN_RIGHT);
             Paragraph pLinha = new Paragraph(new Phrase(20F, "____________________\n\n", FontFactory.getFont(FontFactory.HELVETICA, 12F)));
             pLinha.setAlignment(Element.ALIGN_RIGHT);            
-            Paragraph pTotal = new Paragraph(new Phrase(20F, "Saldo:  R$ " + GerenciadorComandas.valorMonetario(total), FontFactory.getFont(FontFactory.HELVETICA, 14F,Font.BOLD)));
+            Paragraph pTotal = new Paragraph(new Phrase(20F, "Balanço:  R$ " + GerenciadorComandas.valorMonetario(total), FontFactory.getFont(FontFactory.HELVETICA, 14F,Font.BOLD)));
             pTotal.setAlignment(Element.ALIGN_RIGHT);
             
             documento.add(pCredito);
@@ -603,4 +601,5 @@ public class RelatorioFluxoDeCaixa extends javax.swing.JFrame {
     private javax.swing.Box.Filler linha1;
     private javax.swing.Box.Filler linha2;
     // End of variables declaration//GEN-END:variables
+
 }

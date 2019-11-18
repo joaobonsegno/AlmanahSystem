@@ -77,7 +77,6 @@ public class NovaBebida extends javax.swing.JFrame {
         ProdutoDAO pDao = new ProdutoDAO();
         DefaultTableModel dtmBebidas = (DefaultTableModel) jtBebidas.getModel();
         for (Produto p: pDao.read()){
-            p.getCategoria().getId();
             if(p.getCategoria().getNome().equals("Bebida")){
                 String valor = GerenciadorComandas.valorMonetario(p.getPreco());
                 
@@ -88,15 +87,8 @@ public class NovaBebida extends javax.swing.JFrame {
                         p.getQtdEstoque(),                       
                         valor}
                 );
-            }
-        }
-
-        PromocaoUmDAO promoDao = new PromocaoUmDAO();
-        PromocaoUm promocaoUm = promoDao.read();
-        for (Produto p: pDao.read()){
-            if (Menu.flagDia){
-                p.getCategoria().getId();
-                if(p.getCategoria().getNome().equals("Suco")){
+            }else if(p.getCategoria().getNome().equals("Suco")){
+                if (Menu.flagDia){
                     String valor = GerenciadorComandas.valorMonetario(p.getPrecoComDesconto());
 
                     dtmBebidas.addRow(
@@ -106,10 +98,7 @@ public class NovaBebida extends javax.swing.JFrame {
                             p.getQtdEstoque(),
                             valor}
                     );
-                }
-            }else{
-                p.getCategoria().getId();
-                if(p.getCategoria().getNome().equals("Suco")){
+                }else{
                     String valor = GerenciadorComandas.valorMonetario(p.getPreco());
 
                     dtmBebidas.addRow(
@@ -129,7 +118,6 @@ public class NovaBebida extends javax.swing.JFrame {
         ProdutoDAO pDao = new ProdutoDAO();
         DefaultTableModel dtmBebidas = (DefaultTableModel) jtBebidas.getModel();
         for (Produto p: pDao.readForNome(txtPesquisa.getText())){
-            p.getCategoria().getId();
             if(p.getCategoria().getNome().equals("Bebida")){
                 String valor = GerenciadorComandas.valorMonetario(p.getPreco());
                 
@@ -140,15 +128,8 @@ public class NovaBebida extends javax.swing.JFrame {
                         p.getQtdEstoque(),                       
                         valor}
                 );
-            }
-        }
-
-        PromocaoUmDAO promoDao = new PromocaoUmDAO();
-        PromocaoUm promocaoUm = promoDao.read();
-        for (Produto p: pDao.readForNome(txtPesquisa.getText())){
-            if (Menu.flagDia){
-                p.getCategoria().getId();
-                if(p.getCategoria().getNome().equals("Suco")){
+            }else if(p.getCategoria().getNome().equals("Suco")){
+                if (Menu.flagDia){
                     String valor = GerenciadorComandas.valorMonetario(p.getPrecoComDesconto());
 
                     dtmBebidas.addRow(
@@ -158,10 +139,7 @@ public class NovaBebida extends javax.swing.JFrame {
                             p.getQtdEstoque(),
                             valor}
                     );
-                }
-            }else{
-                p.getCategoria().getId();
-                if(p.getCategoria().getNome().equals("Suco")){
+                }else{
                     String valor = GerenciadorComandas.valorMonetario(p.getPreco());
 
                     dtmBebidas.addRow(

@@ -29,14 +29,16 @@ public class LogDAO {
         }
     }
     
-     public ArrayList<Log> read(){
+     public ArrayList<Log> read(String data){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         ArrayList<Log> logs = new ArrayList<>();
         
         try{
-            stmt = con.prepareStatement("SELECT * FROM log");
+            String sql = "SELECT * FROM log WHERE str_to_date(data, '%d/%m/%Y') = str_to_date('"+data+"','%d/%m/%Y') ";
+            //System.out.println("SQL: "+sql);
+            stmt = con.prepareStatement(sql);
             rs = stmt.executeQuery();
             while (rs.next()){
                 Log l = new Log();
@@ -56,14 +58,14 @@ public class LogDAO {
         return logs;
     }
      
-     public ArrayList<Log> readForNome(String nome){
+     public ArrayList<Log> readForNome(String nome, String data){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         ArrayList<Log> logs = new ArrayList<>();
         
         try{
-            stmt = con.prepareStatement("SELECT * FROM log WHERE descricao LIKE ?");
+            stmt = con.prepareStatement("SELECT * FROM log WHERE descricao LIKE ? AND str_to_date(data, '%d/%m/%Y') = str_to_date('"+data+"','%d/%m/%Y') ");
             stmt.setString(1, "%"+nome+"%");
             
             rs = stmt.executeQuery();

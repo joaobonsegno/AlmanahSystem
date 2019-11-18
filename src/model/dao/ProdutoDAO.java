@@ -49,7 +49,7 @@ public class ProdutoDAO {
         cDao = new CategoriaDAO();
         
         try{
-            stmt = con.prepareStatement("SELECT * FROM produto WHERE status = 1");
+            stmt = con.prepareStatement("SELECT * FROM produto WHERE status = 1 ORDER BY nome");
             rs = stmt.executeQuery();
             while (rs.next()){
                 Produto p = new Produto();
@@ -140,7 +140,7 @@ public class ProdutoDAO {
                 cat.setDescricao(rs.getString("descricao"));
             }
             
-            stmt = con.prepareStatement("SELECT * FROM produto WHERE status = 1 AND idCategoria LIKE ?");
+            stmt = con.prepareStatement("SELECT * FROM produto WHERE status = 1 AND idCategoria LIKE ? ORDER BY nome");
             stmt.setInt(1, cat.getId());
             rs = stmt.executeQuery();
             while (rs.next()){

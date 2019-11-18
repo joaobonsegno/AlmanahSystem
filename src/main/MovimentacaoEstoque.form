@@ -31,26 +31,35 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace min="0" pref="45" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
+                      <Component id="lblStringNomeProduto" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="txtPesquisa" min="-2" pref="367" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="jScrollPane1" min="-2" pref="922" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <Component id="btnVoltar" min="-2" pref="98" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="321" max="-2" attributes="0"/>
                       <Component id="btnStringProdutos" min="-2" pref="185" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane1" min="-2" pref="922" max="-2" attributes="0"/>
-                          <Group type="102" attributes="0">
-                              <Component id="lblStringNomeProduto" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="txtPesquisa" min="-2" pref="367" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
+                      <EmptySpace min="-2" pref="77" max="-2" attributes="0"/>
+                      <Component id="lblStringNomeProduto1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="calendarData" min="-2" pref="188" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="lblAtualizar" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="38" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
               <Component id="linha1" alignment="0" pref="1009" max="32767" attributes="0"/>
@@ -68,27 +77,38 @@
                   <Component id="btnStringProdutos" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnVoltar" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="41" max="32767" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="lblStringNomeProduto1" pref="42" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="lblAtualizar" pref="41" max="32767" attributes="0"/>
+                          <Component id="calendarData" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+              </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="txtPesquisa" alignment="3" min="-2" pref="42" max="-2" attributes="0"/>
                   <Component id="lblStringNomeProduto" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="jScrollPane1" min="-2" pref="312" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+              <Component id="jScrollPane1" min="-2" pref="315" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
           </Group>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
                   <Component id="linha1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="434" max="32767" attributes="0"/>
+                  <EmptySpace pref="493" max="32767" attributes="0"/>
               </Group>
           </Group>
           <Group type="103" rootIndex="2" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="linha2" min="-2" pref="1" max="-2" attributes="0"/>
-                  <EmptySpace pref="483" max="32767" attributes="0"/>
+                  <EmptySpace pref="540" max="32767" attributes="0"/>
               </Group>
           </Group>
       </Group>
@@ -214,6 +234,9 @@
           <Font name="Century Gothic" size="20" style="0"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtPesquisaKeyReleased"/>
+      </Events>
     </Component>
     <Component class="javax.swing.Box$Filler" name="linha2">
       <Properties>
@@ -234,6 +257,39 @@
       <AuxValues>
         <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalStrut"/>
       </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblAtualizar">
+      <Properties>
+        <Property name="horizontalAlignment" type="int" value="0"/>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="2" name="C:\Projetos Netbeans\AlmanahSystem\images\update (1) (1).png"/>
+        </Property>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblAtualizarMouseClicked"/>
+      </Events>
+    </Component>
+    <Component class="com.toedter.calendar.JDateChooser" name="calendarData">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Century Gothic" size="18" style="0"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="calendarDataFocusGained"/>
+        <EventHandler event="inputMethodTextChanged" listener="java.awt.event.InputMethodListener" parameters="java.awt.event.InputMethodEvent" handler="calendarDataInputMethodTextChanged"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblStringNomeProduto1">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Century Gothic" size="20" style="0"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Data:"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

@@ -13,25 +13,19 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Phrase;
-import java.awt.Component;
 import java.awt.Desktop;
-import java.awt.Dimension;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Date;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableCellRenderer;
 import model.bean.Cliente;
 import model.bean.Forma;
 import model.bean.Venda;
@@ -53,6 +47,7 @@ public class RelatorioVendas extends javax.swing.JFrame {
         lblDataInicial.setText(GerenciadorRelatorios.dMenor);
         lblDataFinal.setText(GerenciadorRelatorios.dMaior);
         this.getInfo();
+        this.ordenarDatas();
         this.criarTabela();
         lblCredito.setText(GerenciadorComandas.valorMonetario(credito));
         lblDebito.setText(GerenciadorComandas.valorMonetario(debito));
@@ -108,6 +103,31 @@ public class RelatorioVendas extends javax.swing.JFrame {
         jtVendas.getColumnModel().getColumn(2).setMaxWidth(150);
     }
 
+    public void ordenarDatas(){
+        try{
+            // Instancia os objetos necessários
+            SimpleDateFormat formatador = new SimpleDateFormat("dd/MM/yyyy   HH:mm:ss");
+            Date data1;
+            Date data2;
+
+            // Rotina de ordenação da lista genérica a partir das datas
+            int tamanho = lista.size();
+            for (int i = 0; i < tamanho-1; i++){
+                for (int j = i+1; j < tamanho; j++){
+                    data1 = formatador.parse(lista.get(i).getData());
+                    data2 = formatador.parse(lista.get(j).getData());
+                    int resultado = data1.compareTo(data2);
+                    if (resultado == 1){
+                        Venda x = lista.get(i);
+                        lista.set(i, lista.get(j));
+                        lista.set(j, x);
+                    }
+                }
+            }       
+        }catch(ParseException ex){}
+        
+    }
+    
     public void criarTabela() {
         int contador = 1;
         DefaultTableModel dtmBebidas = (DefaultTableModel) jtVendas.getModel();

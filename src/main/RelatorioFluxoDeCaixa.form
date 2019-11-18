@@ -382,7 +382,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Century Gothic" size="21" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Saldo: R$"/>
+        <Property name="text" type="java.lang.String" value="Balan&#xe7;o: R$"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblSaldo">

@@ -61,16 +61,10 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
         
     public void criarTabela(){
         limparTabela();
-        ArrayList<Produto> ordenador = new ArrayList<>();
-        
-        for (Produto prod : pDao.read()){
-            ordenador.add(prod);
-        }
-        Collections.sort(ordenador);
-        
+
         DefaultTableModel dtmProdutos = (DefaultTableModel) jtProdutos.getModel();
 
-        for (Produto p: ordenador){
+        for (Produto p: pDao.read()){
             if(!p.getQtdMinima().equals("X")){           
                 dtmProdutos.addRow(
                 new Object[]{
@@ -117,6 +111,7 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
 
     public void formatarTabela(){
         jtProdutos.setRowHeight(29);
+        jtProdutos.getColumn("Qtd").setCellRenderer(direita);
         jtProdutos.getColumnModel().getColumn(0).setPreferredWidth(0); 
         jtProdutos.getColumnModel().getColumn(1).setPreferredWidth(60);
         jtProdutos.getColumnModel().getColumn(2).setPreferredWidth(100);
@@ -134,6 +129,13 @@ public class GerenciadorEstoque extends javax.swing.JFrame {
     }
 
     // MÉTODOS PARA ARRUMAR CÉLULAS DA TABELA
+    
+    DefaultTableCellRenderer direita = new DefaultTableCellRenderer() {
+        public void setValue(Object value) {
+            setHorizontalAlignment(JLabel.RIGHT);
+            super.setValue(value);
+        }
+    };
     
     /*public void corNaLinhaInteiro(){
         jtProdutos.setDefaultRenderer(Object.class, new DefaultTableCellRenderer(){

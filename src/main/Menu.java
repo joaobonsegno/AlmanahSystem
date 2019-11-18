@@ -31,7 +31,7 @@ public class Menu extends javax.swing.JFrame {
         }
         
         setPromocao();
-        //setFuncionario();      
+        setFuncionario();      
     }
     
     public void setFuncionario(){
@@ -139,17 +139,18 @@ public class Menu extends javax.swing.JFrame {
         funcionarios.setVisible(false);
         clientes.setVisible(false);
         financeiro.setVisible(false);
+        lblConf.setVisible(false);
+        btnAlerta.setVisible(false);
     }
     
     public void setBalconista(){
         // ID: 2
-        //pdv_caixa.setEnabled(false);
         estoque.setVisible(false);
         produtos.setVisible(false);
         funcionarios.setVisible(false);
         estoque.setVisible(true);
-        //clientes.setVisible(false);
         financeiro.setVisible(false);
+        lblConf.setVisible(false);
     }
     
     public void setCozinheiro(){
@@ -160,6 +161,7 @@ public class Menu extends javax.swing.JFrame {
         funcionarios.setVisible(false);
         clientes.setVisible(false);
         financeiro.setVisible(false);
+        lblConf.setVisible(false);
     }
     
     class ClockListener implements ActionListener {
@@ -169,7 +171,7 @@ public class Menu extends javax.swing.JFrame {
             // Subtrair 1 hora por causa do horário de verão
             Date teste = new Date();
             now.setTime(teste);
-            now.set(Calendar.HOUR, now.get(Calendar.HOUR)-1);
+            now.set(Calendar.HOUR, now.get(Calendar.HOUR));
             // --------------------------------------------
             lblHora.setText(String.format("%1$tH:%1$tM:%1$tS", now));
         }
@@ -188,7 +190,7 @@ public class Menu extends javax.swing.JFrame {
         lblFuncao = new javax.swing.JLabel();
         lblNome1 = new javax.swing.JLabel();
         lblNome2 = new javax.swing.JLabel();
-        lblNome3 = new javax.swing.JLabel();
+        lblConf = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         pdv = new javax.swing.JMenu();
         pdv_caixa = new javax.swing.JMenuItem();
@@ -219,7 +221,6 @@ public class Menu extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Menu");
         setBackground(new java.awt.Color(153, 204, 255));
-        setMaximumSize(new java.awt.Dimension(953, 518));
         setMinimumSize(new java.awt.Dimension(953, 518));
         setResizable(false);
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
@@ -282,14 +283,14 @@ public class Menu extends javax.swing.JFrame {
         lblNome2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblNome2.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\usuario (2).png")); // NOI18N
 
-        lblNome3.setBackground(new java.awt.Color(0, 102, 204));
-        lblNome3.setFont(new java.awt.Font("Century Gothic", 0, 21)); // NOI18N
-        lblNome3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblNome3.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\engrenagem (1).png")); // NOI18N
-        lblNome3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        lblNome3.addMouseListener(new java.awt.event.MouseAdapter() {
+        lblConf.setBackground(new java.awt.Color(0, 102, 204));
+        lblConf.setFont(new java.awt.Font("Century Gothic", 0, 21)); // NOI18N
+        lblConf.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblConf.setIcon(new javax.swing.ImageIcon("C:\\Projetos Netbeans\\AlmanahSystem\\images\\engrenagem (1).png")); // NOI18N
+        lblConf.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblConf.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblNome3MouseClicked(evt);
+                lblConfMouseClicked(evt);
             }
         });
 
@@ -541,7 +542,7 @@ public class Menu extends javax.swing.JFrame {
                                     .addComponent(lblNome1)
                                     .addComponent(lblNome2)))
                             .addComponent(lblHora, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblNome3, javax.swing.GroupLayout.Alignment.TRAILING)))
+                            .addComponent(lblConf, javax.swing.GroupLayout.Alignment.TRAILING)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -578,7 +579,7 @@ public class Menu extends javax.swing.JFrame {
                             .addComponent(lblFuncao)
                             .addComponent(lblNome1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblNome3)
+                        .addComponent(lblConf)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblHora, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
@@ -693,10 +694,10 @@ public class Menu extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_produtos_cardapio1ActionPerformed
 
-    private void lblNome3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblNome3MouseClicked
+    private void lblConfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblConfMouseClicked
         Configuracoes suprimento = new Configuracoes(new javax.swing.JFrame(), true);
         suprimento.setVisible(true); 
-    }//GEN-LAST:event_lblNome3MouseClicked
+    }//GEN-LAST:event_lblConfMouseClicked
 
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
         AlertaDAO aDao = new AlertaDAO();
@@ -759,13 +760,13 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JMenuItem funcionarios_cadastrar;
     private javax.swing.JMenuItem funcionarios_gerenciar;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JLabel lblConf;
     private javax.swing.JLabel lblFuncao;
     private javax.swing.JLabel lblHora;
     private javax.swing.JLabel lblLogo;
     private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblNome1;
     private javax.swing.JLabel lblNome2;
-    private javax.swing.JLabel lblNome3;
     private javax.swing.JLabel lblStringMenu1;
     private javax.swing.Box.Filler linha1;
     private javax.swing.JMenu pdv;

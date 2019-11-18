@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.InputMismatchException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
@@ -18,13 +21,15 @@ import model.bean.Comanda;
 import model.bean.Produto;
 import model.dao.ComandaDAO;
 import manual.Manual;
+import model.dao.ConfDAO;
 
 public class GerenciadorComandas extends javax.swing.JFrame {
+    ConfDAO cDao = new ConfDAO();
     public static ArrayList<Comanda> comandasAbertas = new ArrayList<>();
     public static DecimalFormat formato = new DecimalFormat("#.##");
     public static Integer indiceSelecionado, idSelecionado;
     public static ArrayList<Integer> idsAbertos = new ArrayList<>();
-    
+
     public GerenciadorComandas() {
         initComponents();
         Timer timer = new Timer(1000, new GerenciadorComandas.ClockListener());
@@ -32,24 +37,22 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         this.formatarTabela();
         this.novaInstancia();
         this.setLocationRelativeTo(null);
-        
-        
-        if (Login.funcAtual.getCargo().getId() == 1){
+
+        if (Login.funcAtual.getCargo().getId() == 1) {
             btnEncerrar.setEnabled(false);
         }
-        
-        txtNumeroComanda.requestFocus();      
+
+        txtNumeroComanda.requestFocus();
     }
 
     // <editor-fold defaultstate="collapsed" desc="Métodos Diversos">  
-    
-    public void formatarTabela(){
+    public void formatarTabela() {
         jtComandas.setRowHeight(28);
         jtComandas.getColumn("ID").setCellRenderer(centro);
         jtComandas.getColumn("Total (R$)").setCellRenderer(centro);
         jtComandas.getColumn("Data").setCellRenderer(centro);
         jtComandas.getTableHeader().setFont(new Font("Century Gothic", 1, 14));
-        jtComandas.getColumnModel().getColumn(0).setPreferredWidth(60); 
+        jtComandas.getColumnModel().getColumn(0).setPreferredWidth(60);
         jtComandas.getColumnModel().getColumn(1).setPreferredWidth(120);
         jtComandas.getColumnModel().getColumn(2).setPreferredWidth(190);
         jtComandas.getColumnModel().getColumn(0).setMinWidth(60);
@@ -59,21 +62,21 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         jtComandas.getColumnModel().getColumn(1).setMaxWidth(120);
         jtComandas.getColumnModel().getColumn(2).setMaxWidth(190);
     }
-    
-    public void limparTabela(){
+
+    public void limparTabela() {
         DefaultTableModel dtmComandas = (DefaultTableModel) jtComandas.getModel();
         int i = jtComandas.getRowCount();
-        
-        for (int j = 0; j < i; j++){
+
+        for (int j = 0; j < i; j++) {
             dtmComandas.removeRow(0);
-        }       
+        }
     }
-    
-    public static ArrayList<Produto> ordenarListasProduto(ArrayList<Produto> ordenador){
+
+    public static ArrayList<Produto> ordenarListasProduto(ArrayList<Produto> ordenador) {
         int tamanho = ordenador.size();
-        for (int i = 0; i < tamanho-1; i++){
-            for (int j = i+1; j < tamanho; j++){
-                if (ordenador.get(i).getIdProduto() > ordenador.get(j).getIdProduto()){
+        for (int i = 0; i < tamanho - 1; i++) {
+            for (int j = i + 1; j < tamanho; j++) {
+                if (ordenador.get(i).getIdProduto() > ordenador.get(j).getIdProduto()) {
                     Produto x = ordenador.get(i);
                     ordenador.set(i, ordenador.get(j));
                     ordenador.set(j, x);
@@ -82,83 +85,232 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         }
         return ordenador;
     }
-    
-    public static String getDataAtualFormatoUSA(){
-        Calendar data = new GregorianCalendar();     
+
+    public static String getDataAtualFormatoUSA() {
+        Calendar data = new GregorianCalendar();
         // Subtrair 1 hora por causa do horário de verão
-        Date teste = new Date();
+        /*ate teste = new Date();
         data.setTime(teste);
-        data.set(Calendar.HOUR, data.get(Calendar.HOUR)-1);
+        data.set(Calendar.HOUR, data.get(Calendar.HOUR) - 1);*/
         // --------------------------------------------
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String dataFormatada = sdf.format(data.getTime());
         return dataFormatada;
     }
-    
-    public static String getDataAtualComHoraFormatoBr(){
+
+    public static String getDataAtualComHoraFormatoBr() {
         Calendar data = new GregorianCalendar();
         // Subtrair 1 hora por causa do horário de verão
-        Date teste = new Date();
+        /*Date teste = new Date();
         data.setTime(teste);
-        data.set(Calendar.HOUR, data.get(Calendar.HOUR)-1);
+        data.set(Calendar.HOUR, data.get(Calendar.HOUR) - 1);*/
         // --------------------------------------------
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy   HH:mm:ss");
         String dataFormatada = sdf.format(data.getTime());
         return dataFormatada;
     }
-    
-    public static String getDataAtualSemHoraFormatoBr(){
+
+    public static String getDataAtualSemHoraFormatoBr() {
         Calendar data = new GregorianCalendar();
         // Subtrair 1 hora por causa do horário de verão
-        Date teste = new Date();
+        /*Date teste = new Date();
         data.setTime(teste);
-        data.set(Calendar.HOUR, data.get(Calendar.HOUR)-1);
+        data.set(Calendar.HOUR, data.get(Calendar.HOUR) - 1);*/
         // --------------------------------------------
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String dataFormatada = sdf.format(data.getTime());
         return dataFormatada;
     }
-    
-    public static String tornarCompativel(String valor){
+
+    public static boolean isEmail(String email) {
+        boolean isEmailIdValid = false;
+        if (email != null && email.length() > 0) {
+            String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+            Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(email);
+            if (matcher.matches()) {
+                isEmailIdValid = true;
+            }
+        }
+        return isEmailIdValid;
+    }
+
+    public static boolean isCNPJ(String CNPJ) {
+        CNPJ = CNPJ.replace(".","");
+        CNPJ = CNPJ.replace("-","");
+        CNPJ = CNPJ.replace("/","");
+// considera-se erro CNPJ's formados por uma sequencia de numeros iguais
+        if (CNPJ.equals("00000000000000") || CNPJ.equals("11111111111111")
+                || CNPJ.equals("22222222222222") || CNPJ.equals("33333333333333")
+                || CNPJ.equals("44444444444444") || CNPJ.equals("55555555555555")
+                || CNPJ.equals("66666666666666") || CNPJ.equals("77777777777777")
+                || CNPJ.equals("88888888888888") || CNPJ.equals("99999999999999")
+                || (CNPJ.length() != 14)) {
+            return (false);
+        }
+
+        char dig13, dig14;
+        int sm, i, r, num, peso;
+
+// "try" - protege o código para eventuais erros de conversao de tipo (int)
+        try {
+// Calculo do 1o. Digito Verificador
+            sm = 0;
+            peso = 2;
+            for (i = 11; i >= 0; i--) {
+// converte o i-ésimo caractere do CNPJ em um número:
+// por exemplo, transforma o caractere '0' no inteiro 0
+// (48 eh a posição de '0' na tabela ASCII)
+                num = (int) (CNPJ.charAt(i) - 48);
+                sm = sm + (num * peso);
+                peso = peso + 1;
+                if (peso == 10) {
+                    peso = 2;
+                }
+            }
+
+            r = sm % 11;
+            if ((r == 0) || (r == 1)) {
+                dig13 = '0';
+            } else {
+                dig13 = (char) ((11 - r) + 48);
+            }
+
+// Calculo do 2o. Digito Verificador
+            sm = 0;
+            peso = 2;
+            for (i = 12; i >= 0; i--) {
+                num = (int) (CNPJ.charAt(i) - 48);
+                sm = sm + (num * peso);
+                peso = peso + 1;
+                if (peso == 10) {
+                    peso = 2;
+                }
+            }
+
+            r = sm % 11;
+            if ((r == 0) || (r == 1)) {
+                dig14 = '0';
+            } else {
+                dig14 = (char) ((11 - r) + 48);
+            }
+
+// Verifica se os dígitos calculados conferem com os dígitos informados.
+            if ((dig13 == CNPJ.charAt(12)) && (dig14 == CNPJ.charAt(13))) {
+                return (true);
+            } else {
+                return (false);
+            }
+        } catch (InputMismatchException erro) {
+            return (false);
+        }
+    }
+
+    public static boolean isCPF(String CPF) {
+        CPF = CPF.replace(".", "");
+        CPF = CPF.replace("-", "");
+
+        // considera-se erro CPF's formados por uma sequencia de numeros iguais
+        if (CPF.equals("00000000000")
+                || CPF.equals("11111111111")
+                || CPF.equals("22222222222") || CPF.equals("33333333333")
+                || CPF.equals("44444444444") || CPF.equals("55555555555")
+                || CPF.equals("66666666666") || CPF.equals("77777777777")
+                || CPF.equals("88888888888") || CPF.equals("99999999999")
+                || (CPF.length() != 11)) {
+            return (false);
+        }
+
+        char dig10, dig11;
+        int sm, i, r, num, peso;
+
+        // "try" - protege o codigo para eventuais erros de conversao de tipo (int)
+        try {
+            // Calculo do 1o. Digito Verificador
+            sm = 0;
+            peso = 10;
+            for (i = 0; i < 9; i++) {
+                // converte o i-esimo caractere do CPF em um numero:
+                // por exemplo, transforma o caractere '0' no inteiro 0         
+                // (48 eh a posicao de '0' na tabela ASCII)         
+                num = (int) (CPF.charAt(i) - 48);
+                sm = sm + (num * peso);
+                peso = peso - 1;
+            }
+
+            r = 11 - (sm % 11);
+            if ((r == 10) || (r == 11)) {
+                dig10 = '0';
+            } else {
+                dig10 = (char) (r + 48); // converte no respectivo caractere numerico
+            }
+            // Calculo do 2o. Digito Verificador
+            sm = 0;
+            peso = 11;
+            for (i = 0; i < 10; i++) {
+                num = (int) (CPF.charAt(i) - 48);
+                sm = sm + (num * peso);
+                peso = peso - 1;
+            }
+
+            r = 11 - (sm % 11);
+            if ((r == 10) || (r == 11)) {
+                dig11 = '0';
+            } else {
+                dig11 = (char) (r + 48);
+            }
+
+            // Verifica se os digitos calculados conferem com os digitos informados.
+            if ((dig10 == CPF.charAt(9)) && (dig11 == CPF.charAt(10))) {
+                return (true);
+            } else {
+                return (false);
+            }
+        } catch (InputMismatchException erro) {
+            return (false);
+        }
+    }
+
+    public static String tornarCompativel(String valor) {
         boolean flag = true;
         valor = new StringBuilder(valor).reverse().toString();
         StringBuilder builder = new StringBuilder();
 
-        for (int i=0; i<valor.length(); i++) {
+        for (int i = 0; i < valor.length(); i++) {
             Character c = valor.charAt(i);
             String str = Character.toString(c);
-            if (str.equals(",")|str.equals(".")){
+            if (str.equals(",") | str.equals(".")) {
                 flag = false;
                 builder = new StringBuilder(valor);
-                if(i==1){
+                if (i == 1) {
                     String ponto = ".";
                     String decimal = builder.substring(0, i);
-                    String mantissa = builder.substring(i+1, valor.length());
+                    String mantissa = builder.substring(i + 1, valor.length());
                     StringBuilder mantissaBuilder = new StringBuilder(mantissa).reverse();
                     mantissa = mantissaBuilder.toString();
                     StringBuilder finalBuilder = new StringBuilder(mantissa);
                     finalBuilder.append(ponto);
                     finalBuilder.append(decimal);
-                    finalBuilder.append("0");   
+                    finalBuilder.append("0");
                     String retorno = finalBuilder.toString();
                     return retorno;
-                }else{
+                } else {
                     String ponto = ".";
                     String decimal = builder.substring(0, i);
-                    String mantissa = builder.substring(i+1, valor.length());
+                    String mantissa = builder.substring(i + 1, valor.length());
                     StringBuilder mantissaBuilder = new StringBuilder(mantissa).reverse();
                     mantissa = mantissaBuilder.toString();
                     StringBuilder decimalBuilder = new StringBuilder(decimal).reverse();
                     decimal = decimalBuilder.toString();
                     StringBuilder finalBuilder = new StringBuilder(mantissa);
                     finalBuilder.append(ponto);
-                    finalBuilder.append(decimal);   
+                    finalBuilder.append(decimal);
                     String retorno = finalBuilder.toString();
                     return retorno;
                 }
             }
         }
-        if (flag){
+        if (flag) {
             StringBuilder semPonto = new StringBuilder(valor).reverse();
             semPonto.append(".00");
             String retorno = semPonto.toString();
@@ -167,42 +319,42 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         String retorno = builder.toString();
         return retorno;
     }
-    
-    public static String valorMonetario(Double preco){
+
+    public static String valorMonetario(Double preco) {
         /*
         OUTRA MANEIRA:
         DecimalFormat df = new DecimalFormat("#.00");
         String teste = df.format(novoValor);
-        */
+         */
         String valorString = String.format("%.2f", preco);
         return valorString;
     }
 
-    public static String valorKg(Double valor){
+    public static String valorKg(Double valor) {
         /*
         OUTRA MANEIRA:
         DecimalFormat df = new DecimalFormat("#.00");
         String teste = df.format(novoValor);
-        */
+         */
         String valorString = String.format("%.1f", valor);
         return valorString;
     }
-    
-    public static String arredondarValor(String valor){
+
+    public static String arredondarValor(String valor) {
         Integer flag = 0;
         StringBuilder builderValor = new StringBuilder(valor);
-        try{
-            if(valor.endsWith("1")|valor.endsWith("2")){
+        try {
+            if (valor.endsWith("1") | valor.endsWith("2")) {
                 //Verifica se a String termina com 1 ou 2, para arredondar para baixo
-                String modificada = valor.substring(0, valor.length()-1);
+                String modificada = valor.substring(0, valor.length() - 1);
                 builderValor = new StringBuilder(modificada);
                 builderValor.append("0");
-            }else if(valor.endsWith("3")|valor.endsWith("4")|valor.endsWith("6")|valor.endsWith("7")){
+            } else if (valor.endsWith("3") | valor.endsWith("4") | valor.endsWith("6") | valor.endsWith("7")) {
                 //Verifica se a String termina com 3, 4, 6 ou 7 para arredondar para baixo (5)
-                String modificada = valor.substring(0, valor.length()-1);
+                String modificada = valor.substring(0, valor.length() - 1);
                 builderValor = new StringBuilder(modificada);
                 builderValor.append("5");
-            }else if(valor.endsWith("8")|valor.endsWith("9")){
+            } else if (valor.endsWith("8") | valor.endsWith("9")) {
                 //Verifica se a String termina com 8 ou 9, para arredondar para cima
                 int j = valor.length();
                 j -= 2;
@@ -210,7 +362,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
                 Character penultimo = valor.charAt(j);
                 String t = Character.toString(penultimo);
                 Integer inteiro = Integer.parseInt(t);
-                if(inteiro==9){
+                if (inteiro == 9) {
                     //Valor x.98 ou x.99
                     j = valor.length();
                     j -= 4;
@@ -218,7 +370,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
                     penultimo = valor.charAt(j);
                     t = Character.toString(penultimo);
                     inteiro = Integer.parseInt(t);
-                    if(inteiro==9){
+                    if (inteiro == 9) {
                         //Valor x9.98 ou x9.99
                         flag = 1;
                         j = valor.length();
@@ -227,7 +379,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
                         penultimo = valor.charAt(j);
                         t = Character.toString(penultimo);
                         inteiro = Integer.parseInt(t);
-                        if(inteiro==9){
+                        if (inteiro == 9) {
                             //Valor 99.98 ou 99.99
                             flag = 2;
                             j = valor.length();
@@ -236,7 +388,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
                             penultimo = valor.charAt(j);
                             t = Character.toString(penultimo);
                             inteiro = Integer.parseInt(t);
-                            if(inteiro==9){
+                            if (inteiro == 9) {
                                 //Valor 999.98 ou 999.99
                                 flag = 3;
                                 j = valor.length();
@@ -245,7 +397,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
                                 penultimo = valor.charAt(j);
                                 t = Character.toString(penultimo);
                                 inteiro = Integer.parseInt(t);
-                                if(inteiro==9){
+                                if (inteiro == 9) {
                                     //Valor 9999.98 ou 9999.99
                                     flag = 4;
                                     j = valor.length();
@@ -254,7 +406,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
                                     penultimo = valor.charAt(j);
                                     t = Character.toString(penultimo);
                                     inteiro = Integer.parseInt(t);
-                                    if(inteiro==9){
+                                    if (inteiro == 9) {
                                         //Valor 99999.98 ou 99999.99
                                         flag = 5;
                                         j = valor.length();
@@ -263,103 +415,103 @@ public class GerenciadorComandas extends javax.swing.JFrame {
                                         penultimo = valor.charAt(j);
                                         t = Character.toString(penultimo);
                                         inteiro = Integer.parseInt(t);
-                                    }else{
+                                    } else {
                                         //Valor x79999.98 ou x79999.99, por exemplo
                                         inteiro += 1;
                                         t = Integer.toString(inteiro);
-                                        String modificada = valor.substring(0, valor.length()-8);
+                                        String modificada = valor.substring(0, valor.length() - 8);
                                         builderValor = new StringBuilder(modificada);
                                         builderValor.append(t);
                                         builderValor.append("0000.00");
                                     }
-                                }else{
+                                } else {
                                     //Valor x7999.98 ou x7999.99, por exemplo
                                     inteiro += 1;
                                     t = Integer.toString(inteiro);
-                                    String modificada = valor.substring(0, valor.length()-7);
+                                    String modificada = valor.substring(0, valor.length() - 7);
                                     builderValor = new StringBuilder(modificada);
                                     builderValor.append(t);
                                     builderValor.append("000.00");
                                 }
-                            }else{
+                            } else {
                                 //Valor x799.98 ou x799.99, por exemplo
                                 inteiro += 1;
                                 t = Integer.toString(inteiro);
-                                String modificada = valor.substring(0, valor.length()-6);
+                                String modificada = valor.substring(0, valor.length() - 6);
                                 builderValor = new StringBuilder(modificada);
                                 builderValor.append(t);
                                 builderValor.append("00.00");
                             }
-                        }else{
+                        } else {
                             //Valor 799.98 ou 799.99, por exemplo
                             inteiro += 1;
                             t = Integer.toString(inteiro);
-                            String modificada = valor.substring(0, valor.length()-5);
+                            String modificada = valor.substring(0, valor.length() - 5);
                             builderValor = new StringBuilder(modificada);
                             builderValor.append(t);
                             builderValor.append("0.00");
                         }
-                    }else{
+                    } else {
                         //Valor x7.98 ou x7.99, por exemplo
                         inteiro += 1;
                         t = Integer.toString(inteiro);
-                        String modificada = valor.substring(0, valor.length()-4);
+                        String modificada = valor.substring(0, valor.length() - 4);
                         builderValor = new StringBuilder(modificada);
                         builderValor.append(t);
                         builderValor.append(".00");
                     }
-                }else{
+                } else {
                     //Valor x.79, por exemplo
                     inteiro += 1;
                     t = Integer.toString(inteiro);
-                    String modificada = valor.substring(0, valor.length()-2);
+                    String modificada = valor.substring(0, valor.length() - 2);
                     builderValor = new StringBuilder(modificada);
                     builderValor.append(t);
                     builderValor.append("0");
                 }
             }
-        }catch(java.lang.IndexOutOfBoundsException ex){
+        } catch (java.lang.IndexOutOfBoundsException ex) {
             System.out.println(ex);
-            if (flag == 1){
+            if (flag == 1) {
                 String modificada = "";
                 builderValor = new StringBuilder(modificada);
                 builderValor.append("10.00");
-            }else if (flag == 2){
+            } else if (flag == 2) {
                 String modificada = "";
                 builderValor = new StringBuilder(modificada);
                 builderValor.append("100.00");
-            }else if (flag == 3){
+            } else if (flag == 3) {
                 String modificada = "";
                 builderValor = new StringBuilder(modificada);
                 builderValor.append("1000.00");
-            }else if (flag == 4){
+            } else if (flag == 4) {
                 String modificada = "";
                 builderValor = new StringBuilder(modificada);
                 builderValor.append("10000.00");
-            }else if (flag == 5){
+            } else if (flag == 5) {
                 String modificada = "";
                 builderValor = new StringBuilder(modificada);
                 builderValor.append("100000.00");
             }
-        }finally{
+        } finally {
             String retorno = builderValor.toString();
             return retorno;
         }
     }
-    
-    public static void novaComanda(int cod){ 
-        
+
+    public static void novaComanda(int cod) {
+
         ComandaDAO comandaDao = new ComandaDAO();
         DefaultTableModel dtmComandas = (DefaultTableModel) jtComandas.getModel();
-        Comanda comanda = new Comanda(cod);  
+        Comanda comanda = new Comanda(cod);
         String valor = valorMonetario(comanda.getValor());
         comanda.setData(getDataAtualComHoraFormatoBr());
         Object[] dados = {comanda.getId(), valor, comanda.getData()};
         dtmComandas.addRow(dados);
-        
+
         comandaDao.create(comanda);
-        for(Comanda c:comandaDao.read()){
-            if(c.getId()==cod){
+        for (Comanda c : comandaDao.read()) {
+            if (c.getId() == cod) {
                 comanda.setIdBanco(c.getIdBanco());
             }
         }
@@ -367,12 +519,12 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         idsAbertos.add(comanda.getId());
         //ordenarComandas();
     }
-    
-    public static ArrayList<Integer> ordenarListas(ArrayList<Integer> ordenador){
+
+    public static ArrayList<Integer> ordenarListas(ArrayList<Integer> ordenador) {
         int tamanho = ordenador.size();
-        for (int i = 0; i < tamanho-1; i++){
-            for (int j = i+1; j < tamanho; j++){
-                if (ordenador.get(i) > ordenador.get(j)){
+        for (int i = 0; i < tamanho - 1; i++) {
+            for (int j = i + 1; j < tamanho; j++) {
+                if (ordenador.get(i) > ordenador.get(j)) {
                     int x = ordenador.get(i);
                     ordenador.set(i, ordenador.get(j));
                     ordenador.set(j, x);
@@ -381,22 +533,21 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         }
         return ordenador;
     }
-     
-    public static boolean existeComanda(){
+
+    public static boolean existeComanda() {
         int quantidade = comandasAbertas.size();
-        if (quantidade > 0){
+        if (quantidade > 0) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
-    
-    public void novaInstancia(){
-        limparTabela();  
+
+    public void novaInstancia() {
+        limparTabela();
         DefaultTableModel dtmComandas = (DefaultTableModel) jtComandas.getModel();
         idsAbertos.removeAll(idsAbertos);
-        for(Comanda c : comandasAbertas){
+        for (Comanda c : comandasAbertas) {
             String valor = valorMonetario(c.getValor());
             Object[] dados = {c.getId(), valor, c.getData()};
             dtmComandas.addRow(dados);
@@ -404,30 +555,30 @@ public class GerenciadorComandas extends javax.swing.JFrame {
         }
         //ordenarComandas();
     }
-    
-    public int retornaIndice(){
+
+    public int retornaIndice() {
         int contador = 0;
-        for(Comanda c:comandasAbertas){
-            if(c.getId() == idSelecionado){
-                break;  
+        for (Comanda c : comandasAbertas) {
+            if (c.getId() == idSelecionado) {
+                break;
             }
             contador += 1;
         }
         return contador;
     }
-    
-    public static int retornaIndice(int id){
+
+    public static int retornaIndice(int id) {
         int contador = 0;
-        for(Comanda c:comandasAbertas){
-            if(c.getId() == id){
-                break;  
+        for (Comanda c : comandasAbertas) {
+            if (c.getId() == id) {
+                break;
             }
             contador += 1;
         }
         return contador;
     }
     // </editor-fold> 
-    
+
     // MÉTODOS PARA ARRUMAR CÉLULAS DA TABELA
     DefaultTableCellRenderer centro = new DefaultTableCellRenderer() {
         public void setValue(Object value) {
@@ -442,7 +593,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
             super.setValue(value);
         }
     };
-    
+
     // MÉTODO PARA RELÓGIO NA TELA
     class ClockListener implements ActionListener {
 
@@ -451,12 +602,12 @@ public class GerenciadorComandas extends javax.swing.JFrame {
             // Subtrair 1 hora por causa do horário de verão
             Date teste = new Date();
             now.setTime(teste);
-            now.set(Calendar.HOUR, now.get(Calendar.HOUR)-1);
+            now.set(Calendar.HOUR, now.get(Calendar.HOUR));
             // --------------------------------------------
             lblHora.setText(String.format("%1$tH:%1$tM:%1$tS", now));
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -796,16 +947,16 @@ public class GerenciadorComandas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLancadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLancadorActionPerformed
-        new Menu().setVisible(true); 
+        new Menu().setVisible(true);
         dispose();
     }//GEN-LAST:event_btnLancadorActionPerformed
 
     private void btnBebidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBebidaActionPerformed
-        new NovaBebida().setVisible(true); 
+        new NovaBebida().setVisible(true);
     }//GEN-LAST:event_btnBebidaActionPerformed
 
     private void btnSobremesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSobremesaActionPerformed
-        new NovaSobremesa().setVisible(true); 
+        new NovaSobremesa().setVisible(true);
     }//GEN-LAST:event_btnSobremesaActionPerformed
 
     private void btnEncerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEncerrarActionPerformed
@@ -825,9 +976,9 @@ public class GerenciadorComandas extends javax.swing.JFrame {
                         c.setStatus(0);
                         comandaDao.update(c);
                     }else{*/
-                        new EncerrarComanda().setVisible(true); 
-                        dispose();
-                    /*}
+        new EncerrarComanda().setVisible(true);
+        dispose();
+        /*}
                 }
             }    
         }catch(java.lang.NumberFormatException|java.lang.NullPointerException ex){
@@ -837,7 +988,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
 
     private void btnRefeicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefeicaoActionPerformed
         NovaRefeicao novoPrato = new NovaRefeicao(new javax.swing.JFrame(), true);
-        novoPrato.setVisible(true);        
+        novoPrato.setVisible(true);
     }//GEN-LAST:event_btnRefeicaoActionPerformed
 
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
@@ -845,7 +996,7 @@ public class GerenciadorComandas extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowGainedFocus
 
     private void jtComandasFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtComandasFocusGained
-        
+
     }//GEN-LAST:event_jtComandasFocusGained
 
     private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
@@ -853,28 +1004,39 @@ public class GerenciadorComandas extends javax.swing.JFrame {
     }//GEN-LAST:event_formKeyReleased
 
     private void txtNumeroComandaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumeroComandaKeyReleased
-        if (evt.getKeyCode() == 10){
-            if (!txtNumeroComanda.getText().equals("")){
-                ComandaDAO comDao = new ComandaDAO();
-                int cod = comDao.codComanda(txtNumeroComanda.getText());           
-                if (cod == 0){
-                    if (!txtNumeroComanda.getText().equals(""))
-                        JOptionPane.showMessageDialog(null, "Código de comanda inválido");
+        if (evt.getKeyCode() == 10) {
+            ComandaDAO comDao = new ComandaDAO();
+            int cod = 0;
+            try{
+                if (cDao.readCod() == 1){
+                    cod = Integer.parseInt(txtNumeroComanda.getText());
                 }else{
+                    cod = comDao.codComanda(txtNumeroComanda.getText());
+                }
+            }catch(java.lang.NumberFormatException ex){}
+            
+            if (!txtNumeroComanda.getText().equals("")) {
+                
+                if (cod == 0) {
+                    if (!txtNumeroComanda.getText().equals("")) {
+                        JOptionPane.showMessageDialog(null, "Código de comanda inválido");
+                        txtNumeroComanda.setText("");
+                    }
+                } else {
                     txtNumeroComanda.setText("");
                     boolean flagComandaAberta = false;
-                    for (Integer i : idsAbertos){
-                        if (i == cod){
-                            JOptionPane.showMessageDialog(null, "Comanda "+cod+" já foi aberta");
+                    for (Integer i : idsAbertos) {
+                        if (i == cod) {
+                            JOptionPane.showMessageDialog(null, "Comanda " + cod + " já foi aberta");
                             flagComandaAberta = true;
                             break;
                         }
                     }
-                    if (!flagComandaAberta){
+                    if (!flagComandaAberta) {
                         this.novaComanda(cod);
-                    }               
+                    }
                 }
-            }                      
+            }
         }
     }//GEN-LAST:event_txtNumeroComandaKeyReleased
 

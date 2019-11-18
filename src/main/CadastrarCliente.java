@@ -3,8 +3,6 @@ package main;
 import ArrumarString.SoNumeros;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 import model.bean.Cargo;
 import model.bean.Cliente;
@@ -16,14 +14,13 @@ import manual.Manual;
 
 public class CadastrarCliente extends javax.swing.JFrame {
     ArrayList<Cargo> listaCargos = new ArrayList<>();
-    ArrayList<Estado> listaEstados = new ArrayList<>();
     EstadoDAO eDao = new EstadoDAO();
     CargoDAO cargoDao = new CargoDAO();
     
     public void criarCb(){
         cbUf.removeAllItems();
         cbUf.addItem("");
-        for (Estado e : listaEstados){
+        for (Estado e : eDao.read()){
             cbUf.addItem(e.getNome());
         }
         
@@ -37,10 +34,7 @@ public class CadastrarCliente extends javax.swing.JFrame {
        initComponents();
        this.setLocationRelativeTo(null);
        txtNumero.setDocument(new SoNumeros()); 
-       for (Estado e : eDao.read()){
-           listaEstados.add(e);
-       }
-       
+
        for (Cargo c : cargoDao.read()){
            listaCargos.add(c);
        }
@@ -142,7 +136,7 @@ public class CadastrarCliente extends javax.swing.JFrame {
         lblStringNascimento.setText("*Nascimento:");
 
         lblStringEmail.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
-        lblStringEmail.setText("*Email:");
+        lblStringEmail.setText("Email:");
 
         lblStringNome.setFont(new java.awt.Font("Century Gothic", 0, 20)); // NOI18N
         lblStringNome.setText("*Nome:");
@@ -263,21 +257,22 @@ public class CadastrarCliente extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(47, 47, 47)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(lblStringNascimento)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(46, 46, 46)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                    .addComponent(lblStringEmail)
-                                                    .addComponent(lblStringNome))))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                                        .addGap(93, 93, 93)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(lblStringEmail)
+                                            .addComponent(lblStringNome))
+                                        .addGap(16, 16, 16))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(lblStringContatoUm)
-                                        .addGap(15, 15, 15)))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addComponent(lblStringContatoUm)
+                                                .addGap(15, 15, 15))
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addComponent(lblStringNascimento)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(txtEmail, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtNome, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -428,13 +423,89 @@ public class CadastrarCliente extends javax.swing.JFrame {
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         int flag = 0;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         ClienteDAO cDao = new ClienteDAO();
-        String sexo = (String)cbSexo.getSelectedItem();
-        String uf = (String)cbUf.getSelectedItem();
-        String nome = txtNome.getText();
-        String cpf = txtCpf.getText();
+        boolean celularInserido = false;
+        boolean cpfValido = false;
+        boolean camposInseridos = false;
+        boolean cpfExistente = false;
         
-        if (flag == 0){
+        try{
+            // Instancia as variáveis necessárias           
+            String dataFormatada = sdf.format(calendarNasc.getDate());
+            String nome = txtNome.getText();
+            String cpf = txtCpf.getText();
+            String sexo = (String)cbSexo.getSelectedItem();           
+            String celular = txtCelular.getText();
+            String logradouro = txtLogradouro.getText();
+            String numero = txtNumero.getText();
+            String bairro = txtBairro.getText();
+            String cidade = txtCidade.getText();
+            String cep = txtCep.getText();
+            String uf = (String)cbUf.getSelectedItem();
+
+            // Seta as FLAGs necessárias
+            Character ch = celular.charAt(13);
+            if (ch.isDigit(ch)){
+                celularInserido = true;
+            }
+        
+            if (GerenciadorComandas.isCPF(cpf)){
+                cpfValido = true;
+                if (cDao.cpfExiste(cpf)){
+                    cpfExistente = true;
+                }
+            }
+            
+            
+            if (!nome.equals("") && !sexo.equals("") && !logradouro.equals("") && !numero.equals("") 
+            || !bairro.equals("") && !cidade.equals("") && !cep.equals("") && !uf.equals("")){
+                camposInseridos = true;
+            }
+            
+            
+            // IFs que verificam se todos os campos foram inseridos
+            if (cpfValido && camposInseridos && celularInserido && !cpfExistente){
+                Cliente c = new Cliente();
+                c.setNome(nome);
+                c.setCpf(cpf);
+                c.setEmail(txtEmail.getText());
+                c.setSexo(sexo);
+                c.setTelefone(txtTelefone.getText());
+                c.setCelular(txtCelular.getText());
+                c.setLogradouro(txtLogradouro.getText());
+                c.setBairro(txtBairro.getText());
+                c.setNumero(Integer.parseInt(txtNumero.getText()));
+                c.setCidade(txtCidade.getText());
+                c.setCep(txtCep.getText());
+                c.setComplemento(txtComplemento.getText());
+
+
+
+                c.setDataNasc(dataFormatada);
+                c.setSaldo(0.0);
+                c.setSaldoPendente(0.0);
+                c.setEstado(eDao.readForUf(uf));
+
+                cDao.create(c);
+                new Menu().setVisible(true); 
+                dispose();
+            }else{
+                if (!cpfValido){
+                    JOptionPane.showMessageDialog(null, "Erro no cadastro: CPF inválido.");
+                }else if (!celularInserido){
+                    JOptionPane.showMessageDialog(null, "Erro no cadastro: informe o número de celular do cliente.");
+                }else if (cpfExistente){
+                    JOptionPane.showMessageDialog(null, "Erro no cadastro: o CPF informado já é cadastrado no sistema.");
+                }else{
+                    JOptionPane.showMessageDialog(null, "Erro no cadastro: campos obrigatórios não foram preenchidos.\nPreencha todos os campos que possuem asterisco (*).");
+                }
+            }
+        }catch(java.lang.NullPointerException ex){
+            JOptionPane.showMessageDialog(null, "Erro no cadastro: data de nascimento inválida.");
+        }
+        
+        /*if (flag == 0){
             if(!(nome.equals("")|cpf.equals("")|sexo.equals(""))){
                 try{
                     Estado estado = new Estado();
@@ -459,8 +530,7 @@ public class CadastrarCliente extends javax.swing.JFrame {
                     c.setCep(txtCep.getText());
                     c.setComplemento(txtComplemento.getText());
                     
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    String dataFormatada = sdf.format(calendarNasc.getDate());
+                    
                     
                     c.setDataNasc(dataFormatada);
                     c.setSaldo(0.0);
@@ -487,7 +557,7 @@ public class CadastrarCliente extends javax.swing.JFrame {
                 }
                 JOptionPane.showMessageDialog(null, "O(s) seguinte(s) campo(s) deve(m) ser preenchido(s):"+msg);
             }
-        }
+        }*/
         
     }//GEN-LAST:event_btnConfirmarActionPerformed
 

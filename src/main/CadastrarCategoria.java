@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import model.bean.Categoria;
 import model.bean.Produto;
 import model.dao.CategoriaDAO;
@@ -148,21 +149,27 @@ public class CadastrarCategoria extends javax.swing.JFrame {
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         Categoria c = new Categoria();
         CategoriaDAO cDao = new CategoriaDAO();
-        c.setNome(txtNome.getText());
-        c.setDescricao(txtDescricao.getText());
-
-        cDao.create(c);        
+        String nome = txtNome.getText();
+        if (!nome.equals("")){
+            if (cDao.existe(nome)){
+                JOptionPane.showMessageDialog(null, "O nome inserido para a categoria já existe");
+            }else{
+                c.setNome(nome);
+                c.setDescricao(txtDescricao.getText());
+                cDao.create(c);        
+                dispose();
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Insira o nome da categoria");
+        }
         
-        dispose();
+        
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -185,34 +192,6 @@ public class CadastrarCategoria extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(CadastrarCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>

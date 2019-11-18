@@ -142,7 +142,7 @@ public class VendaDAO {
             String sql = "SELECT * FROM venda "
                     +    "WHERE str_to_date(data, '%d/%m/%Y') >= str_to_date('"+dataMenor+"','%d/%m/%Y') "
                     +    "AND   str_to_date(data, '%d/%m/%Y') <= str_to_date('"+dataMaior+"','%d/%m/%Y') "
-                    +    "ORDER BY str_to_date(data, '%d/%m/%Y')";
+                    +    "ORDER BY str_to_date(data, '%d/%m/%Y') ASC";
             stmt = con.prepareStatement(sql);
             rs = stmt.executeQuery();
             while (rs.next()){

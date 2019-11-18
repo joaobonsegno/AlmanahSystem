@@ -378,10 +378,12 @@ public class CadastrarFornecedor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        boolean camposObrigatorios = true;        
+        boolean camposObrigatorios = true;
+        boolean emailValido = false;
+        boolean cnpjValido = false;
         FornecedorDAO fDao = new FornecedorDAO();
         EstadoDAO eDao = new EstadoDAO();
-        
+
         // Variáveis que são de preenchimento obrigatório
         String nome = txtNome.getText();
         String cnpj = txtCnpj.getText();
@@ -395,13 +397,22 @@ public class CadastrarFornecedor extends javax.swing.JFrame {
         String uf = (String) cbUf.getSelectedItem();
 
         // Verifica se as variáveis de preenchimento obrigatória estão ok
-        if (nome.equals("") || cnpj.equals("") || email.equals("") || celular.equals("") || logradouro.equals("") | 
-        bairro.equals("") || cidade.equals("") || numero.equals("") || cep.equals("") || uf.equals("")) {            
+        if (nome.equals("") || cnpj.equals("") || email.equals("") || celular.equals("") || logradouro.equals("")
+                | bairro.equals("") || cidade.equals("") || numero.equals("") || cep.equals("") || uf.equals("")) {
             camposObrigatorios = false;
         }
-        
+
+        if (GerenciadorComandas.isEmail(email)) {
+            emailValido = true;
+        }
+
+        if (GerenciadorComandas.isCNPJ(cnpj)) {
+            cnpjValido = true;
+        }
+
         // Se os campos obrigatórios foram preenchidos, o cadastro pode seguir
-        if (camposObrigatorios){
+        if (camposObrigatorios) {
+            if (emailValido && cnpjValido){
                 // Instancia o objeto ESTADO, pertencente ao Fornecedor
                 Estado estado = new Estado();
                 for (Estado e : eDao.read()) {
@@ -430,7 +441,14 @@ public class CadastrarFornecedor extends javax.swing.JFrame {
                 fDao.create(f);
                 new GerenciadorFornecedores().setVisible(true);
                 dispose();
-        }else {            
+            }else{
+                if (!emailValido){
+                    JOptionPane.showMessageDialog(null, "Erro no cadastro: email inserido é inválido.");
+                }else if (!cnpjValido){
+                    JOptionPane.showMessageDialog(null, "Erro no cadastro: CNPJ inserido é inválido.");
+                }
+            }           
+        } else {
             JOptionPane.showMessageDialog(null, "Erro no cadastro: campos obrigatórios não foram preenchidos.\nPreencha todos os campos que possuem asterisco (*).");
         }
 

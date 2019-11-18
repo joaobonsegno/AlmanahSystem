@@ -134,6 +134,25 @@ public class ClienteDAO {
         return c;
     }
     
+    public boolean cpfExiste(String cpf){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try{
+            stmt = con.prepareStatement("SELECT * FROM cliente WHERE cpf LIKE '"+cpf+"' ");
+            rs = stmt.executeQuery();
+            while (rs.next()){               
+                return true;
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return false;
+    }
+    
     public Cliente readForCpfExato(String cpf){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;

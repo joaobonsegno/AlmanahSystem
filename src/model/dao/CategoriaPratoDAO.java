@@ -55,6 +55,48 @@ public class CategoriaPratoDAO {
         return categorias;
     }
     
+    public CategoriaPrato readForNomeExato(String nome){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        CategoriaPrato c = new CategoriaPrato();
+        
+        try{
+            stmt = con.prepareStatement("SELECT * FROM categoriaPrato WHERE nome LIKE '"+nome+"'");
+            rs = stmt.executeQuery();
+            while (rs.next()){   
+                c.setId(rs.getInt("idCategoriaPrato"));
+                c.setNome(rs.getString("nome"));
+                c.setDescricao(rs.getString("descricao"));
+
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return c;
+    }
+    
+    public boolean existe(String nome){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try{
+            stmt = con.prepareStatement("SELECT * FROM categoriaPrato WHERE nome LIKE '"+nome+"'");
+            rs = stmt.executeQuery();
+            while (rs.next()){   
+                return true;
+            }
+        }catch(SQLException ex){
+            System.err.println("Erro no READ MySQL: "+ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return false;
+    }
+    
     public void update(CategoriaPrato c){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;

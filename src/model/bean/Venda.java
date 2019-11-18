@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import main.EncerrarComanda;
-import model.dao.ProdutoDAO;
 
 public class Venda {
     private Integer idBanco;
@@ -94,9 +92,9 @@ public class Venda {
     public String dataAtual(){
         Calendar data = new GregorianCalendar();
         // Subtrair 1 hora por causa do horário de verão
-        Date teste = new Date();
+        /*Date teste = new Date();
         data.setTime(teste);
-        data.set(Calendar.HOUR, data.get(Calendar.HOUR)-1);
+        data.set(Calendar.HOUR, data.get(Calendar.HOUR)-1);*/
         // --------------------------------------------
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy   HH:mm:ss");
         String dataFormatada = sdf.format(data.getTime());
